@@ -5,6 +5,9 @@ this is the JBike6GUI_2015_02_08.zip
 ALWAYS give attribution to the authors of these files per the license agreement here: 
 http://ruina.tam.cornell.edu/research/topics/bicycle_mechanics/JBike6_web_folder/JBike6_license_agreement.htm
 
+Copyright © 2003-2015 Schwab, Papadopoulos, Ruina, & Dressel, Delft University of Technology & Cornell University
+
+
 2015_02_08 is the most recent version of the MATLAB files: 
 < START >
 JBike6 Download
