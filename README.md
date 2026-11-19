@@ -1,7 +1,7 @@
 # JBike6
 A Benchmark for Bicycle Motion
 
-this was created with most recent JBike6GUI_2006_10_21.zip - main folder: 2,649,522 bytes (3 MB on disk) for 153 items
+this was created with most recent 2015-02-08 - main folder: 1,085,915 bytes (1.2 MB on disk) for 28 items
 
 http://ruina.tam.cornell.edu/research/topics/bicycle_mechanics/JBike6_web_folder/index.htm
 
