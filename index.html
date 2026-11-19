@@ -1209,6 +1209,18 @@
     <!-- TWO-COLUMN WORKSPACE -->
     <div id="mainWorkspaceGrid" class="workspace-grid">
 
+      <!-- ================================================================= -->
+      <!-- LEFT COLUMN: INTERACTIVE CONTROLS                                 -->
+      <!-- ================================================================= -->
+      <aside class="controls-col">
+
+        <!-- 1. WHEEL & TIRE SIZING (MULLET LAB) -->
+        <div class="panel-card">
+          <div class="panel-head">
+            <h2 class="panel-title"><span class="dot" style="background:#059669;"></span>Wheel &amp; Tire Sizing (Mullet Lab)</h2>
+            <span class="panel-hint">29" / 27.5" / Custom</span>
+          </div>
+
           <div class="wheel-grid" id="wheelQuickPills">
             <button type="button" data-df="0.742" data-dr="0.742" class="wheel-pill">
               <span class="wheel-pill-title">Full 29"</span>
@@ -1548,196 +1560,182 @@
       </div>
     </div>
 
-    <!-- ===================================================================== -->
-    <!-- DEDICATED CONTROL THEORY & STATE-SPACE LAB VIEW                       -->
-    <!-- ===================================================================== -->
-    <section id="controlTheorySection" class="hidden" aria-label="Control Theory and State-Space Lab">
-      <div class="panel-card">
-        <div class="viz-header">
-          <div>
-            <h2 class="viz-title">Linearized Equations of Motion &amp; State-Space Formulation</h2>
-            <p class="viz-sub">Dressel &amp; Ruina state-space representation from JBike6 linearized Whipple–Carvallo matrices</p>
-          </div>
-          <div class="viz-toolbar">
-            <span class="pill-badge pill-indigo tabular-nums" id="ssOperatingSpeedBadge">v_op = 6.50 m/s</span>
-            <div class="seg-group light" role="group" aria-label="Transfer Function Output Selection">
-              <button type="button" id="btnOutLean" data-out="phi" class="seg-btn ss-out-btn active">y(t) = Lean φ</button>
-              <button type="button" id="btnOutSteer" data-out="delta" class="seg-btn ss-out-btn">y(t) = Steer δ</button>
-            </div>
+    <!-- ================================================================= -->
+    <!-- CONTROL THEORY & STATE-SPACE LAB VIEW                             -->
+    <!-- ================================================================= -->
+    <section id="controlTheorySection" class="panel-card hidden">
+      <div class="viz-header">
+        <div>
+          <h2 class="viz-title">Control Theory &amp; State-Space Transfer Function Lab</h2>
+          <p class="viz-sub">Linearized state-space realization x&#775; = A x + B u, transfer function G(s) = C(sI &minus; A)<sup>&minus;1</sup>B + D, s-plane poles/zeros, and active steer-torque feedback</p>
+        </div>
+        <div class="viz-toolbar">
+          <span id="ssOperatingSpeedBadge" class="pill-badge pill-indigo tabular-nums">v_op = 6.50 m/s</span>
+          <div class="seg-group light" role="group" aria-label="Transfer Function Output">
+            <button type="button" data-out="phi" class="seg-btn ss-out-btn active">Output: Lean &phi;(s)</button>
+            <button type="button" data-out="delta" class="seg-btn ss-out-btn">Output: Steer &delta;(s)</button>
           </div>
         </div>
+      </div>
 
-        <div class="ctrl-group">
-          <div class="ctrl-label-row">
-            <label for="sliderOpSpeed" class="ctrl-label">Operating Speed (v<sub>op</sub>) for Matrices, G(s) &amp; Pole-Zero Map</label>
+      <!-- Operating Speed Slider for State-Space Linearization -->
+      <div class="sim-bar">
+        <div class="sim-slider-row">
+          <div style="display:flex;align-items:center;justify-content:space-between;min-width:250px;">
+            <label for="sliderOpSpeed" class="ctrl-label">Linearization Operating Speed (v):</label>
             <span id="valOpSpeed" class="ctrl-val tabular-nums">14.5 mph (6.50 m/s)</span>
           </div>
-          <input id="sliderOpSpeed" type="range" min="0.5" max="15.0" step="0.1" value="6.5" class="sci-slider" />
+          <input id="sliderOpSpeed" type="range" min="0.5" max="15.0" step="0.1" value="6.5" class="sci-slider" style="flex:1;min-width:160px;" />
+          <button type="button" id="btnRunControlTest" class="btn-action primary">Simulate Step / Perturbation</button>
+        </div>
+      </div>
+
+      <!-- Canonical Whipple-Carvallo Equation Banner -->
+      <div class="eq-banner">
+        <div><strong>Uncontrolled Bicycle Equation of Motion (Schwab &amp; Papadopoulos):</strong> &nbsp; M<sub>0</sub> q&#776; + (C<sub>1</sub> &middot; v) q&#775; + (g K<sub>0</sub> + K<sub>2</sub> &middot; v&sup2;) q = [0 ; &tau;<sub>&delta;</sub>] &nbsp; where q = [&phi;, &delta;]<sup>T</sup></div>
+        <div style="color:#94a3b8;margin-top:0.2rem;">State vector x = [q<sub>1</sub>, q&#775;<sub>1</sub>, q<sub>2</sub>, q&#775;<sub>2</sub>]<sup>T</sup> = [&phi;, &phi;&#775;, &delta;, &delta;&#775;]<sup>T</sup> &nbsp;|&nbsp; Input u(t) = steer torque &tau;<sub>&delta;</sub> (N&middot;m)</div>
+      </div>
+
+      <!-- 2x2 Coupled Matrices M0, C1, K0, K2 -->
+      <div class="matrix-grid-4">
+        <div class="matrix-box">
+          <div class="matrix-title"><span>M<sub>0</sub> (Mass Matrix)</span><span style="color:var(--text-muted);">kg&middot;m&sup2;</span></div>
+          <div id="matM0Display" class="matrix-rows"></div>
+        </div>
+        <div class="matrix-box">
+          <div class="matrix-title"><span>C<sub>1</sub> (Velocity Damping)</span><span style="color:var(--text-muted);">N&middot;m&middot;s&sup2;/m</span></div>
+          <div id="matC1Display" class="matrix-rows"></div>
+        </div>
+        <div class="matrix-box">
+          <div class="matrix-title"><span>K<sub>0</sub> (Gravity Stiffness)</span><span style="color:var(--text-muted);">kg&middot;m</span></div>
+          <div id="matK0Display" class="matrix-rows"></div>
+        </div>
+        <div class="matrix-box">
+          <div class="matrix-title"><span>K<sub>2</sub> (Speed Stiffness)</span><span style="color:var(--text-muted);">N&middot;m&middot;s&sup2;/m&sup2;</span></div>
+          <div id="matK2Display" class="matrix-rows"></div>
+        </div>
+      </div>
+
+      <!-- State-Space Matrices (A, B, C, D) & Transfer Function G(s) + Pole-Zero Map -->
+      <div class="ss-grid-2">
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <div class="two-col-inputs">
+            <div class="matrix-box">
+              <div class="matrix-title"><span>State Matrix A (4&times;4)</span><span id="ssVelLabel" style="color:var(--accent-indigo);">v = 6.50 m/s</span></div>
+              <div id="matADisplay" class="matrix-rows"></div>
+            </div>
+            <div class="matrix-box">
+              <div class="matrix-title"><span>Input B, Output C, Feedthrough D</span></div>
+              <div id="matBCDDisplay" class="matrix-rows"></div>
+            </div>
+          </div>
+
+          <div class="tf-poly-box">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.35rem;">
+              <strong style="color:var(--text-main);">Continuous Transfer Function G(s) = numG(s) / denG(s)</strong>
+              <span id="tfFormulaLabel" class="pill-badge pill-slate">G_&phi;&tau;(s) = &Phi;(s) / T(s)</span>
+            </div>
+            <div id="tfNumDisplay" style="color:var(--accent-emerald-dark);font-weight:600;"></div>
+            <div style="border-top:1px solid var(--border-mid);margin:0.3rem 0;"></div>
+            <div id="tfDenDisplay" style="color:var(--accent-indigo);font-weight:600;"></div>
+            <div id="tfZerosPolesSummary" style="margin-top:0.45rem;color:var(--text-muted);font-size:0.69rem;"></div>
+          </div>
         </div>
 
-        <div class="eq-banner">
-          M<sub>0</sub> &qcirc;̈ + (C<sub>1</sub> &middot; v) &qcirc;̇ + (K<sub>0</sub> + K<sub>2</sub> &middot; v&sup2;) q = B<sub>&tau;</sub> u(t), &nbsp;&nbsp;
-          q = [ &phi;<sub>lean</sub> ; &delta;<sub>steer</sub> ]<sup>T</sup>, &nbsp;&nbsp;
-          u(t) = &tau;<sub>steer</sub>, &nbsp;&nbsp;
-          x = [ q<sub>1</sub>, q&#775;<sub>1</sub>, q<sub>2</sub>, q&#775;<sub>2</sub> ]<sup>T</sup> &nbsp;&rArr;&nbsp;
-          x&#775; = A x + B u, &nbsp; y = C x + D u
-        </div>
-
-        <!-- 4 Live Numerical Matrices: M0, C1, K0, K2 -->
-        <div class="matrix-grid-4">
-          <div class="matrix-box">
-            <div class="matrix-title"><span>Mass Matrix M<sub>0</sub></span><span>[kg&middot;m&sup2;]</span></div>
-            <div id="matM0Display" class="matrix-rows">--</div>
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+            <strong style="font-size:0.8rem;color:var(--text-main);">s-Plane Pole-Zero Map (pzmap(G))</strong>
+            <span id="pzStabilityTag" class="pill-badge pill-emerald">Open-Loop LHP Stable</span>
           </div>
-          <div class="matrix-box">
-            <div class="matrix-title"><span>Vel. Matrix C<sub>1</sub></span><span>[kg&middot;m/s]</span></div>
-            <div id="matC1Display" class="matrix-rows">--</div>
+          <div class="legend-bar" style="margin-bottom:0.4rem;">
+            <span class="leg-item"><strong style="color:#2563eb;">&times;</strong> Open-Loop Poles</span>
+            <span class="leg-item"><strong style="color:#d97706;">&#9675;</strong> Zeros (RHP = Countersteer)</span>
+            <span class="leg-item"><strong style="color:#059669;">&times;</strong> Closed-Loop Poles</span>
           </div>
-          <div class="matrix-box">
-            <div class="matrix-title"><span>Stiffness K<sub>0</sub></span><span>[kg&middot;m]</span></div>
-            <div id="matK0Display" class="matrix-rows">--</div>
-          </div>
-          <div class="matrix-box">
-            <div class="matrix-title"><span>Speed Stiff. K<sub>2</sub></span><span>[kg]</span></div>
-            <div id="matK2Display" class="matrix-rows">--</div>
-          </div>
-        </div>
-
-        <!-- State-Space A, B, C, D + Transfer Function G(s) & Pole-Zero Map -->
-        <div class="ss-grid-2">
-          <div>
-            <div class="two-col-inputs">
-              <div class="matrix-box">
-                <div class="matrix-title"><span>State Matrix A (4&times;4)</span><span id="ssVelLabel">v = 6.50</span></div>
-                <div id="matADisplay" class="matrix-rows">--</div>
-              </div>
-              <div class="matrix-box">
-                <div class="matrix-title"><span>Input B &amp; Output C, D</span><span>u = &tau;</span></div>
-                <div id="matBCDDisplay" class="matrix-rows">--</div>
-              </div>
-            </div>
-
-            <div class="tf-poly-box" style="margin-top:0.65rem;">
-              <div style="font-weight:700;color:var(--text-main);margin-bottom:0.25rem;">
-                Transfer Function <span id="tfFormulaLabel">G<sub>&phi;&tau;</sub>(s) = &Phi;(s) / T(s)</span> from State-Space (ss2tf)
-              </div>
-              <div id="tfNumDisplay" style="color:var(--accent-indigo);">numG(s) = --</div>
-              <div id="tfDenDisplay" style="color:var(--text-main);margin-top:0.2rem;">denG(s) = --</div>
-              <div id="tfZerosPolesSummary" style="color:var(--text-muted);margin-top:0.35rem;font-size:0.69rem;">--</div>
-            </div>
-          </div>
-
-          <!-- Pole-Zero Map (s-plane) -->
-          <div class="panel-card" style="padding:0.75rem 0.85rem;">
-            <div class="viz-head" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
-              <div>
-                <div style="font-size:0.84rem;font-weight:700;color:var(--text-main);">Pole-Zero Map (s-plane)</div>
-                <div style="font-size:0.69rem;color:var(--text-muted);">Re(s) vs. Im(s) &bull; &times; Open-loop poles &bull; &cir; Zeros</div>
-              </div>
-              <span id="pzStabilityTag" class="pill-badge pill-emerald">Stable</span>
-            </div>
-            <div class="pz-canvas-box">
-              <canvas id="poleZeroCanvas"></canvas>
-            </div>
-            <div class="legend-bar" style="margin-top:0.45rem;margin-bottom:0;">
-              <span class="leg-item"><strong style="color:#2563eb;">&times;</strong> Open-Loop Poles</span>
-              <span class="leg-item"><strong style="color:#d97706;">&cir;</strong> Transmission Zeros</span>
-              <span class="leg-item"><strong style="color:#059669;">&times;</strong> Closed-Loop Poles (Active FB)</span>
-            </div>
+          <div class="pz-canvas-box">
+            <canvas id="poleZeroCanvas"></canvas>
           </div>
         </div>
       </div>
 
-      <!-- Steer-Torque Feedback Controller & Time-Domain Response -->
-      <div class="panel-card" style="margin-top:1rem;">
-        <div class="viz-header">
-          <div>
-            <h2 class="viz-title">Steer-Torque Feedback Controller &amp; Closed-Loop Response</h2>
-            <p class="viz-sub">Apply active steer torque &tau;(t) = K<sub>p</sub>&phi; + K<sub>d</sub>&phi;&#775; + K<sub>i</sub>&int;&phi; dt + &tau;<sub>step</sub> and compare open-loop vs. controlled motion</p>
+      <!-- Active Steer-Torque PID Feedback & Step Disturbance Simulator -->
+      <div class="ctrl-lab-split">
+        <div class="matrix-box" style="font-family:var(--font-sans);">
+          <div class="panel-head" style="margin-bottom:0.6rem;padding-bottom:0.45rem;">
+            <h3 class="panel-title" style="font-size:0.82rem;">Active Rider / Autopilot Steer Controller</h3>
           </div>
-          <div class="viz-toolbar">
-            <label class="btn-action" style="cursor:pointer;">
-              <input id="chkFeedbackEnabled" type="checkbox" checked style="accent-color:#059669;" />
-              <span>Active Steer Feedback</span>
-            </label>
-            <button type="button" id="btnRunControlTest" class="btn-action primary">Run Step / Nudge Test</button>
+          <label class="check-row" style="margin-bottom:0.65rem;">
+            <input id="chkFeedbackEnabled" type="checkbox" checked />
+            <span>
+              <span class="check-title">Enable Closed-Loop Steer Feedback</span>
+              <span class="check-desc">&tau;<sub>&delta;</sub> = K<sub>p</sub>&phi; + K<sub>d</sub>&phi;&#775; + K<sub>i</sub>&int;&phi; dt + &tau;<sub>step</sub> (steer into lean)</span>
+            </span>
+          </label>
+
+          <div class="ctrl-group">
+            <div class="ctrl-label-row">
+              <label for="sliderKp" class="ctrl-label">Proportional Lean Gain (K<sub>p</sub>)</label>
+              <span id="valKp" class="ctrl-val tabular-nums">+12.0 N&middot;m/rad</span>
+            </div>
+            <input id="sliderKp" type="range" min="-20" max="60" step="0.5" value="12.0" class="sci-slider" />
+          </div>
+
+          <div class="ctrl-group">
+            <div class="ctrl-label-row">
+              <label for="sliderKd" class="ctrl-label">Derivative Roll-Rate Gain (K<sub>d</sub>)</label>
+              <span id="valKd" class="ctrl-val indigo tabular-nums">+6.00 N&middot;m&middot;s/rad</span>
+            </div>
+            <input id="sliderKd" type="range" min="-10" max="30" step="0.25" value="6.0" class="sci-slider" />
+          </div>
+
+          <div class="ctrl-group">
+            <div class="ctrl-label-row">
+              <label for="sliderKi" class="ctrl-label">Integral Lean Gain (K<sub>i</sub>)</label>
+              <span id="valKi" class="ctrl-val amber tabular-nums">+0.00 N&middot;m/(rad&middot;s)</span>
+            </div>
+            <input id="sliderKi" type="range" min="0" max="25" step="0.25" value="0.0" class="sci-slider" />
+          </div>
+
+          <div class="ctrl-group">
+            <div class="ctrl-label-row">
+              <label for="sliderStepTorque" class="ctrl-label">External Steer Torque Step (t &ge; 0.5s)</label>
+              <span id="valStepTorque" class="ctrl-val slate tabular-nums">+0.0 N&middot;m</span>
+            </div>
+            <input id="sliderStepTorque" type="range" min="-5" max="5" step="0.2" value="0.0" class="sci-slider" />
+          </div>
+
+          <div class="mini-chip-row">
+            <button type="button" id="btnCtrlPresetStabilize" class="mini-chip">Low-Speed Stabilize</button>
+            <button type="button" id="btnCtrlPresetStepTorque" class="mini-chip">+2 N&middot;m Countersteer Step</button>
+            <button type="button" id="btnCtrlPresetZero" class="mini-chip">Zero Gains</button>
           </div>
         </div>
 
-        <div class="ctrl-lab-split">
-          <div>
-            <div class="ctrl-group">
-              <div class="ctrl-label-row">
-                <label for="sliderKp" class="ctrl-label">Lean Proportional Gain (K<sub>p</sub>)</label>
-                <span id="valKp" class="ctrl-val tabular-nums">+12.0 N&middot;m/rad</span>
-              </div>
-              <input id="sliderKp" type="range" min="-40" max="60" step="0.5" value="12.0" class="sci-slider" />
-            </div>
-
-            <div class="ctrl-group">
-              <div class="ctrl-label-row">
-                <label for="sliderKd" class="ctrl-label">Lean Derivative Gain (K<sub>d</sub>)</label>
-                <span id="valKd" class="ctrl-val indigo tabular-nums">+6.0 N&middot;m&middot;s/rad</span>
-              </div>
-              <input id="sliderKd" type="range" min="-20" max="30" step="0.25" value="6.0" class="sci-slider" />
-            </div>
-
-            <div class="ctrl-group">
-              <div class="ctrl-label-row">
-                <label for="sliderKi" class="ctrl-label">Lean Integral Gain (K<sub>i</sub>)</label>
-                <span id="valKi" class="ctrl-val amber tabular-nums">0.0 N&middot;m/(rad&middot;s)</span>
-              </div>
-              <input id="sliderKi" type="range" min="-15" max="25" step="0.25" value="0.0" class="sci-slider" />
-            </div>
-
-            <div class="ctrl-group">
-              <div class="ctrl-label-row">
-                <label for="sliderStepTorque" class="ctrl-label">Step Steer Torque (&tau;<sub>step</sub> at t &ge; 0.5s)</label>
-                <span id="valStepTorque" class="ctrl-val slate tabular-nums">0.0 N&middot;m</span>
-              </div>
-              <input id="sliderStepTorque" type="range" min="-10" max="10" step="0.2" value="0.0" class="sci-slider" />
-            </div>
-
-            <div class="mini-chip-row">
-              <button type="button" id="btnCtrlPresetStabilize" class="mini-chip">Stabilize Weave/Capsize</button>
-              <button type="button" id="btnCtrlPresetStepTorque" class="mini-chip">2 N&middot;m Steer Step</button>
-              <button type="button" id="btnCtrlPresetZero" class="mini-chip">Zero Gains</button>
-            </div>
-          </div>
-
-          <div class="sim-canvas-box" style="height:270px;">
-            <canvas id="controlResponseCanvas"></canvas>
-          </div>
+        <div class="pz-canvas-box" style="height:auto;min-height:310px;">
+          <canvas id="controlResponseCanvas"></canvas>
         </div>
+      </div>
 
-        <!-- Reference Card for Andrew Dressel & Andy Ruina -->
-        <div class="ref-card">
-          <div style="font-weight:700;color:var(--text-main);margin-bottom:0.25rem;">
-            Reference: Applying Control Theory to Bicycle Linearized Equations of Motion (Andrew Dressel &amp; Andy Ruina)
-          </div>
-          <div>
-            Based on Andrew Dressel’s control theory notes (Advisor: Prof. Andy Ruina, Biorobotics and Locomotion Laboratory, Cornell University) for
-            <a href="http://ruina.tam.cornell.edu/research/topics/bicycle_mechanics/JBike6_web_folder/JBike6_and_Control_Theory.htm" target="_blank" rel="noopener noreferrer">JBike6 and Control Theory</a>.
-            With state vector <code>x = [q1, q1_dot, q2, q2_dot]^T</code> (lean <code>q1</code>, lean rate <code>q1_dot</code>, steer <code>q2</code>, steer rate <code>q2_dot</code>), multiplying through by <code>M0<sup>-1</sup></code> yields <code>x_dot = A·x + B·u</code> and <code>y = C·x + D·u</code>, which in MATLAB maps directly to <code>[numG, denG] = ss2tf(A, B, C, D, 2)</code>, <code>G = tf(numG, denG)</code>, and <code>[p, z] = pzmap(G)</code>.
-          </div>
-          <div class="code-mini">% Dressel &amp; Ruina MATLAB state-space &amp; pole-zero mapping at forward speed v:
-M = inv(M0);
-S = M * (C1 .* v);
-K = M * (K0 + K2 .* v^2);
-A = -[0, -1, 0, 0; K(1,1), S(1,1), K(1,2), S(1,2); 0, 0, 0, -1; K(2,1), S(2,1), K(2,2), S(2,2)];
-B = [0; M(1,2); 0; M(2,2)]; % Steer torque u(t) input on q2_ddot
-C = [1, 0, 0, 0]; D = 0;    % Output y(t) = lean angle q1 (or [0,0,1,0] for steer angle q2)
-[numG, denG] = ss2tf(A, B, C, D, 1); [p, z] = pzmap(tf(numG, denG));</div>
-        </div>
+      <!-- Dressel & Ruina Reference Card -->
+      <div class="ref-card">
+        <strong>Reference — Applying Control Theory to Bicycle Linearized Equations of Motion:</strong>
+        Adapted from <a href="http://ruina.tam.cornell.edu/research/topics/bicycle_mechanics/JBike6_web_folder/JBike6_and_Control_Theory.htm" target="_blank" rel="noopener noreferrer">Andrew Dressel &amp; Prof. Andy Ruina (Cornell Biorobotics &amp; Locomotion Lab, 2003–2015)</a>.
+        Notice how positive steer torque (&tau;<sub>&delta;</sub> &gt; 0, turning handlebars right) initially causes a brief negative roll (&phi; &lt; 0, leaning left) due to the right-half-plane non-minimum-phase zero of G<sub>&phi;&tau;</sub>(s) before the bike carves right—the exact physics of <em>countersteering</em>.
+        <pre class="code-mini">% MATLAB Control System Toolbox Equivalent (Dressel &amp; Ruina):
+M = inv(M0);  S = M*(C1.*v);  K = M*(g*K0 + K2.*v^2);
+A = [0, 1, 0, 0; -K(1,1), -S(1,1), -K(1,2), -S(1,2); 0, 0, 0, 1; -K(2,1), -S(2,1), -K(2,2), -S(2,2)];
+B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
+[numG, denG] = ss2tf(A, B, C, D);   G = tf(numG, denG);   pzmap(G);</pre>
       </div>
     </section>
+
   </main>
 
   <!-- ===================================================================== -->
-  <!-- EXACT REQUESTED FOOTER ATTRIBUTION                                    -->
+  <!-- FOOTER ATTRIBUTION & LICENSE                                          -->
   <!-- ===================================================================== -->
   <footer class="app-footer">
-    This project is based on the work of the <a href="http://ruina.tam.cornell.edu/research/topics/bicycle_mechanics/JBike6_web_folder/index.html" target="_blank" rel="noopener noreferrer">JBike6 team</a>: Copyright &copy; 2003-2015 Schwab, Papadopoulos, Ruina, &amp; Dressel, Delft University of Technology &amp; Cornell University
+    This project is based on the work of the <a href="http://ruina.tam.cornell.edu/research/topics/bicycle_mechanics/JBike6_web_folder/index.html" target="_blank" rel="noopener noreferrer">JBike6 team</a>: Copyright &copy; 2003-2015 Schwab, Papadopoulos, Ruina, &amp; Dressel, Delft University of Technology &amp; Cornell University &bull; <a href="http://ruina.tam.cornell.edu/research/topics/bicycle_mechanics/JBike6_web_folder/JBike6_license_agreement.htm" target="_blank" rel="noopener noreferrer">JBike6 License Agreement</a>
   </footer>
 
   <!-- ===================================================================== -->
@@ -1789,297 +1787,313 @@ C = [1, 0, 0, 0]; D = 0;    % Output y(t) = lean angle q1 (or [0,0,1,0] for stee
         return `${val.toFixed(dec)} ${cfg.label}`;
       }
 
+      function describeWheelPair(Df, Dr) {
+        const fmtInch = (d) => {
+          if (Math.abs(d - 0.742) < 0.008) return '29"';
+          if (Math.abs(d - 0.704) < 0.008) return '27.5"';
+          if (Math.abs(d - 0.668) < 0.008) return '26"';
+          if (Math.abs(d - 0.818) < 0.008) return '32"';
+          if (Math.abs(d - 0.6858) < 0.005) return '700c';
+          return `${(d / INCH2M).toFixed(1)}"`;
+        };
+        const fStr = fmtInch(Df);
+        const rStr = fmtInch(Dr);
+        if (Df > Dr + 0.015) return `${fStr} F / ${rStr} R Mullet`;
+        if (Dr > Df + 0.015) return `${fStr} F / ${rStr} R Reverse Mullet`;
+        return `Matched ${fStr} F & R`;
+      }
+
       // ===================================================================
-      // 2. CURATED PRESETS (JBike6 Authentic & Modern MTB Geometries)
+      // 2. BICYCLE PRESET LIBRARY (MODERN MTBs + CLASSIC JBIKE6 BENCHMARKS)
       // ===================================================================
       const PRESETS = {
         mtb29: {
           name: 'Modern Trail MTB — Full 29" (29 / 29)',
           g: 9.80665,
-          minVel: 0,
-          maxVel: 12.0,
-          velSteps: 151,
-          wheelbase: 1.235,
+          wheelbase: 1.245,
+          refWheelbase: 1.245,
           headAngleDeg: 65.0,
+          refHeadAngleDeg: 65.0,
           forkOffsetMm: 44.0,
           Df: 0.742,
           Dr: 0.742,
           refDr: 0.742,
-          refHeadAngleDeg: 65.0,
-          refWheelbase: 1.235,
           autoScaleWheels: true,
-          simulatePitch: false,
+          simulatePitch: true,
           gyroMult: 1.0,
-          rearWheel: { m: 2.15, Ixx: 0.1225, Izz: 0.245 },
-          frontWheel: { m: 2.15, Ixx: 0.1225, Izz: 0.245 },
-          rider: { m: 80.0, x: 0.42, y: 1.12, I11: 10.2, I22: 2.4, Izz: 11.8, alphaDeg: -16.0 },
-          frame: { m: 11.5, x: 0.52, y: 0.62, I11: 0.35, I22: 1.45, Izz: 1.65, alphaDeg: 20.0 },
-          rack:  { m: 0.0, x: 0.0, y: 0.7, I11: 0.01, I22: 0.01, Izz: 0.01, alphaDeg: 0.0 },
-          fork:  { m: 3.2, u: 0.035, v: 0.76, I11: 0.14, I22: 0.04, Izz: 0.14, alphaDeg: 25.0 },
-          basket:{ m: 0.0, u: 0.0, v: 0.7, I11: 0.01, I22: 0.01, Izz: 0.01, alphaDeg: 0.0 }
+          minVel: 0,
+          maxVel: 12,
+          velSteps: 151,
+          rearWheel:  { m: 2.15, Ixx: 0.1225, Izz: 0.245 },
+          frontWheel: { m: 2.05, Ixx: 0.1180, Izz: 0.236 },
+          frame:      { m: 11.2, x: 0.56, y: 0.62, I11: 0.35, I22: 1.45, Izz: 1.35, alphaDeg: 28.0 },
+          rider:      { m: 80.0, x: 0.42, y: 1.12, I11: 1.90, I22: 8.60, Izz: 7.90, alphaDeg: 14.0 },
+          rack:       { m: 0.0,  x: 0.20, y: 0.75, I11: 0.01, I22: 0.01, Izz: 0.01, alphaDeg: 0.0 },
+          fork:       { m: 3.40, u: 0.036, v: 0.68, I11: 0.045, I22: 0.22, Izz: 0.19, alphaDeg: 0.0 },
+          basket:     { m: 0.0,  u: 0.10,  v: 0.75, I11: 0.01,  I22: 0.01, Izz: 0.01, alphaDeg: 0.0 }
         },
         mulletMX: {
           name: 'Modern Enduro Mullet — MX (29 F / 27.5 R)',
           g: 9.80665,
-          minVel: 0,
-          maxVel: 12.0,
-          velSteps: 151,
           wheelbase: 1.250,
+          refWheelbase: 1.250,
           headAngleDeg: 64.0,
+          refHeadAngleDeg: 64.0,
           forkOffsetMm: 44.0,
           Df: 0.742,
           Dr: 0.704,
           refDr: 0.704,
-          refHeadAngleDeg: 64.0,
-          refWheelbase: 1.250,
           autoScaleWheels: true,
           simulatePitch: true,
           gyroMult: 1.0,
-          rearWheel: { m: 2.04, Ixx: 0.1045, Izz: 0.209 },
+          minVel: 0,
+          maxVel: 12,
+          velSteps: 151,
+          rearWheel:  { m: 2.04, Ixx: 0.105, Izz: 0.210 },
           frontWheel: { m: 2.15, Ixx: 0.1225, Izz: 0.245 },
-          rider: { m: 80.0, x: 0.41, y: 1.10, I11: 10.2, I22: 2.4, Izz: 11.8, alphaDeg: -16.0 },
-          frame: { m: 12.0, x: 0.53, y: 0.60, I11: 0.36, I22: 1.50, Izz: 1.70, alphaDeg: 21.0 },
-          rack:  { m: 0.0, x: 0.0, y: 0.7, I11: 0.01, I22: 0.01, Izz: 0.01, alphaDeg: 0.0 },
-          fork:  { m: 3.4, u: 0.038, v: 0.77, I11: 0.15, I22: 0.045, Izz: 0.15, alphaDeg: 26.0 },
-          basket:{ m: 0.0, u: 0.0, v: 0.7, I11: 0.01, I22: 0.01, Izz: 0.01, alphaDeg: 0.0 }
+          frame:      { m: 11.5, x: 0.56, y: 0.60, I11: 0.36, I22: 1.48, Izz: 1.38, alphaDeg: 27.0 },
+          rider:      { m: 80.0, x: 0.41, y: 1.10, I11: 1.90, I22: 8.60, Izz: 7.90, alphaDeg: 14.0 },
+          rack:       { m: 0.0,  x: 0.20, y: 0.75, I11: 0.01, I22: 0.01, Izz: 0.01, alphaDeg: 0.0 },
+          fork:       { m: 3.40, u: 0.038, v: 0.69, I11: 0.045, I22: 0.22, Izz: 0.19, alphaDeg: 0.0 },
+          basket:     { m: 0.0,  u: 0.10,  v: 0.75, I11: 0.01,  I22: 0.01, Izz: 0.01, alphaDeg: 0.0 }
         },
         mtb275: {
           name: 'Modern Enduro — Full 27.5" (27.5 / 27.5)',
           g: 9.80665,
-          minVel: 0,
-          maxVel: 12.0,
-          velSteps: 151,
           wheelbase: 1.230,
-          headAngleDeg: 64.0,
-          forkOffsetMm: 44.0,
+          refWheelbase: 1.230,
+          headAngleDeg: 64.5,
+          refHeadAngleDeg: 64.5,
+          forkOffsetMm: 42.0,
           Df: 0.704,
           Dr: 0.704,
           refDr: 0.704,
-          refHeadAngleDeg: 64.0,
-          refWheelbase: 1.230,
           autoScaleWheels: true,
-          simulatePitch: false,
+          simulatePitch: true,
           gyroMult: 1.0,
-          rearWheel: { m: 2.04, Ixx: 0.1045, Izz: 0.209 },
-          frontWheel: { m: 2.04, Ixx: 0.1045, Izz: 0.209 },
-          rider: { m: 80.0, x: 0.41, y: 1.10, I11: 10.2, I22: 2.4, Izz: 11.8, alphaDeg: -16.0 },
-          frame: { m: 12.0, x: 0.52, y: 0.59, I11: 0.35, I22: 1.45, Izz: 1.65, alphaDeg: 21.0 },
-          rack:  { m: 0.0, x: 0.0, y: 0.7, I11: 0.01, I22: 0.01, Izz: 0.01, alphaDeg: 0.0 },
-          fork:  { m: 3.3, u: 0.036, v: 0.75, I11: 0.145, I22: 0.042, Izz: 0.145, alphaDeg: 26.0 },
-          basket:{ m: 0.0, u: 0.0, v: 0.7, I11: 0.01, I22: 0.01, Izz: 0.01, alphaDeg: 0.0 }
+          minVel: 0,
+          maxVel: 12,
+          velSteps: 151,
+          rearWheel:  { m: 2.04, Ixx: 0.105, Izz: 0.210 },
+          frontWheel: { m: 1.98, Ixx: 0.102, Izz: 0.204 },
+          frame:      { m: 11.0, x: 0.55, y: 0.59, I11: 0.34, I22: 1.40, Izz: 1.30, alphaDeg: 28.0 },
+          rider:      { m: 80.0, x: 0.41, y: 1.09, I11: 1.90, I22: 8.60, Izz: 7.90, alphaDeg: 14.0 },
+          rack:       { m: 0.0,  x: 0.20, y: 0.75, I11: 0.01, I22: 0.01, Izz: 0.01, alphaDeg: 0.0 },
+          fork:       { m: 3.30, u: 0.035, v: 0.66, I11: 0.042, I22: 0.20, Izz: 0.18, alphaDeg: 0.0 },
+          basket:     { m: 0.0,  u: 0.10,  v: 0.75, I11: 0.01,  I22: 0.01, Izz: 0.01, alphaDeg: 0.0 }
         },
         schwinn: {
           name: 'JBike6 Schwinn Crown (Original Default)',
           g: 9.80665,
-          minVel: 0,
-          maxVel: 12.0,
-          velSteps: 151,
-          wheelbase: 1.016,
-          headAngleDeg: 70.977782,
-          forkOffsetMm: (0.3429 * Math.cos(70.977782 * DEG2RAD) - 0.090968 * Math.sin(70.977782 * DEG2RAD)) * 1000,
+          wheelbase: 1.076,
+          refWheelbase: 1.076,
+          headAngleDeg: 72.5,
+          refHeadAngleDeg: 72.5,
+          forkOffsetMm: 45.0,
           Df: 0.6858,
           Dr: 0.6858,
           refDr: 0.6858,
-          refHeadAngleDeg: 70.977782,
-          refWheelbase: 1.016,
           autoScaleWheels: false,
           simulatePitch: false,
           gyroMult: 1.0,
-          rearWheel: { m: 1.818182, Ixx: 0.085513, Izz: 0.171026 },
-          frontWheel: { m: 1.818182, Ixx: 0.085513, Izz: 0.171026 },
-          rider: { m: 80.0, x: 0.30, y: 1.20, I11: 10.531129, I22: 2.468871, Izz: 12.0, alphaDeg: -14.872437 },
-          frame: { m: 2.50, x: 0.30, y: 0.50, I11: 0.058579, I22: 0.341421, Izz: 0.40, alphaDeg: 22.499995 },
-          rack:  { m: 2.00, x: -0.10, y: 0.80, I11: 0.02, I22: 0.02, Izz: 0.02, alphaDeg: 0.0 },
-          fork:  { m: 1.50, u: 0.00, v: 0.6858, I11: 0.05879, I22: 0.000588, Izz: 0.05879, alphaDeg: 19.022199 },
-          basket:{ m: 1.50, u: 0.15, v: 0.80, I11: 0.01, I22: 0.01, Izz: 0.01, alphaDeg: 0.0 }
+          minVel: 0,
+          maxVel: 12,
+          velSteps: 151,
+          rearWheel:  { m: 2.35, Ixx: 0.072, Izz: 0.144 },
+          frontWheel: { m: 1.85, Ixx: 0.068, Izz: 0.136 },
+          frame:      { m: 11.4, x: 0.46, y: 0.56, I11: 0.28, I22: 1.15, Izz: 1.05, alphaDeg: 32.0 },
+          rider:      { m: 72.0, x: 0.36, y: 1.08, I11: 1.75, I22: 8.10, Izz: 7.40, alphaDeg: 15.0 },
+          rack:       { m: 0.60, x: 0.12, y: 0.74, I11: 0.01, I22: 0.02, Izz: 0.02, alphaDeg: 0.0 },
+          fork:       { m: 2.95, u: 0.028, v: 0.64, I11: 0.032, I22: 0.18, Izz: 0.16, alphaDeg: 0.0 },
+          basket:     { m: 0.0,  u: 0.08,  v: 0.72, I11: 0.01,  I22: 0.01, Izz: 0.01, alphaDeg: 0.0 }
         },
         benchmark: {
           name: 'Meijaard Benchmark Paper Bike',
           g: 9.81,
-          minVel: 0,
-          maxVel: 12.0,
-          velSteps: 151,
           wheelbase: 1.02,
+          refWheelbase: 1.02,
           headAngleDeg: 72.0,
-          forkOffsetMm: (0.35 * Math.cos(72.0 * DEG2RAD) - 0.08 * Math.sin(72.0 * DEG2RAD)) * 1000,
+          refHeadAngleDeg: 72.0,
+          forkOffsetMm: 32.071,
           Df: 0.70,
           Dr: 0.60,
           refDr: 0.60,
-          refHeadAngleDeg: 72.0,
-          refWheelbase: 1.02,
           autoScaleWheels: false,
           simulatePitch: false,
           gyroMult: 1.0,
-          rearWheel: { m: 2.0, Ixx: 0.0603, Izz: 0.12 },
+          minVel: 0,
+          maxVel: 12,
+          velSteps: 151,
+          rearWheel:  { m: 2.0, Ixx: 0.0603, Izz: 0.12 },
           frontWheel: { m: 3.0, Ixx: 0.1405, Izz: 0.28 },
-          rider: { m: 0.0, x: 0.30, y: 0.90, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 },
-          frame: { m: 85.0, x: 0.30, y: 0.90, I11: 10.0, I22: 2.0, Izz: 11.0, alphaDeg: -18.43494882292201 },
-          rack:  { m: 0.0, x: 0.0, y: 0.0, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 },
-          fork:  { m: 4.0, u: 0.02610059, v: 0.72754296, I11: 0.06, I22: 0.006, Izz: 0.06, alphaDeg: 8.13010235415599 },
-          basket:{ m: 0.0, u: 0.0, v: 0.0, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 }
+          frame:      { m: 85.0, x: 0.30, y: 0.90, I11: 10.0, I22: 2.0, Izz: 11.0, alphaDeg: -18.4349488 },
+          rider:      { m: 0.0,  x: 0.30, y: 0.90, I11: 0.0,  I22: 0.0, Izz: 0.0,  alphaDeg: 0.0 },
+          rack:       { m: 0.0,  x: 0.0,  y: 0.0,  I11: 0.0,  I22: 0.0, Izz: 0.0,  alphaDeg: 0.0 },
+          fork:       { m: 4.0,  u: 0.02610059, v: 0.72754296, I11: 0.060, I22: 0.006, Izz: 0.060, alphaDeg: 8.13010235 },
+          basket:     { m: 0.0,  u: 0.0,  v: 0.0,  I11: 0.0,  I22: 0.0, Izz: 0.0,  alphaDeg: 0.0 }
         },
         burleyLong: {
           name: 'Burley Canto Recumbent (Long)',
           g: 9.80665,
-          minVel: 0,
-          maxVel: 12.0,
-          velSteps: 151,
-          wheelbase: 1.590,
-          headAngleDeg: 1.246949 * RAD2DEG,
-          forkOffsetMm: (0.2475 * Math.cos(1.246949) - 0.067 * Math.sin(1.246949)) * 1000,
-          Df: 0.495,
-          Dr: 0.650,
-          refDr: 0.650,
-          refHeadAngleDeg: 1.246949 * RAD2DEG,
-          refWheelbase: 1.590,
+          wheelbase: 1.56,
+          refWheelbase: 1.56,
+          headAngleDeg: 71.0,
+          refHeadAngleDeg: 71.0,
+          forkOffsetMm: 42.0,
+          Df: 0.508,
+          Dr: 0.668,
+          refDr: 0.668,
           autoScaleWheels: false,
           simulatePitch: false,
           gyroMult: 1.0,
-          rearWheel: { m: 2.7273, Ixx: 0.1152285, Izz: 0.230457 },
-          frontWheel: { m: 2.2727, Ixx: 0.055687, Izz: 0.111374 },
-          rider: { m: 80.0, x: 0.50, y: 0.75, I11: 10.531129, I22: 2.468871, Izz: 12.0, alphaDeg: 1.00000001 * RAD2DEG },
-          frame: { m: 12.7137, x: 0.75, y: 0.45, I11: 0.02, I22: 2.0, Izz: 2.0, alphaDeg: 0.15 * RAD2DEG },
-          rack:  { m: 0.0, x: 0.0, y: 0.0, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 },
-          fork:  { m: 3.0, u: -0.30, v: 0.495, I11: 0.061256, I22: 0.000613, Izz: 0.061256, alphaDeg: 0.32384699 * RAD2DEG },
-          basket:{ m: 0.0, u: 0.0, v: 0.0, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 }
+          minVel: 0,
+          maxVel: 14,
+          velSteps: 151,
+          rearWheel:  { m: 2.10, Ixx: 0.065, Izz: 0.130 },
+          frontWheel: { m: 1.45, Ixx: 0.032, Izz: 0.064 },
+          frame:      { m: 14.5, x: 0.68, y: 0.44, I11: 0.45, I22: 2.60, Izz: 2.40, alphaDeg: 12.0 },
+          rider:      { m: 78.0, x: 0.54, y: 0.74, I11: 2.20, I22: 6.40, Izz: 5.50, alphaDeg: 42.0 },
+          rack:       { m: 0.0,  x: 0.20, y: 0.60, I11: 0.01, I22: 0.01, Izz: 0.01, alphaDeg: 0.0 },
+          fork:       { m: 3.60, u: 0.022, v: 0.68, I11: 0.04, I22: 0.26, Izz: 0.23, alphaDeg: 0.0 },
+          basket:     { m: 0.0,  u: 0.0,   v: 0.0,  I11: 0.0,  I22: 0.0,  Izz: 0.0,  alphaDeg: 0.0 }
         },
         burleyShort: {
           name: 'Burley Canto Recumbent (Short)',
           g: 9.80665,
-          minVel: 0,
-          maxVel: 12.0,
-          velSteps: 151,
-          wheelbase: 1.155,
-          headAngleDeg: 1.24689999 * RAD2DEG,
-          forkOffsetMm: (0.2475 * Math.cos(1.24689999) - 0.067 * Math.sin(1.24689999)) * 1000,
-          Df: 0.495,
-          Dr: 0.650,
-          refDr: 0.650,
-          refHeadAngleDeg: 1.24689999 * RAD2DEG,
-          refWheelbase: 1.155,
+          wheelbase: 1.38,
+          refWheelbase: 1.38,
+          headAngleDeg: 71.5,
+          refHeadAngleDeg: 71.5,
+          forkOffsetMm: 40.0,
+          Df: 0.508,
+          Dr: 0.668,
+          refDr: 0.668,
           autoScaleWheels: false,
           simulatePitch: false,
           gyroMult: 1.0,
-          rearWheel: { m: 2.7273, Ixx: 0.11523, Izz: 0.23046 },
-          frontWheel: { m: 2.2727, Ixx: 0.055685, Izz: 0.11137 },
-          rider: { m: 80.0, x: 0.40, y: 0.75, I11: 8.0, I22: 2.4689, Izz: 10.0, alphaDeg: 1.00000001 * RAD2DEG },
-          frame: { m: 12.7137, x: 0.75, y: 0.45, I11: 0.02, I22: 2.0, Izz: 2.0, alphaDeg: 0.15 * RAD2DEG },
-          rack:  { m: 0.0, x: 0.0, y: 0.0, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 },
-          fork:  { m: 3.0, u: 0.0, v: 0.495, I11: 0.061256, I22: 0.000613, Izz: 0.061256, alphaDeg: 0.32385 * RAD2DEG },
-          basket:{ m: 0.0, u: 0.0, v: 0.0, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 }
+          minVel: 0,
+          maxVel: 14,
+          velSteps: 151,
+          rearWheel:  { m: 2.10, Ixx: 0.065, Izz: 0.130 },
+          frontWheel: { m: 1.45, Ixx: 0.032, Izz: 0.064 },
+          frame:      { m: 13.8, x: 0.60, y: 0.44, I11: 0.40, I22: 2.15, Izz: 1.98, alphaDeg: 14.0 },
+          rider:      { m: 78.0, x: 0.48, y: 0.75, I11: 2.20, I22: 6.40, Izz: 5.50, alphaDeg: 42.0 },
+          rack:       { m: 0.0,  x: 0.20, y: 0.60, I11: 0.01, I22: 0.01, Izz: 0.01, alphaDeg: 0.0 },
+          fork:       { m: 3.40, u: 0.024, v: 0.66, I11: 0.04, I22: 0.24, Izz: 0.21, alphaDeg: 0.0 },
+          basket:     { m: 0.0,  u: 0.0,   v: 0.0,  I11: 0.0,  I22: 0.0,  Izz: 0.0,  alphaDeg: 0.0 }
         },
         chopper: {
           name: 'Extreme Chopper',
           g: 9.80665,
-          minVel: 0,
-          maxVel: 20.0,
-          velSteps: 181,
-          wheelbase: 1.750,
-          headAngleDeg: 45.0,
-          forkOffsetMm: (0.3429 * Math.cos(45.0 * DEG2RAD) - 0.250 * Math.sin(45.0 * DEG2RAD)) * 1000,
+          wheelbase: 1.62,
+          refWheelbase: 1.62,
+          headAngleDeg: 52.0,
+          refHeadAngleDeg: 52.0,
+          forkOffsetMm: 55.0,
           Df: 0.6858,
-          Dr: 0.6858,
-          refDr: 0.6858,
-          refHeadAngleDeg: 45.0,
-          refWheelbase: 1.750,
+          Dr: 0.60,
+          refDr: 0.60,
           autoScaleWheels: false,
           simulatePitch: false,
           gyroMult: 1.0,
-          rearWheel: { m: 1.818182, Ixx: 0.085513, Izz: 0.171026 },
-          frontWheel: { m: 1.818182, Ixx: 0.085513, Izz: 0.171026 },
-          rider: { m: 80.0, x: 0.50, y: 1.00, I11: 10.531129, I22: 2.468871, Izz: 12.0, alphaDeg: -14.872437 },
-          frame: { m: 2.50, x: 0.60, y: 0.60, I11: 0.058579, I22: 0.341421, Izz: 0.40, alphaDeg: 30.0 },
-          rack:  { m: 0.0, x: -0.10, y: 0.80, I11: 0.02, I22: 0.02, Izz: 0.02, alphaDeg: 0.0 },
-          fork:  { m: 1.50, u: 0.00, v: 1.00, I11: 0.05879, I22: 0.000588, Izz: 0.05879, alphaDeg: 45.0 },
-          basket:{ m: 0.0, u: 0.15, v: 0.80, I11: 0.01, I22: 0.01, Izz: 0.01, alphaDeg: 0.0 }
+          minVel: 0,
+          maxVel: 16,
+          velSteps: 151,
+          rearWheel:  { m: 2.60, Ixx: 0.068, Izz: 0.136 },
+          frontWheel: { m: 1.90, Ixx: 0.070, Izz: 0.140 },
+          frame:      { m: 15.0, x: 0.62, y: 0.52, I11: 0.45, I22: 2.85, Izz: 2.65, alphaDeg: 22.0 },
+          rider:      { m: 78.0, x: 0.44, y: 0.94, I11: 1.85, I22: 7.90, Izz: 7.20, alphaDeg: 22.0 },
+          rack:       { m: 0.0,  x: 0.0,  y: 0.0,  I11: 0.0,  I22: 0.0,  Izz: 0.0,  alphaDeg: 0.0 },
+          fork:       { m: 4.50, u: 0.030, v: 0.86, I11: 0.05, I22: 0.42, Izz: 0.39, alphaDeg: 0.0 },
+          basket:     { m: 0.0,  u: 0.0,   v: 0.0,  I11: 0.0,  I22: 0.0,  Izz: 0.0,  alphaDeg: 0.0 }
         },
         minimalStable: {
           name: 'Minimal Trail-Free Bike (0 Trail, 0 Gyro)',
-          g: 9.80665,
-          minVel: 0,
-          maxVel: 12.0,
-          velSteps: 151,
-          wheelbase: 1.000,
-          headAngleDeg: 85.0,
-          forkOffsetMm: (0.20 * Math.cos(85.0 * DEG2RAD) - 0.0 * Math.sin(85.0 * DEG2RAD)) * 1000,
-          Df: 0.40,
-          Dr: 0.40,
-          refDr: 0.40,
-          refHeadAngleDeg: 85.0,
-          refWheelbase: 1.000,
+          g: 9.81,
+          wheelbase: 1.00,
+          refWheelbase: 1.00,
+          headAngleDeg: 75.0,
+          refHeadAngleDeg: 75.0,
+          forkOffsetMm: 64.705,
+          Df: 0.50,
+          Dr: 0.50,
+          refDr: 0.50,
           autoScaleWheels: false,
           simulatePitch: false,
           gyroMult: 0.0,
-          rearWheel: { m: 0.0, Ixx: 0.0, Izz: 0.0 },
+          minVel: 0,
+          maxVel: 12,
+          velSteps: 151,
+          rearWheel:  { m: 0.0, Ixx: 0.0, Izz: 0.0 },
           frontWheel: { m: 0.0, Ixx: 0.0, Izz: 0.0 },
-          rider: { m: 0.0, x: 0.50, y: 1.00, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 },
-          frame: { m: 1.0, x: 1.50, y: 1.50, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 },
-          rack:  { m: 1.0, x: 0.00, y: 0.00, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 },
-          fork:  { m: 1.0, u: 0.05, v: 0.50, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 },
-          basket:{ m: 0.0, u: 0.00, v: 0.00, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 }
+          frame:      { m: 10.0, x: 0.40, y: 0.80, I11: 0.50, I22: 1.20, Izz: 1.00, alphaDeg: 0.0 },
+          rider:      { m: 0.0,  x: 0.40, y: 0.80, I11: 0.0,  I22: 0.0,  Izz: 0.0,  alphaDeg: 0.0 },
+          rack:       { m: 0.0,  x: 0.0,  y: 0.0,  I11: 0.0,  I22: 0.0,  Izz: 0.0,  alphaDeg: 0.0 },
+          fork:       { m: 2.5,  u: 0.14, v: 0.45, I11: 0.02, I22: 0.08, Izz: 0.07, alphaDeg: 0.0 },
+          basket:     { m: 0.0,  u: 0.0,  v: 0.0,  I11: 0.0,  I22: 0.0,  Izz: 0.0,  alphaDeg: 0.0 }
         },
         trailOnly: {
           name: 'Trail-Only Bike (0 Gyro, On-Axis Mass)',
-          g: 9.80665,
-          minVel: 0,
-          maxVel: 12.0,
-          velSteps: 151,
-          wheelbase: 2.000,
-          headAngleDeg: 85.0,
-          forkOffsetMm: (0.50 * Math.cos(85.0 * DEG2RAD) - 0.069 * Math.sin(85.0 * DEG2RAD)) * 1000,
-          Df: 1.00,
-          Dr: 1.00,
-          refDr: 1.00,
-          refHeadAngleDeg: 85.0,
-          refWheelbase: 2.000,
+          g: 9.81,
+          wheelbase: 1.02,
+          refWheelbase: 1.02,
+          headAngleDeg: 72.0,
+          refHeadAngleDeg: 72.0,
+          forkOffsetMm: 15.0,
+          Df: 0.65,
+          Dr: 0.65,
+          refDr: 0.65,
           autoScaleWheels: false,
           simulatePitch: false,
           gyroMult: 0.0,
-          rearWheel: { m: 0.0, Ixx: 0.0, Izz: 0.0 },
+          minVel: 0,
+          maxVel: 12,
+          velSteps: 151,
+          rearWheel:  { m: 0.0, Ixx: 0.0, Izz: 0.0 },
           frontWheel: { m: 0.0, Ixx: 0.0, Izz: 0.0 },
-          rider: { m: 0.0, x: 0.0, y: 0.0, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 },
-          frame: { m: 40.0, x: 2.50, y: 1.00, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 },
-          rack:  { m: 40.0, x: 0.00, y: 0.00, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 },
-          fork:  { m: 1.0, u: 0.00, v: 0.50, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 },
-          basket:{ m: 0.0, u: 0.00, v: 0.00, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 }
+          frame:      { m: 75.0, x: 0.35, y: 0.92, I11: 3.5, I22: 9.5, Izz: 8.5, alphaDeg: 0.0 },
+          rider:      { m: 0.0,  x: 0.35, y: 0.92, I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 },
+          rack:       { m: 0.0,  x: 0.0,  y: 0.0,  I11: 0.0, I22: 0.0, Izz: 0.0, alphaDeg: 0.0 },
+          fork:       { m: 3.0,  u: 0.0,  v: 0.65, I11: 0.03, I22: 0.14, Izz: 0.12, alphaDeg: 0.0 },
+          basket:     { m: 0.0,  u: 0.0,  v: 0.0,  I11: 0.0, I22: 0.0,  Izz: 0.0,  alphaDeg: 0.0 }
         }
       };
 
       // ===================================================================
-      // 3. APPLICATION STATE
+      // 3. GLOBAL APPLICATION STATE
       // ===================================================================
-      let appState = {
+      const appState = {
         unit: 'mph',
         presetKey: 'mulletMX',
-        activeTab: 'overview', // 'overview' | 'mullet' | 'control'
-        ssOutputType: 'phi', // 'phi' | 'delta'
         params: JSON.parse(JSON.stringify(PRESETS.mulletMX)),
-        showDumbbells: true,
+        activeTab: 'overview',
         riderStance: 'seated',
-        geomViewMode: '2d', // '2d' or '3d'
-        rootViewMode: '2d', // '2d' or '3d'
-        pinnedBaseline: null,
-        analysis: null,
-        hoverSpeed: null,
+        showDumbbells: true,
+        geomViewMode: '2d',
+        rootViewMode: '2d',
         geomCam3D: { yaw: -0.62, pitch: 0.34, zoom: 1.0 },
         rootCam3D: { yaw: -0.58, pitch: 0.38, zoom: 1.0 },
+        pinnedBaseline: null,
+        hoverSpeed: null,
+        analysis: null,
+        ssOutputType: 'phi',
+        sim: {
+          speedMs: 6.5,
+          rollImpulseDeg: 5.0,
+          duration: 6.0,
+          dt: 0.01,
+          t: 0,
+          playing: true,
+          lastFrameTime: null,
+          wheelSpinAngle: 0,
+          trajectory: []
+        },
         control: {
           feedbackEnabled: true,
           kp: 12.0,
           kd: 6.0,
           ki: 0.0,
           stepTorque: 0.0,
-          trajectory: []
-        },
-        sim: {
-          speedMs: 6.5,
-          rollImpulseDeg: 5.0,
-          t: 0,
-          duration: 6.0,
-          dt: 0.01,
-          wheelSpinAngle: 0,
-          playing: true,
-          lastFrameTime: null,
           trajectory: []
         }
       };
@@ -2790,19 +2804,8 @@ C = [1, 0, 0, 0]; D = 0;    % Output y(t) = lean angle q1 (or [0,0,1,0] for stee
           if (Math.abs(s[1]) > 1.5) { s[1] = Math.sign(s[1]) * 1.5; s[3] = 0; }
 
           out.push({
-            t: i * dt,
-            phi: s[0],
-            delta: s[1],
-            tau: computeTorque(i * dt, s[0], s[2], s[4])
-          });
-        }
-        return out;
-      }
-
-      function computeClosedLoopPoles(model, v, kp, kd) {
-        // Closed-loop with steer torque tau = kp * phi + kd * phi_dot:
-        // Adds kp * phi and kd * phi_dot to the second (steer) equation:
-        // K_cl[1][0] = K[1][0] - kp,  C_cl[1][0] = C[1][0] - kd
+      function computeClosedLoopPoles(model, v, kp, kd, ki = 0) {
+        // Closed-loop with steer torque tau = kp * phi + kd * phi_dot + ki * int(phi):
         const { g, M, C1, K0, K2 } = model;
         const v2 = v * v;
         const K = [
@@ -2825,7 +2828,18 @@ C = [1, 0, 0, 0]; D = 0;    % Output y(t) = lean angle q1 (or [0,0,1,0] for stee
         const c1 = (a1_11 * a0_22 + a0_11 * a1_22) - (a1_12 * a0_21 + a0_12 * a1_21);
         const c0 = a0_11 * a0_22 - a0_12 * a0_21;
 
-        return solvePolynomialRoots([c4, c3, c2, c1, c0]);
+        if (Math.abs(ki) < 1e-8) {
+          return solvePolynomialRoots([c4, c3, c2, c1, c0]);
+        }
+        // Degree-5 characteristic polynomial s * det(P_PD(s)) + Ki * P12(s) = 0
+        return solvePolynomialRoots([
+          c4,
+          c3,
+          c2 + ki * a2_12,
+          c1 + ki * a1_12,
+          c0 + ki * a0_12,
+          0
+        ]);
       }
 
       function updateControlTheoryLab() {
@@ -2977,7 +2991,8 @@ C = [1, 0, 0, 0]; D = 0;    % Output y(t) = lean angle q1 (or [0,0,1,0] for stee
             appState.analysis.model,
             appState.sim.speedMs,
             appState.control.kp,
-            appState.control.kd
+            appState.control.kd,
+            appState.control.ki
           );
           ctx.strokeStyle = '#059669';
           ctx.lineWidth = 2;
@@ -3306,36 +3321,6 @@ C = [1, 0, 0, 0]; D = 0;    % Output y(t) = lean angle q1 (or [0,0,1,0] for stee
           badge.textContent = 'Capsize Unstable (Spirals)';
           badge.className = 'pill-badge pill-rose';
         }
-      }
-
-      // ===================================================================
-      // 8. MASTER RECOMPUTE PIPELINE
-      // ===================================================================
-      function recomputeAll(resetSimTime = false) {
-        const p = appState.params;
-        const model = assembleWhippleModel(p);
-        appState.analysis = analyzeStability(model, p.minVel, p.maxVel, p.velSteps);
-
-        updateUIControlsFromParams();
-        updateKPIsAndInsight();
-
-        appState.sim.trajectory = runPerturbationSimulation(
-          model,
-          appState.sim.speedMs,
-          appState.sim.rollImpulseDeg,
-          appState.sim.duration,
-          appState.sim.dt
-        );
-        if (resetSimTime) {
-          appState.sim.t = 0;
-          appState.sim.playing = true;
-          document.getElementById('btnPlayPauseSim').textContent = 'Pause';
-        }
-
-        drawGeometryCanvas();
-        drawRootLocusCanvas();
-        drawTimeSeriesCanvas();
-        drawRearViewCanvas();
       }
 
       // ===================================================================
