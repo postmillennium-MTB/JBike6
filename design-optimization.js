@@ -95,15 +95,17 @@
       const params=clone(baseParams);
       setPath(params,getAxis(config.xKey).path,x);
       setPath(params,getAxis(config.yKey).path,y);
+      let bicycleModel;
+      try{bicycleModel=assembleWhippleModel(params);}
+      catch(error){return null;}
       let worst=-Infinity,worstSpeed=NaN,valid=0;
       for(const speed of speeds){
         try{
-          const bicycleModel=assembleWhippleModel(params);
           const result=maxRealEigenvalue(bicycleModel,speed);
           if(!result||!Number.isFinite(result.maxRe))continue;
           valid++;
           if(result.maxRe>worst){worst=result.maxRe;worstSpeed=speed;}
-        }catch(error){/* Invalid designs are reported as unsolved, not as good candidates. */}
+        }catch(error){/* Invalid operating points make this candidate incomplete. */}
       }
       return valid===speeds.length?{x,y,score:worst,worstSpeed,validSamples:valid}:null;
     }
@@ -118,31 +120,36 @@
       model.yValues=linspace(config.yMin,config.yMax,config.resolution);
       model.rows=Array.from({length:config.resolution},()=>Array(config.resolution).fill(null));
       model.selected=null;model.best=null;model.scale=0.1;model.baseSignature=signature;
-      model.scanConfig=config;model.completedRows=0;model.validCount=0;model.scanning=true;model.cancelled=false;
+      model.scanConfig=config;model.completedCandidates=0;model.validCount=0;model.scanning=true;model.cancelled=false;
+      const totalCandidates=config.resolution*config.resolution;
       ui.run.disabled=true;ui.cancel.disabled=false;ui.apply.disabled=true;
       ui.run.textContent='Optimizing…';ui.progress.value=0;
-      setStatus('Evaluating '+(config.resolution*config.resolution)+' candidate designs over '+config.speedSteps+' speed samples each…','working');
+      setStatus('Evaluating '+totalCandidates+' candidate designs over '+config.speedSteps+' speed samples each…','working');
 
-      const processRow=()=>{
+      // Process a small batch per animation frame so even a 31 × 31 grid
+      // with many speed samples keeps the controls responsive.
+      const processBatch=()=>{
         if(model.cancelled)return;
         if(JSON.stringify(state.params)!==signature){
           stopScan('The active bicycle changed during the scan. Results were discarded; run the optimization again.');
           return;
         }
-        const iy=model.completedRows;
-        if(iy>=config.resolution){finish();return;}
-        for(let ix=0;ix<config.resolution;ix++){
+        const batchSize=6;
+        for(let batch=0;batch<batchSize&&model.completedCandidates<totalCandidates;batch++){
+          const iy=Math.floor(model.completedCandidates/config.resolution);
+          const ix=model.completedCandidates%config.resolution;
           const candidate=evaluateCandidate(baseParams,config,model.xValues[ix],model.yValues[iy],speeds);
           model.rows[iy][ix]=candidate;
           if(candidate){model.validCount++;model.scale=Math.max(model.scale,Math.abs(candidate.score));}
+          model.completedCandidates++;
         }
-        model.completedRows++;
-        ui.progress.value=model.completedRows/config.resolution*100;
-        setStatus('Evaluating design row '+model.completedRows+' of '+config.resolution+' · '+model.validCount+' valid candidates so far…','working');
+        ui.progress.value=model.completedCandidates/totalCandidates*100;
+        setStatus('Evaluating candidate '+model.completedCandidates+' of '+totalCandidates+' · '+model.validCount+' valid so far…','working');
         draw();
-        model.scanFrame=requestAnimationFrame(processRow);
+        if(model.completedCandidates>=totalCandidates){finish();return;}
+        model.scanFrame=requestAnimationFrame(processBatch);
       };
-      model.scanFrame=requestAnimationFrame(processRow);
+      model.scanFrame=requestAnimationFrame(processBatch);
     }
     function finish(){
       model.scanning=false;model.scanFrame=null;ui.run.disabled=false;ui.cancel.disabled=true;
