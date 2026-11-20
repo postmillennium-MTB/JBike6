@@ -4315,7 +4315,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         for (const pt of [alongA, alongB, acrossA, acrossB]) {
           ctx.beginPath();
           ctx.arc(pt.x, pt.y, 2.7, 0, Math.PI * 2);
-          ctx.fillStyle = '#f2f0e8fff';
+          ctx.fillStyle = '#f2f0e8';
           ctx.fill();
           ctx.strokeStyle = color;
           ctx.lineWidth = 1.3;
@@ -4356,7 +4356,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.moveTo(b1.x, b1.y); ctx.lineTo(b2.x, b2.y);
         ctx.stroke();
         ctx.setLineDash([]);
-        ctx.fillStyle = '#f2f0e8fff';
+        ctx.fillStyle = '#f2f0e8';
         ctx.strokeStyle = color;
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -4375,7 +4375,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const point = toPx(model.xT, -model.zT);
         ctx.save();
         ctx.strokeStyle = '#bd5736';
-        ctx.fillStyle = '#f2f0e8fff';
+        ctx.fillStyle = '#f2f0e8';
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.arc(point.x, point.y, 7, 0, Math.PI * 2);
@@ -4594,28 +4594,37 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           drawSystemCenterOfMass2D(ctx, toPx, model);
         }
 
-        // Draggable CoM Handles
+        // Draggable CoM handles: concentric drafting targets with a square datum mark.
         const drawDragHandle = (wx, wy, fillColor, label) => {
           const pt = toPx(wx, wy);
           ctx.save();
-          ctx.fillStyle = fillColor + '33';
-          ctx.beginPath(); ctx.arc(pt.x, pt.y, 13, 0, Math.PI * 2); ctx.fill();
-
-          ctx.fillStyle = fillColor;
-          ctx.strokeStyle = '#f2f0e8fff';
-          ctx.lineWidth = 2;
-          ctx.beginPath(); ctx.arc(pt.x, pt.y, 7, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-
-          ctx.font = '600 11px "IBM Plex Sans", sans-serif';
-          const tw = ctx.measureText(label).width + 10;
-          ctx.fillStyle = 'rgba(32, 42, 46, 0.86)';
+          ctx.strokeStyle = fillColor;
+          ctx.lineWidth = 1.2;
           ctx.beginPath();
-          if (ctx.roundRect) ctx.roundRect(pt.x + 11, pt.y - 10, tw, 20, 6);
-          else ctx.rect(pt.x + 11, pt.y - 10, tw, 20);
-          ctx.fill();
-          ctx.fillStyle = '#f2f0e8fff';
+          ctx.arc(pt.x, pt.y, 10, 0, Math.PI * 2);
+          ctx.moveTo(pt.x - 15, pt.y); ctx.lineTo(pt.x - 9, pt.y);
+          ctx.moveTo(pt.x + 9, pt.y); ctx.lineTo(pt.x + 15, pt.y);
+          ctx.moveTo(pt.x, pt.y - 15); ctx.lineTo(pt.x, pt.y - 9);
+          ctx.moveTo(pt.x, pt.y + 9); ctx.lineTo(pt.x, pt.y + 15);
+          ctx.stroke();
+          ctx.fillStyle = fillColor;
+          ctx.fillRect(pt.x - 3, pt.y - 3, 6, 6);
+          ctx.strokeStyle = '#f2f0e8';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(pt.x - 3, pt.y - 3, 6, 6);
+
+          ctx.font = '500 10px "IBM Plex Mono", monospace';
+          const tw = ctx.measureText(label).width + 12;
+          const labelX = pt.x + 15;
+          const labelY = pt.y - 10;
+          ctx.fillStyle = '#202a2e';
+          ctx.fillRect(labelX, labelY, tw, 20);
+          ctx.strokeStyle = fillColor;
+          ctx.lineWidth = 1;
+          ctx.strokeRect(labelX, labelY, tw, 20);
+          ctx.fillStyle = '#f2f0e8';
           ctx.textAlign = 'left';
-          ctx.fillText(label, pt.x + 16, pt.y + 4);
+          ctx.fillText(label, labelX + 6, pt.y + 3);
           ctx.restore();
         };
 
@@ -4640,11 +4649,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         const proj = (x, y, z) => project3DPoint({ x, y, z }, target, cam, width, height, baseScale);
 
-        // Background subtle sky/floor gradient
-        const grad = ctx.createLinearGradient(0, 0, 0, height);
-        grad.addColorStop(0, '#f2f0e8');
-        grad.addColorStop(1, '#d6d3c8');
-        ctx.fillStyle = grad;
+        // Flat drafting-paper field; depth is carried by the wireframe and contact geometry.
+        ctx.fillStyle = '#f2f0e8';
         ctx.fillRect(0, 0, width, height);
 
         // 1. Perspective Ground Grid (scrolls backward with wheelSpinAngle)
@@ -4851,7 +4857,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.fillStyle = 'rgba(52, 115, 108, 0.25)';
           ctx.beginPath(); ctx.arc(c2.x, c2.y, 22 * cam.zoom, 0, Math.PI * 2); ctx.fill();
           ctx.fillStyle = '#34736c';
-          ctx.strokeStyle = '#f2f0e8fff';
+          ctx.strokeStyle = '#f2f0e8';
           ctx.lineWidth = 2;
           ctx.beginPath(); ctx.arc(c2.x, c2.y, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
         }
