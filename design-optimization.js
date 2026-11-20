@@ -259,7 +259,7 @@
         }
       }
       ctx.fillStyle='#68716c';ctx.font='10px "IBM Plex Sans", sans-serif';ctx.textAlign='left';
-      ctx.fillText('Color = worst-case max Re(λ) across speed interval · teal is better; red is worse',pad.left,pad.top-10);
+      ctx.fillText('Color = worst-case max Re(λ) across speed interval · teal indicates decay; orange indicates growth',pad.left,pad.top-10);
     }
     function selectFromCanvas(event){
       if(!model.plot||!model.rows.length)return;
