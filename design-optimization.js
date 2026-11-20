@@ -243,7 +243,7 @@
       ctx.fillText(xAxis.short+' ('+xAxis.unit+')',pad.left+plotW/2,height-14);
       ctx.save();ctx.translate(17,pad.top+plotH/2);ctx.rotate(-Math.PI/2);
       ctx.fillText(yAxis.short+' ('+yAxis.unit+')',0,0);ctx.restore();
-      ctx.font='10px monospace';ctx.fillStyle='#68716c';
+      ctx.font='10px "IBM Plex Mono", monospace';ctx.fillStyle='#68716c';
       ctx.textAlign='left';ctx.fillText(format(model.xValues[0],xAxis.digits),pad.left,pad.top+plotH+17);
       ctx.textAlign='right';ctx.fillText(format(model.xValues[model.xValues.length-1],xAxis.digits),pad.left+plotW,pad.top+plotH+17);
       ctx.textAlign='right';ctx.fillText(format(model.yValues[0],yAxis.digits),pad.left-8,pad.top+plotH);
