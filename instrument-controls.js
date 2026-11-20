@@ -74,12 +74,14 @@
     Object.keys(UNIT_MAP).forEach(id => decorateNumberInput(document.getElementById(id)));
     ['inputMinVel', 'inputMaxVel'].forEach(id => {
       const input = document.getElementById(id);
-      const label = input && input.parentElement.querySelector('label');
+      const field = input && input.closest('.num-field');
+      const label = field && field.querySelector('label');
       if (label) label.textContent = label.textContent.replace(/\s*\([^)]*\)\s*$/, '');
     });
     ['optSpeedMin', 'optSpeedMax'].forEach(id => {
       const input = document.getElementById(id);
-      const label = input && input.parentElement.querySelector('span');
+      const field = input && input.closest('.landscape-field');
+      const label = field && field.querySelector('span');
       if (label) label.textContent = label.textContent.replace(/\s*\([^)]*\)\s*$/, '');
     });
     Object.entries(RANGE_AXIS_MAP).forEach(([selectId, inputIds]) => {
