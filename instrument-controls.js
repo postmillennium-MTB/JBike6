@@ -47,7 +47,7 @@
   function decorateReadout(element) {
     if (!element) return;
     const raw = element.textContent.trim();
-    if (!raw || element.dataset.instrumentReadout === raw) return;
+    if (!raw || raw.includes('(') || element.dataset.instrumentReadout === raw) return;
     const units = ['N·m·s/rad','N·m/rad','m/s²','km/h','m/s','N·m','mph','mm','kg','Hz','rad','m','s','°','%'];
     let suffix = '';
     for (const candidate of units) {
