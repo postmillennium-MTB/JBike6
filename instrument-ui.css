@@ -666,3 +666,13 @@ input[type="range"]:not(.sci-slider)::-moz-range-track {
 .geometry-legend-item:nth-child(5) .geometry-legend-swatch { background: var(--stable) !important; }
 .geometry-legend-item:nth-child(n+6) .geometry-legend-swatch { background: var(--ink-soft) !important; }
 @media (max-width: 760px) { .app-header { position: relative; } }
+
+.instrument-readout-value { color: var(--signal); font: inherit; font-variant-numeric: tabular-nums; }
+.instrument-readout-unit {
+  margin-left: 3px;
+  color: var(--muted);
+  font: 500 .52rem var(--font-mono);
+  letter-spacing: .035em;
+  text-transform: uppercase;
+  vertical-align: .08em;
+}
