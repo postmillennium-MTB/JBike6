@@ -99,9 +99,9 @@
     const matrixNorm = Math.sqrt(A.flat().reduce((sum, value) => sum + value * value, 0));
     const vectorNorm = Math.sqrt(stateVector.reduce((sum, value) => sum + abs(value) ** 2, 0));
     const relativeResidual = residualNorm / Math.max((matrixNorm + abs(lambda)) * vectorNorm, EPS);
+    const magnitude = [abs(q[0]), abs(q[1])];
     const phaseDifferenceDeg = magnitude[0] > EPS && magnitude[1] > EPS
       ? wrapDegrees((arg(q[1]) - arg(q[0])) * 180 / Math.PI) : null;
-    const magnitude = [abs(q[0]), abs(q[1])];
     return {
       coordinates: { lean: q[0], steer: q[1] },
       velocity: { lean: velocity[0], steer: velocity[1] },
