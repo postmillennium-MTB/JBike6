@@ -921,6 +921,133 @@
       margin: 0.65rem 0;
     }
 
+    /* Eigenvalue Math Explorer and modal analysis */
+    .eigen-lab-panel { margin-top: 1rem; padding: 1rem; border: 1px solid var(--border-light); border-radius: 15px; background: linear-gradient(180deg,#fbfdff,#f6fafc); }
+    .eigen-lab-heading, .eigen-mode-heading, .optimization-inspector-head { display:flex; align-items:flex-start; justify-content:space-between; gap:.9rem; flex-wrap:wrap; }
+    .eigen-kicker, .optimization-kicker { color:#087c70; font:750 .65rem/1.2 var(--font-mono); letter-spacing:.13em; }
+    .eigen-lab-heading h3 { margin:.3rem 0; color:var(--text-main); font-size:1.08rem; }
+    .eigen-lab-heading p, .eigen-mode-heading p { margin:0; max-width:760px; color:var(--text-muted); font-size:.76rem; line-height:1.5; }
+    .eigen-equation-banner { margin:.85rem 0; padding:.9rem 1rem; border-radius:12px; background:#0e2736; color:#effcf9; text-align:center; }
+    .eigen-equation-main { font:700 clamp(.94rem,2vw,1.18rem)/1.5 var(--font-mono); letter-spacing:-.025em; }
+    .eigen-equation-sub { margin-top:.25rem; color:#a9c6d0; font:.69rem/1.5 var(--font-mono); }
+    .eigen-math-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.7rem; }
+    .eigen-math-card { min-width:0; padding:.85rem; border:1px solid #dce6ed; border-radius:12px; background:#fff; }
+    .eigen-step-heading { display:flex; align-items:flex-start; gap:.55rem; margin-bottom:.65rem; }
+    .eigen-step-heading > span { display:grid; place-items:center; width:25px; height:25px; flex:0 0 auto; border-radius:8px; background:#e0f2f1; color:#087c70; font:750 .72rem var(--font-mono); }
+    .eigen-step-heading strong { display:block; color:#183448; font-size:.76rem; }
+    .eigen-step-heading small { display:block; margin-top:.1rem; color:#718394; font-size:.65rem; line-height:1.4; }
+    .eigen-matrix-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.45rem; }
+    .eigen-matrix-card { min-width:0; padding:.5rem; border-radius:8px; background:#f3f7fa; }
+    .eigen-matrix-name { display:flex; flex-wrap:wrap; justify-content:space-between; gap:.2rem; margin-bottom:.35rem; color:#33495b; font:700 .69rem var(--font-mono); }
+    .eigen-matrix-name span { color:#8293a2; font:500 .57rem var(--font-sans); }
+    .eigen-matrix-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.22rem; color:#263b4c; font:.62rem var(--font-mono); font-variant-numeric:tabular-nums; }
+    .eigen-matrix-grid span { min-width:0; padding:.22rem .14rem; border-radius:4px; background:#fff; text-align:right; overflow:hidden; }
+    .eigen-matrix-grid.four { grid-template-columns:repeat(4,minmax(0,1fr)); }
+    .eigen-matrix-grid.four span { font-size:.59rem; }
+    .eigen-state-matrix .eigen-matrix-card { background:#f3f7fa; }
+    .eigen-matrix-card.wide { width:100%; }
+    .eigen-math-explain, .eigen-poly-note, .eigen-footnote { margin-top:.5rem; color:#718394; font-size:.65rem; line-height:1.5; }
+    .eigen-poly-equation { color:#0f766e; font:750 .85rem var(--font-mono); }
+    .eigen-poly-expanded { margin-top:.45rem; color:#172f42; font:650 .77rem/1.7 var(--font-mono); overflow-wrap:anywhere; }
+    .eigen-root-list { display:flex; flex-wrap:wrap; gap:.4rem; }
+    .eigen-root-chip { display:flex; flex-direction:column; gap:.12rem; padding:.42rem .55rem; border:1px solid #d8e2ea; border-radius:8px; background:#f7fafc; color:#34495a; cursor:pointer; text-align:left; }
+    .eigen-root-chip span { font:.64rem var(--font-mono); }
+    .eigen-root-chip.stable { border-left:3px solid #0d9488; }
+    .eigen-root-chip.unstable { border-left:3px solid #e05252; }
+    .eigen-root-chip.neutral { border-left:3px solid #d69b38; }
+    .eigen-root-chip.selected { outline:2px solid #2563eb; outline-offset:1px; background:#eff6ff; }
+    .eigen-math-status { margin-top:.5rem; color:#65798a; font-size:.65rem; line-height:1.45; }
+    .eigen-math-status[data-kind="error"] { color:#be123c; }
+    .eigen-math-status[data-kind="success"] { color:#087c70; }
+    .eigen-mode-heading { margin-top:1rem; padding-top:.9rem; border-top:1px solid #e5edf2; }
+    .eigen-mode-heading h4 { margin:0 0 .25rem; color:#183448; font-size:.88rem; }
+    .eigen-mode-controls { display:flex; flex-direction:column; gap:.25rem; min-width:180px; }
+    .eigen-mode-controls label { color:#64798a; font-size:.65rem; font-weight:700; }
+    .eigen-mode-select { min-width:180px; }
+    .eigen-mode-stats { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:.45rem; margin:.75rem 0; }
+    .eigen-stat { min-width:0; padding:.55rem .6rem; border:1px solid #e0e8ee; border-radius:9px; background:#fff; }
+    .eigen-stat span { display:block; min-height:2em; color:#718394; font-size:.59rem; line-height:1.35; }
+    .eigen-stat strong { display:block; margin-top:.2rem; color:#183448; font:700 .78rem var(--font-mono); overflow-wrap:anywhere; }
+    .eigen-mode-visual { display:grid; grid-template-columns:minmax(0,1.6fr) minmax(220px,.7fr); gap:.7rem; }
+    .eigen-mode-canvas-box { min-width:0; min-height:300px; border:1px solid #dce6ed; border-radius:11px; overflow:hidden; background:#f8fafc; }
+    #eigenmodeCanvas { display:block; width:100%; height:300px; }
+    .eigen-mode-side { display:flex; flex-direction:column; align-items:stretch; gap:.65rem; }
+    .eigen-mode-callout { padding:.75rem; border-radius:10px; background:#f0f6f8; color:#3e5568; }
+    .eigen-mode-callout strong { font-size:.72rem; }
+    .eigen-mode-callout p { margin:.3rem 0 0; font-size:.66rem; line-height:1.5; }
+    .eigen-phase-control { display:grid; grid-template-columns:1fr auto; gap:.4rem; align-items:center; color:#52697b; font-size:.68rem; font-weight:650; }
+    .eigen-phase-control input { grid-column:1/-1; width:100%; accent-color:#087c70; }
+    .eigen-footnote { padding-top:.65rem; border-top:1px solid #e4edf2; }
+
+    /* Speed-interval design optimization laboratory */
+    .optimization-workspace { display:flex; flex-direction:column; gap:.9rem; min-width:0; }
+    .optimization-hero { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; padding:1.35rem 1.5rem; border-radius:17px; color:#effbf9; background:linear-gradient(115deg,#102536,#124a50); }
+    .optimization-hero h2 { margin:.35rem 0; color:#fff; font-size:clamp(1.35rem,2.4vw,1.9rem); letter-spacing:-.035em; }
+    .optimization-hero p { max-width:680px; margin:0; color:#bed4dc; font-size:.8rem; line-height:1.5; }
+    .optimization-objective { min-width:220px; padding:.8rem .9rem; border:1px solid rgba(167,243,208,.2); border-radius:12px; background:rgba(1,19,30,.26); }
+    .optimization-objective span, .optimization-objective small { display:block; color:#a8c9d0; font-size:.62rem; }
+    .optimization-objective strong { display:block; margin:.25rem 0; color:#d1fae5; font:750 .95rem var(--font-mono); }
+    .optimization-layout { display:grid; grid-template-columns:minmax(260px,320px) minmax(0,1fr); gap:.85rem; align-items:start; }
+    .optimization-controls { display:flex; flex-direction:column; gap:.6rem; padding:1rem; }
+    .optimization-controls .landscape-field input, .optimization-controls .landscape-field select { width:100%; }
+    .opt-speed-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.45rem; }
+    .opt-action-row { display:flex; gap:.45rem; flex-wrap:wrap; }
+    .opt-action-row .btn-action { flex:1; justify-content:center; }
+    .optimization-progress { width:100%; height:7px; accent-color:#079b79; }
+    .optimization-results { display:flex; flex-direction:column; gap:.8rem; min-width:0; }
+    .optimization-map-card, .optimization-inspector { min-width:0; padding:.9rem; }
+    .optimization-canvas-stage { height:clamp(340px,44vw,520px); min-height:320px; border:1px solid #dce6ed; border-radius:11px; overflow:hidden; background:#f8fafc; }
+    #optimizationCanvas { display:block; width:100%; height:100%; }
+    .optimization-legend { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:.55rem; color:#687d8d; font-size:.64rem; }
+    .optimization-legend span { display:inline-flex; align-items:center; gap:.32rem; }
+    .optimization-swatch { width:10px; height:10px; border-radius:3px; display:inline-block; }
+    .optimization-swatch.better { background:#0d9488; }
+    .optimization-swatch.neutral { background:#f1f5f9; border:1px solid #cbd5e1; }
+    .optimization-swatch.worse { background:#e14b4b; }
+    .optimization-inspector-head { align-items:center; }
+    .optimization-selection-detail { margin-top:.65rem; }
+    .opt-detail-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.45rem; }
+    .opt-detail-grid > div { min-width:0; padding:.55rem; border-radius:8px; background:#f3f7fa; }
+    .opt-detail-grid span { display:block; color:#718394; font-size:.61rem; }
+    .opt-detail-grid strong { display:block; margin-top:.22rem; color:#183448; font:700 .72rem var(--font-mono); overflow-wrap:anywhere; }
+    .opt-detail-status { margin-top:.55rem; padding:.55rem .65rem; border-radius:8px; background:#fff7ed; color:#9a3412; font-size:.7rem; }
+    .opt-detail-status.stable { background:#ecfdf5; color:#047857; }
+    .opt-detail-foot { margin-top:.45rem; color:#718394; font-size:.64rem; line-height:1.5; }
+    .optimization-ranking-wrap { margin-top:.85rem; padding-top:.75rem; border-top:1px solid #e4edf2; }
+    .optimization-ranking-wrap h4 { margin:0 0 .45rem; color:#20384b; font-size:.75rem; }
+    .optimization-ranking { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:.45rem; }
+    .opt-ranking-row { display:flex; align-items:center; gap:.45rem; min-width:0; padding:.48rem; border:1px solid #e0e8ee; border-radius:8px; background:#fafcfd; color:#34495a; cursor:pointer; text-align:left; }
+    .opt-rank-number { display:grid; place-items:center; width:20px; height:20px; flex:0 0 auto; border-radius:6px; background:#e0f2f1; color:#087c70; font:750 .65rem var(--font-mono); }
+    .opt-ranking-row span:nth-child(2) { display:flex; flex-direction:column; min-width:0; font-size:.62rem; }
+    .opt-ranking-row small { color:#718394; font-size:.58rem; }
+    .opt-rank-score { margin-left:auto; font:700 .61rem var(--font-mono); overflow-wrap:anywhere; }
+    .optimization-method-note { padding:.75rem .9rem; border:1px solid #dce6ed; border-radius:10px; background:#f8fbfd; color:#65798a; font-size:.68rem; line-height:1.55; }
+    .optimization-method-note strong { color:#334e60; }
+    @media (max-width:1050px) {
+      .eigen-mode-stats { grid-template-columns:repeat(3,minmax(0,1fr)); }
+      .optimization-ranking { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .optimization-layout { grid-template-columns:minmax(240px,300px) minmax(0,1fr); }
+    }
+    @media (max-width:760px) {
+      .eigen-math-grid, .eigen-mode-visual, .optimization-layout { grid-template-columns:1fr; }
+      .eigen-matrix-list { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .eigen-mode-stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .optimization-hero { align-items:stretch; }
+      .optimization-objective { width:100%; }
+      .optimization-canvas-stage { height:360px; }
+      .opt-detail-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .optimization-inspector-head { align-items:flex-start; }
+    }
+    @media (max-width:430px) {
+      .eigen-lab-panel { padding:.7rem; }
+      .eigen-matrix-list { grid-template-columns:1fr; }
+      .eigen-matrix-grid.four span { font-size:.52rem; }
+      .eigen-mode-stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .opt-speed-grid { grid-template-columns:1fr; }
+      .optimization-ranking { grid-template-columns:1fr; }
+      .optimization-hero { padding:1rem; }
+    }
+
     /* Control Theory & State-Space Lab Styles */
     .lab-nav-bar {
       background: var(--bg-card);
@@ -1477,6 +1604,7 @@
         <button type="button" id="tabViewMullet" role="tab" aria-selected="false" data-tab="mullet" class="seg-btn lab-tab-btn">Mullet &amp; Wheel Lab</button>
         <button type="button" id="tabViewLandscape" role="tab" aria-selected="false" data-tab="landscape" class="seg-btn lab-tab-btn">Stability Landscape</button>
         <button type="button" id="tabViewControl" role="tab" aria-selected="false" data-tab="control" class="seg-btn lab-tab-btn">Control Theory &amp; State-Space Lab</button>
+        <button type="button" id="tabViewOptimization" role="tab" aria-selected="false" data-tab="optimization" class="seg-btn lab-tab-btn">Design Optimization</button>
       </div>
       <div id="tabContextHint" class="panel-hint tabular-nums">
         Full workspace active • Switch tabs to focus on Mullet wheel tuning or Dressel–Ruina state-space control
@@ -1948,6 +2076,67 @@
         </div>
       </div>
 
+      <!-- EIGENVALUE MATH & MODE-SHAPE EXPLORER -->
+      <section class="eigen-lab-panel" aria-labelledby="eigenMathTitle">
+        <div class="eigen-lab-heading">
+          <div>
+            <span class="eigen-kicker">OPEN-LOOP BICYCLE MODES</span>
+            <h3 id="eigenMathTitle">Eigenvalue Math Explorer &amp; Mode Shapes</h3>
+            <p>Follow the current bicycle model from its equations of motion to the four eigenvalues and the lean/steer motion associated with a selected root.</p>
+          </div>
+          <span id="eigenmodeSpeed" class="pill-badge pill-indigo tabular-nums">v = 6.50 m/s</span>
+        </div>
+        <div class="eigen-equation-banner">
+          <div class="eigen-equation-main">M q̈ + v C₁ q̇ + (g K₀ + v² K₂) q = 0</div>
+          <div class="eigen-equation-sub">q = [φ, δ]ᵀ &nbsp; · &nbsp; x = [φ, φ̇, δ, δ̇]ᵀ &nbsp; · &nbsp; ẋ = A x</div>
+        </div>
+        <div class="eigen-math-grid">
+          <section class="eigen-math-card">
+            <div class="eigen-step-heading"><span>01</span><div><strong>Physical model matrices</strong><small>Evaluated at the current bicycle configuration and forward speed</small></div></div>
+            <div id="eigenMathMatrices" class="eigen-matrix-list"></div>
+          </section>
+          <section class="eigen-math-card">
+            <div class="eigen-step-heading"><span>02</span><div><strong>Four-state realization</strong><small>Convert the second-order equations into ẋ = A x</small></div></div>
+            <div id="eigenMathA" class="eigen-state-matrix"></div>
+            <div class="eigen-math-explain">The matrix A contains the same open-loop bicycle dynamics used by the eigenvalue solver.</div>
+          </section>
+          <section class="eigen-math-card eigen-polynomial-card">
+            <div class="eigen-step-heading"><span>03</span><div><strong>Characteristic equation</strong><small>Find λ where det(λI − A) = 0</small></div></div>
+            <div id="eigenMathPolynomial" class="eigen-poly-expanded">Waiting for model calculation…</div>
+          </section>
+          <section class="eigen-math-card eigen-roots-card">
+            <div class="eigen-step-heading"><span>04</span><div><strong>Eigenvalues</strong><small>Select a root to inspect its mode shape</small></div></div>
+            <div id="eigenMathRoots" class="eigen-root-list"></div>
+            <div id="eigenMathStatus" class="eigen-math-status" role="status">Waiting for model calculation…</div>
+          </section>
+        </div>
+        <div class="eigen-mode-heading">
+          <div><h4>05 · Eigenvector and physical mode shape</h4><p>The displacement eigenvector contains the relative lean and steer amplitudes and their phase relationship. Velocity components follow from λq.</p></div>
+          <div class="eigen-mode-controls">
+            <label for="eigenmodeSelect">Selected root</label>
+            <select id="eigenmodeSelect" class="num-input eigen-mode-select"><option value="0">λ1</option></select>
+          </div>
+        </div>
+        <div class="eigen-mode-stats">
+          <div class="eigen-stat"><span>Oscillation frequency</span><strong id="eigenmodeFrequency">—</strong></div>
+          <div class="eigen-stat"><span>Damping ratio</span><strong id="eigenmodeDamping">—</strong></div>
+          <div class="eigen-stat"><span>Steer / lean amplitude</span><strong id="eigenmodeRatio">—</strong></div>
+          <div class="eigen-stat"><span>Steer phase vs. lean</span><strong id="eigenmodePhaseDifference">—</strong></div>
+          <div class="eigen-stat"><span>Growth / decay time constant</span><strong id="eigenmodeTimeConstant">—</strong></div>
+          <div class="eigen-stat"><span>Eigenvector residual</span><strong id="eigenmodeResidual">—</strong></div>
+        </div>
+        <div class="eigen-mode-visual">
+          <div class="eigen-mode-canvas-box"><canvas id="eigenmodeCanvas" aria-label="Complex lean and steer eigenvector phasors and normalized modal time response"></canvas></div>
+          <div class="eigen-mode-side">
+            <div class="eigen-mode-callout"><strong>How to read the mode</strong><p>Lean and steer are shown as complex phasors. Their relative lengths show amplitude; their angle difference shows phase. The traces below include the selected mode's growth or decay envelope.</p></div>
+            <label class="eigen-phase-control" for="eigenmodePhase"><span>Oscillation phase</span><strong id="eigenmodePhaseValue">0°</strong><input id="eigenmodePhase" type="range" min="0" max="359" step="1" value="0" /></label>
+            <button type="button" id="btnEigenmodePlay" class="btn-action primary" disabled>Play modal cycle</button>
+            <div id="eigenmodeStatus" class="eigen-math-status" data-kind="neutral" role="status" aria-live="polite">Select an eigenvalue to inspect its mode shape.</div>
+          </div>
+        </div>
+        <div class="eigen-footnote">This explorer displays the open-loop bicycle eigenstructure. Closed-loop controller poles are analyzed separately in the pole-zero and feedback portions of this lab. An eigenvector defines a modal shape, not an independent root-locus trajectory.</div>
+      </section>
+
       <!-- Active Steer-Torque PID Feedback & Step Disturbance Simulator -->
       <div class="ctrl-lab-split">
         <div class="matrix-box" style="font-family:var(--font-sans);">
@@ -2139,6 +2328,55 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
       </div>
     </section>
 
+    <!-- ================================================================ -->
+    <!-- DESIGN OPTIMIZATION LAB                                          -->
+    <!-- ================================================================ -->
+    <section id="designOptimizationSection" class="optimization-workspace hidden" aria-labelledby="optimizationTitle">
+      <div class="optimization-hero">
+        <div><span class="optimization-kicker">DESIGN SPACE SEARCH</span><h2 id="optimizationTitle">Bicycle Parameter Optimization Laboratory</h2><p>Search two design variables while evaluating the open-loop eigenvalues across a selected forward-speed interval.</p></div>
+        <div class="optimization-objective"><span>OPTIMIZATION OBJECTIVE</span><strong>Minimize max Re(λ)</strong><small>Worst sampled growth rate over the speed interval</small></div>
+      </div>
+      <div class="optimization-layout">
+        <aside class="optimization-controls panel-card">
+          <div class="landscape-section-heading"><span class="landscape-step">01</span><div><h3>Design variables</h3><p>Choose two independent parameters</p></div></div>
+          <label class="landscape-field"><span>Horizontal variable</span><select id="optXAxis"></select></label>
+          <div class="landscape-range-pair">
+            <label class="landscape-field"><span>Minimum</span><input id="optXMin" type="number" step="0.01" /></label>
+            <label class="landscape-field"><span>Maximum</span><input id="optXMax" type="number" step="0.01" /></label>
+          </div>
+          <label class="landscape-field"><span>Vertical variable</span><select id="optYAxis"></select></label>
+          <div class="landscape-range-pair">
+            <label class="landscape-field"><span>Minimum</span><input id="optYMin" type="number" step="0.01" /></label>
+            <label class="landscape-field"><span>Maximum</span><input id="optYMax" type="number" step="0.01" /></label>
+          </div>
+          <div class="landscape-divider"></div>
+          <div class="landscape-section-heading"><span class="landscape-step">02</span><div><h3>Operating envelope</h3><p>Evaluate the full speed interval</p></div></div>
+          <div class="opt-speed-grid">
+            <label class="landscape-field"><span>Minimum speed (m/s)</span><input id="optSpeedMin" type="number" min="0" max="40" step="0.1" value="2.0" /></label>
+            <label class="landscape-field"><span>Maximum speed (m/s)</span><input id="optSpeedMax" type="number" min="0" max="40" step="0.1" value="12.0" /></label>
+          </div>
+          <label class="landscape-field"><span>Speed samples</span><select id="optSpeedSteps"><option value="5">5 · Quick</option><option value="9" selected>9 · Standard</option><option value="13">13 · Detailed</option><option value="17">17 · Fine</option><option value="25">25 · Very fine</option><option value="31">31 · Maximum</option></select></label>
+          <label class="landscape-field"><span>Design grid</span><select id="optResolution"><option value="7">7 × 7 · Preview</option><option value="11">11 × 11 · Quick</option><option value="15" selected>15 × 15 · Standard</option><option value="21">21 × 21 · Detailed</option><option value="31">31 × 31 · Fine</option></select></label>
+          <div class="opt-action-row"><button type="button" id="btnRunOptimization" class="btn-action primary">Run optimization</button><button type="button" id="btnCancelOptimization" class="btn-action" disabled>Cancel</button></div>
+          <progress id="optimizationProgress" max="100" value="0" class="optimization-progress"></progress>
+          <div id="optimizationStatus" class="landscape-status" data-kind="neutral" role="status" aria-live="polite">Ready · configure the design variables and run the search.</div>
+        </aside>
+        <div class="optimization-results">
+          <section class="panel-card optimization-map-card">
+            <div class="panel-head"><div><h3 class="panel-title">Worst-case stability response</h3><p class="viz-sub">Each cell evaluates every speed sample in the chosen interval. Teal is better; red is worse.</p></div><span class="pill-badge pill-slate">Sampled search</span></div>
+            <div class="optimization-canvas-stage"><canvas id="optimizationCanvas" aria-label="Heatmap of worst-case bicycle eigenvalue growth rate over two design parameters"></canvas></div>
+            <div class="optimization-legend"><span><i class="optimization-swatch better"></i>More negative · better</span><span><i class="optimization-swatch neutral"></i>Near neutral</span><span><i class="optimization-swatch worse"></i>Positive · unstable</span></div>
+          </section>
+          <section class="panel-card optimization-inspector">
+            <div class="optimization-inspector-head"><div><h3 class="panel-title">Selected design candidate</h3><p class="viz-sub">Select a heatmap cell or a top-ranked candidate.</p></div><button type="button" id="btnApplyOptimizedDesign" class="btn-action primary" disabled>Apply selected design</button></div>
+            <div id="optimizationSelectionDetail" class="optimization-selection-detail">Run an optimization to compare candidate designs.</div>
+            <div class="optimization-ranking-wrap"><h4>Top-ranked candidates</h4><div id="optimizationRanking" class="optimization-ranking">Results will appear here after a search.</div></div>
+          </section>
+        </div>
+      </div>
+      <div class="optimization-method-note"><strong>Interpretation and limitations:</strong> The objective is the largest real part among all four open-loop eigenvalues, maximized over the sampled speeds, then minimized across the design grid. A negative score means every mode decays at every sampled speed; a positive score means at least one mode grows at a sampled speed. This coarse search is not a mathematical guarantee between speed samples, between grid points, or under model uncertainty. Optimization changes parameters only when you explicitly apply a candidate.</div>
+    </section>
+
   </main>
 
   <!-- ===================================================================== -->
@@ -2173,6 +2411,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
   <!-- JAVASCRIPT PHYSICS ENGINE, 3D PROJECTION & INTERACTIVE RENDERERS      -->
   <!-- ===================================================================== -->
   <script src="stability-landscape.js"></script>
+  <script src="eigenmode-lab.js"></script>
+  <script src="design-optimization.js"></script>
   <script>
     (function () {
       'use strict';
@@ -2510,6 +2750,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
       };
 
       let stabilityLandscape = null;
+      let eigenmodeLab = null;
+      let designOptimization = null;
 
       // ===================================================================
       // 4. EXACT 4-BODY WHIPPLE-CARVALLO / MEIJAARD ET AL. (2007) SOLVER
@@ -3554,6 +3796,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         drawTimeSeriesCanvas();
         drawRearViewCanvas();
         updateControlTheoryLab();
+        if (eigenmodeLab) eigenmodeLab.update();
       }
 
       function updateUIControlsFromParams() {
@@ -5214,13 +5457,14 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         drawRearViewCanvas();
         drawTimeSeriesCanvas();
         if (appState.geomViewMode === '3d') drawGeometryCanvas();
+        if (eigenmodeLab) eigenmodeLab.update();
       }
 
       // ===================================================================
       // 12. EVENT LISTENERS & CONTROL WIRING
       // ===================================================================
       function bindEvents() {
-        // Lab View Tabs ('overview' | 'mullet' | 'control')
+        // Lab View Tabs ('overview' | 'mullet' | 'control' | 'landscape' | 'optimization')
         const applyLabTab = (tabName) => {
           appState.activeTab = tabName;
           document.querySelectorAll('.lab-tab-btn').forEach(b => {
@@ -5232,24 +5476,25 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const mainGrid = document.getElementById('mainWorkspaceGrid');
           const ctrlSec = document.getElementById('controlTheorySection');
           const landscapeSec = document.getElementById('stabilityLandscapeSection');
+          const optimizationSec = document.getElementById('designOptimizationSection');
           const hintEl = document.getElementById('tabContextHint');
 
+          mainGrid.classList.toggle('hidden', tabName === 'control' || tabName === 'landscape' || tabName === 'optimization');
+          ctrlSec.classList.toggle('hidden', tabName !== 'control');
+          landscapeSec.classList.toggle('hidden', tabName !== 'landscape');
+          optimizationSec.classList.toggle('hidden', tabName !== 'optimization');
+
           if (tabName === 'control') {
-            mainGrid.classList.add('hidden');
-            ctrlSec.classList.remove('hidden');
-            landscapeSec.classList.add('hidden');
-            hintEl.textContent = 'Control Theory Lab active • Explore state-space, transfer functions, poles and feedback';
+            hintEl.textContent = 'Control Theory Lab active • Inspect state-space math, eigenmodes, transfer functions and feedback';
             updateControlTheoryLab();
+            if (eigenmodeLab) eigenmodeLab.update();
           } else if (tabName === 'landscape') {
-            mainGrid.classList.add('hidden');
-            ctrlSec.classList.add('hidden');
-            landscapeSec.classList.remove('hidden');
-            hintEl.textContent = 'Stability Landscape active • Scan two bicycle parameters and rotate the 3D response surface';
+            hintEl.textContent = 'Stability Landscape active • Scan two bicycle parameters at a fixed operating speed';
             if (stabilityLandscape) stabilityLandscape.activate();
+          } else if (tabName === 'optimization') {
+            hintEl.textContent = 'Design Optimization active • Search two design variables over a forward-speed envelope';
+            if (designOptimization) designOptimization.activate();
           } else {
-            mainGrid.classList.remove('hidden');
-            ctrlSec.classList.add('hidden');
-            landscapeSec.classList.add('hidden');
             hintEl.textContent = tabName === 'mullet'
               ? 'Mullet & Wheel Lab focus • Customize wheel diameters, frame pitch and gyroscopic contribution'
               : 'Overview active • Explore bicycle geometry, eigenvalue stability and perturbation dynamics';
@@ -5755,6 +6000,45 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
               status.dataset.kind = 'error';
             }
             stabilityLandscape = null;
+          }
+        }
+        if (window.JBike6EigenmodeLab) {
+          try {
+            eigenmodeLab = window.JBike6EigenmodeLab.create({
+              state: appState,
+              maxRealEigenvalue,
+              charPolyCoeffs
+            });
+          } catch (error) {
+            console.error('[JBike6] Eigenmode Lab initialization failed:', error);
+            const status = document.getElementById('eigenmodeStatus');
+            if (status) status.textContent = 'Eigenmode explorer unavailable: ' + error.message;
+            eigenmodeLab = null;
+          }
+        }
+        if (window.JBike6DesignOptimization && window.JBike6Landscape) {
+          try {
+            designOptimization = window.JBike6DesignOptimization.create({
+              state: appState,
+              assembleWhippleModel,
+              maxRealEigenvalue,
+              axes: window.JBike6Landscape.AXES,
+              onApply: (patch) => {
+                patch.paths.forEach(item => {
+                  let target = appState.params;
+                  for (let i = 0; i < item.path.length - 1; i++) target = target[item.path[i]];
+                  target[item.path[item.path.length - 1]] = item.value;
+                });
+                if (patch.paths.some(item => item.path[0] === 'headAngleDeg')) appState.params.refHeadAngleDeg = appState.params.headAngleDeg;
+                if (patch.paths.some(item => item.path[0] === 'wheelbase')) appState.params.refWheelbase = appState.params.wheelbase;
+                recomputeAll(false);
+              }
+            });
+          } catch (error) {
+            console.error('[JBike6] Design Optimization initialization failed:', error);
+            const status = document.getElementById('optimizationStatus');
+            if (status) status.textContent = 'Design Optimization unavailable: ' + error.message;
+            designOptimization = null;
           }
         }
         bindEvents();
