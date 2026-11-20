@@ -860,3 +860,52 @@ input[type="range"]:not(.sci-slider)::-moz-range-track {
   .matrix-box { padding: 8px; }
   .root-pinned-status { min-height: 26px; }
 }
+
+
+/* Final typography cleanup for the matrix, eigenmode, and optimization workspaces. */
+.controls-col { counter-reset: control-group; }
+.controls-col > .panel-card { counter-increment: control-group; }
+.controls-col > .panel-card > .panel-head::before {
+  content: "0" counter(control-group);
+  flex: 0 0 auto;
+  margin-right: 3px;
+  color: var(--signal);
+  font: 500 .62rem var(--font-mono);
+  letter-spacing: .04em;
+}
+.controls-col .ctrl-group {
+  padding-left: 8px;
+  border-left: 1px solid var(--rule);
+}
+.controls-col .ctrl-group:focus-within { border-left: 2px solid var(--signal); padding-left: 7px; }
+.eigen-step-heading strong, .eigen-mode-heading h4,
+.eigen-verification-head strong { color: var(--ink); }
+.eigen-step-heading small, .eigen-matrix-name span,
+.eigen-math-explain, .eigen-poly-note, .eigen-footnote,
+.eigen-mode-heading p, .eigen-mode-controls label,
+.eigen-state-vector span, .eigen-verification-head span,
+.eigenpair-legend, .opt-detail-grid span, .opt-detail-foot,
+.opt-ranking-row small, .optimization-method-note {
+  color: var(--muted);
+}
+.eigen-poly-equation, .eigen-state-vector code, .eigenpair-readout { color: var(--stable); }
+.eigen-poly-expanded { color: var(--ink); }
+.eigen-mode-callout {
+  border-left: 3px solid var(--stable);
+  background: var(--panel);
+  color: var(--ink-soft);
+}
+.eigen-phase-control { color: var(--ink-soft); }
+.optimization-hero h2 { color: var(--paper); }
+.optimization-hero p { color: #d0d1c8; }
+.optimization-objective span, .optimization-objective small { color: #c3c8bd; }
+.optimization-objective strong { color: var(--stable-wash); }
+.optimization-ranking-wrap h4 { color: var(--ink); }
+.optimization-method-note strong { color: var(--ink); }
+.opt-detail-grid strong, .opt-rank-score { color: var(--ink); }
+#hoverSpeedLabel { color: var(--signal) !important; font-family: var(--font-mono); }
+.hover-card { border-color: var(--rule-strong); }
+.hover-card-head { border-bottom-color: var(--rule-strong); }
+@media (max-width: 760px) {
+  .controls-col > .panel-card > .panel-head::before { margin-top: 1px; }
+}
