@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JBike6 Bicycle Stability &amp; Dynamics Lab</title>
+  <title>JBike6 — Bicycle Dynamics Workbench</title>
   <style>
     :root {
       --bg-app: #f1f5f9;
@@ -1692,50 +1692,48 @@
   <header class="app-header">
     <div class="header-inner">
       <div class="brand-group">
-        <div class="brand-icon" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="#bd5736" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="6.5" cy="19.5" r="4.5" />
-            <circle cx="21.5" cy="19.5" r="4.5" />
-            <path d="M6.5 19.5 L12.5 11.5 L19.5 11.5 L21.5 19.5" />
-            <path d="M12.5 11.5 L14.5 19.5 L6.5 19.5" />
-            <path d="M18.2 8.2 L20.4 8.2" />
-            <path d="M11.2 9.2 L13.8 9.2" />
-            <path d="M3 5 C7 3, 11 7, 15 4" stroke="#34736c" stroke-width="1.6" stroke-dasharray="2 2" />
-          </svg>
+        <div class="brand-icon brand-mark" aria-hidden="true">
+          <span>J6</span><small>04</small>
         </div>
-        <div>
+        <div class="brand-copy">
           <div class="brand-title-row">
-            <h1 class="brand-title">JBike6 Bicycle Stability &amp; Dynamics Lab</h1>
-            <span class="brand-badge">Whipple–Carvallo 4-Body</span>
+            <h1 class="brand-title">JBike6</h1>
+            <span class="brand-badge">Bicycle dynamics instrument</span>
           </div>
-          <p class="brand-sub">Interactive 2D/3D Eigenvalue Root-Locus, Mullet Wheel &amp; Perturbation Dynamics Simulator</p>
+          <p class="brand-sub">WHIPPLE–CARVALLO MODEL / FOUR-BODY FORMULATION</p>
         </div>
       </div>
 
       <div class="header-actions">
-        <!-- Unit Switcher -->
-        <div class="seg-group" role="group" aria-label="Speed Units">
-          <button type="button" data-unit="mph" class="seg-btn unit-btn active">mph</button>
-          <button type="button" data-unit="kmh" class="seg-btn unit-btn">km/h</button>
-          <button type="button" data-unit="ms" class="seg-btn unit-btn">m/s</button>
+        <div class="header-control-block" role="group" aria-label="Speed display units">
+          <span class="header-control-label">Speed display</span>
+          <div class="seg-group" role="group" aria-label="Speed units">
+            <button type="button" data-unit="mph" class="seg-btn unit-btn active">mph</button>
+            <button type="button" data-unit="kmh" class="seg-btn unit-btn">km/h</button>
+            <button type="button" data-unit="ms" class="seg-btn unit-btn">m/s</button>
+          </div>
         </div>
 
-        <!-- Preset Library -->
-        <select id="presetSelect" class="preset-select" aria-label="Bicycle Preset">
-          <option value="mtb29">Modern Trail MTB — Full 29" (29 / 29)</option>
-          <option value="mulletMX" selected>Modern Enduro Mullet — MX (29 F / 27.5 R)</option>
-          <option value="mtb275">Modern Enduro — Full 27.5" (27.5 / 27.5)</option>
-          <option value="schwinn">JBike6 Schwinn Crown (Original Default)</option>
-          <option value="benchmark">Meijaard Benchmark Paper Bike</option>
-          <option value="burleyLong">Burley Canto Recumbent (Long)</option>
-          <option value="burleyShort">Burley Canto Recumbent (Short)</option>
-          <option value="chopper">Extreme Chopper</option>
-          <option value="minimalStable">Minimal Trail-Free Bike (0 Trail, 0 Gyro)</option>
-          <option value="trailOnly">Trail-Only Bike (0 Gyro, On-Axis Mass)</option>
-        </select>
+        <div class="header-control-block header-profile-block">
+          <label class="header-control-label" for="presetSelect">Model profile</label>
+          <select id="presetSelect" class="preset-select" aria-label="Bicycle model profile">
+            <option value="mtb29">Modern Trail MTB — Full 29" (29 / 29)</option>
+            <option value="mulletMX" selected>Modern Enduro Mullet — MX (29 F / 27.5 R)</option>
+            <option value="mtb275">Modern Enduro — Full 27.5" (27.5 / 27.5)</option>
+            <option value="schwinn">JBike6 Schwinn Crown (Original Default)</option>
+            <option value="benchmark">Meijaard Benchmark Paper Bike</option>
+            <option value="burleyLong">Burley Canto Recumbent (Long)</option>
+            <option value="burleyShort">Burley Canto Recumbent (Short)</option>
+            <option value="chopper">Extreme Chopper</option>
+            <option value="minimalStable">Minimal Trail-Free Bike (0 Trail, 0 Gyro)</option>
+            <option value="trailOnly">Trail-Only Bike (0 Gyro, On-Axis Mass)</option>
+          </select>
+        </div>
 
-        <button type="button" id="btnResetPreset" class="hdr-btn" title="Restore selected preset defaults">Reset Default</button>
-        <button type="button" id="btnOpenJsonModal" class="hdr-btn" title="Export or Import JSON Configuration">JSON Config</button>
+        <div class="header-action-buttons">
+          <button type="button" id="btnResetPreset" class="hdr-btn" title="Restore selected model profile defaults">Reset model</button>
+          <button type="button" id="btnOpenJsonModal" class="hdr-btn" title="Export or import bicycle configuration">Configuration JSON</button>
+        </div>
       </div>
     </div>
   </header>
@@ -1745,9 +1743,13 @@
   <!-- ===================================================================== -->
   <main class="main-wrap">
 
-    <nav id="vizWorkspaceNav" class="viz-workspace-nav" aria-label="Primary workspace navigation"></nav>\n    <section id="engineeringInspector" class="engineering-inspector" aria-label="Linked engineering inspector"><div class="engineering-inspector-empty">Select a point, mode, or component in any visualization to inspect it here.</div></section>
+    <nav id="vizWorkspaceNav" class="viz-workspace-nav" aria-label="Primary workspace navigation"></nav>\n    <section id="engineeringInspector" class="engineering-inspector is-empty" aria-label="Linked engineering inspector"><div class="engineering-inspector-empty">Select a point, mode, or component in any visualization to inspect it here.</div></section>
 
-    <!-- KPI SUMMARY STRIP -->
+    <div class="output-strip-heading" aria-label="Calculated model outputs">
+      <span class="output-strip-index">MODEL OUTPUT /</span>
+      <span class="output-strip-title">Current model response</span>
+      <span class="output-strip-note">Calculated from the active bicycle configuration and speed sweep</span>
+    </div>
     <section class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-top">
@@ -1801,17 +1803,9 @@
       </div>
     </section>
 
-    <!-- LIVE PHYSICS INSIGHT BANNER -->
-    <section class="insight-banner">
-      <div class="insight-icon" aria-hidden="true">
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-        </svg>
-      </div>
-      <div class="insight-text">
-        <span class="insight-tag">Live Dynamics Insight:</span>
-        <span id="physicsInsightText">Initializing linearized Whipple–Carvallo eigenvalue solver...</span>
-      </div>
+    <section class="insight-banner" aria-label="Model interpretation">
+      <span class="insight-tag">MODEL NOTE /</span>
+      <span class="insight-text" id="physicsInsightText">Initializing linearized Whipple–Carvallo eigenvalue solver...</span>
     </section>
 
     <!-- LAB VIEW SWITCHER BAR -->
@@ -1839,7 +1833,7 @@
         <!-- 1. WHEEL & TIRE SIZING (MULLET LAB) -->
         <div class="panel-card">
           <div class="panel-head">
-            <h2 class="panel-title"><span class="dot" style="background:#34736c;"></span>Wheel &amp; Tire Sizing (Mullet Lab)</h2>
+            <h2 class="panel-title"><span class="dot" style="background:#34736c;"></span>Wheel &amp; Tire Geometry</h2>
             <span class="panel-hint">29" / 27.5" / Custom</span>
           </div>
 
@@ -1957,7 +1951,7 @@
         <!-- 3. RIDER & MASS DISTRIBUTION -->
         <div class="panel-card">
           <div class="panel-head">
-            <h2 class="panel-title"><span class="dot" style="background:#bd5736;"></span>Rider &amp; Mass Distribution</h2>
+            <h2 class="panel-title"><span class="dot" style="background:#bd5736;"></span>Rider &amp; Mass Properties</h2>
             <div class="seg-group light">
               <button type="button" id="btnStanceSeated" class="seg-btn active">Seated</button>
               <button type="button" id="btnStanceAttack" class="seg-btn">Attack</button>
@@ -2010,7 +2004,7 @@
         <!-- 4. SPEED SWEEP & ENVIRONMENT DEFAULTS -->
         <div class="panel-card">
           <div class="panel-head">
-            <h2 class="panel-title"><span class="dot" style="background:#0284c7;"></span>Speed Sweep &amp; Environment Defaults</h2>
+            <h2 class="panel-title"><span class="dot" style="background:#0284c7;"></span>Analysis Envelope &amp; Environment</h2>
             <span class="panel-hint">Solver Bounds</span>
           </div>
 
@@ -4189,6 +4183,10 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const match = Math.abs(p.Df - bDf) < 0.004 && Math.abs(p.Dr - bDr) < 0.004;
           btn.classList.toggle('active', match);
         });
+
+        if (window.JBike6InstrumentControls) {
+          window.JBike6InstrumentControls.syncParameterEntries();
+        }
       }
 
       function updateKPIsAndInsight() {

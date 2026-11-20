@@ -12,6 +12,7 @@
     if (!host) return;
     const safeRows = Array.isArray(rows) ? rows : [];
     host.innerHTML = '';
+    host.classList.remove('is-empty');
     const heading = document.createElement('div');
     heading.className = 'engineering-inspector-heading';
     const eyebrow = document.createElement('span');
@@ -51,7 +52,10 @@
   }
   function clear() {
     const host = typeof document !== 'undefined' && document.getElementById('engineeringInspector');
-    if (host) host.innerHTML = '<div class="engineering-inspector-empty">Select a point, mode, or component in any visualization to inspect it here.</div>';
+    if (host) {
+      host.classList.add('is-empty');
+      host.innerHTML = '<div class="engineering-inspector-empty">Select a point, mode, or component in any visualization to inspect it here.</div>';
+    }
   }
   const api = { publish, clear };
   if (root) root.JBike6EngineeringInspector = api;
