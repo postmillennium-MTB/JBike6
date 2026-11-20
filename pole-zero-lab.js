@@ -82,7 +82,7 @@
       mode: '3d', camera: { yaw: -0.62, pitch: 0.48, zoom: 1 },
       data: null, extents: { reMin: -8, reMax: 6, imMax: 8 },
       tracks: { poles: [], zeros: [], closedPoles: [] },
-      pointer: null, dragging: false, moved: false, selected: null, plotArea: null
+      pointer: null, dragging: false, moved: false, selected: null, plotArea: null, hover: null
     };
 
     function setupCanvas() {
@@ -304,6 +304,7 @@
       if(!state.data)return;
       const surface=setupCanvas();surface.ctx.clearRect(0,0,surface.width,surface.height);
       if(state.mode==='3d')draw3D(surface.ctx,surface.width,surface.height);else draw2D(surface.ctx,surface.width,surface.height);
+      drawHoverCrosshair(surface.ctx,surface.width,surface.height);
       if(speedInput){
         speedInput.min=String(state.data.minSpeed);speedInput.max=String(state.data.maxSpeed);speedInput.step='0.05';
         speedInput.value=String(Math.max(state.data.minSpeed,Math.min(state.data.maxSpeed,state.data.current.v)));
@@ -311,6 +312,19 @@
       if(speedReadout)speedReadout.textContent=state.data.current.v.toFixed(2)+' m/s';
       updateReadout();
     }
+
+    function drawHoverCrosshair(ctx,width,height){
+      if(!state.hover)return;
+      const x=state.hover.x,y=state.hover.y;
+      ctx.save();ctx.strokeStyle='rgba(15,118,110,.72)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+      ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,height);ctx.moveTo(0,y);ctx.lineTo(width,y);ctx.stroke();
+      ctx.setLineDash([]);ctx.fillStyle='#0f766e';ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();ctx.restore();
+    }
+    function setCameraPreset(name){
+      const presets={front:{yaw:0,pitch:.12,zoom:1},side:{yaw:Math.PI/2,pitch:.18,zoom:1},top:{yaw:0,pitch:1.18,zoom:1}};
+      if(presets[name]){state.camera=Object.assign({},presets[name]);render();}
+    }
+
     function setMode(mode) {
       state.mode=mode==='2d'?'2d':'3d';
       if(btn2D){btn2D.classList.toggle('active',state.mode==='2d');btn2D.setAttribute('aria-pressed',String(state.mode==='2d'));}
@@ -325,6 +339,7 @@
       if(btnReset)btnReset.addEventListener('click',()=>{state.camera={yaw:-.62,pitch:.48,zoom:1};render();});
       if(btnZoomIn)btnZoomIn.addEventListener('click',()=>zoom(1.16));
       if(btnZoomOut)btnZoomOut.addEventListener('click',()=>zoom(1/1.16));
+      document.querySelectorAll('[data-pz-camera]').forEach(button=>button.addEventListener('click',()=>setCameraPreset(button.dataset.pzCamera)));
       if(speedInput)speedInput.addEventListener('input',()=>{if(typeof opts.onSpeedChange==='function')opts.onSpeedChange(Number(speedInput.value));});
       canvas.addEventListener('pointerdown',event=>{
         state.pointer={id:event.pointerId,x:event.clientX,y:event.clientY,startX:event.clientX,startY:event.clientY};
@@ -332,7 +347,7 @@
         if(canvas.setPointerCapture)canvas.setPointerCapture(event.pointerId);
       });
       canvas.addEventListener('pointermove',event=>{
-        if(!state.pointer||state.pointer.id!==event.pointerId||!state.dragging)return;
+        if(!state.pointer||state.pointer.id!==event.pointerId||!state.dragging){const rect=canvas.getBoundingClientRect();state.hover={x:event.clientX-rect.left,y:event.clientY-rect.top};render();return;}
         const dx=event.clientX-state.pointer.x,dy=event.clientY-state.pointer.y;
         state.pointer.x=event.clientX;state.pointer.y=event.clientY;
         if(Math.abs(event.clientX-state.pointer.startX)+Math.abs(event.clientY-state.pointer.startY)>4)state.moved=true;
@@ -348,6 +363,7 @@
       };
       canvas.addEventListener('pointerup',finish);
       canvas.addEventListener('pointercancel',()=>{state.pointer=null;state.dragging=false;});
+      canvas.addEventListener('pointerleave',()=>{state.hover=null;render();});
       canvas.addEventListener('wheel',event=>{
         if(state.mode!=='3d')return;event.preventDefault();zoom(event.deltaY>0?.92:1.08);
       },{passive:false});
@@ -362,7 +378,7 @@
       state.selected=null;updateExtents();render();
     }
     bind();
-    return {update:update,render:render,setMode:setMode,zoom:zoom};
+    return {update:update,render:render,setMode:setMode,zoom:zoom,setCameraPreset:setCameraPreset,getCamera:()=>Object.assign({},state.camera)};
   }
 
   return {create:create,matchRootsToPrevious:matchRootsToPrevious,buildTracks:buildTracks,classifyPole:classifyPole};
