@@ -346,8 +346,9 @@
         ctx.fillStyle = '#34736c'; ctx.fillRect(labelW, y - 8, axW, 8);
         ctx.fillStyle = '#dedcd2'; ctx.fillRect(labelW, y + 3, barW, 8);
         ctx.fillStyle = '#bd5736'; ctx.fillRect(labelW, y + 3, lxW, 8);
-        ctx.fillStyle = '#68716c'; ctx.textAlign = 'right';
+        ctx.fillStyle = '#68716c'; ctx.font = '9px "IBM Plex Mono", monospace'; ctx.textAlign = 'right';
         ctx.fillText('Δ ' + fmt(abs(metrics.residual[i]), 3), width - 8, y + 4);
+        ctx.font = '10px "IBM Plex Sans", sans-serif';
       });
       ctx.fillStyle = '#68716c'; ctx.font = '9px "IBM Plex Sans", sans-serif'; ctx.textAlign = 'left';
       ctx.fillText('Bar lengths are normalized to the largest component across A x and λ x; Δ is the component residual.', 8, height - 7);
