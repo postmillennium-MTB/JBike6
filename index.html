@@ -1741,6 +1741,7 @@
             <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#0891b2;"></span>Basket</span>
             <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#0f766e;"></span>Rear assembly axes</span>
             <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#c2410c;"></span>Steering assembly axes</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#7c3aed;"></span>Total CoM</span>
             <span class="geometry-legend-note">Inertia glyphs show scaled radii of gyration, not physical component dimensions.</span>
           </div>
         </section>
@@ -4520,7 +4521,10 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             return;
           }
 
-          if (!draggingGeomHandle || dragPointerId !== event.pointerId) return;
+          if (!draggingGeomHandle || dragPointerId !== event.pointerId) {
+            canvas.style.cursor = hitTest2D(pos.x, pos.y) ? 'grab' : 'default';
+            return;
+          }
           const worldPos = geomTransform.toWorld(pos.x, pos.y);
           const p = appState.params;
 
