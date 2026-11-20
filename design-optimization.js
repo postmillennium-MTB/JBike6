@@ -7,6 +7,50 @@
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const format = (value, digits = 3) => Number.isFinite(value) ? value.toFixed(digits) : '—';
   const linspace = (min, max, count) => Array.from({ length: count }, (_, i) => min + (max-min)*i/(count-1));
+  const sampleResponse = (speeds, sampleAtSpeed) => speeds.map(speed => {
+    let value = null;
+    try {
+      const sampled = sampleAtSpeed(speed);
+      if (Number.isFinite(sampled)) value = sampled;
+    } catch (error) {
+      // Preserve a gap in the plot when a speed sample cannot be evaluated.
+    }
+    return { speed, value };
+  });
+  const findWorstResponse = series => {
+    let worst = null;
+    for (const point of series || []) {
+      if (!point || !Number.isFinite(point.value)) continue;
+      if (!worst || point.value > worst.value) worst = point;
+    }
+    return worst;
+  };
+  const niceStep = rawStep => {
+    if (!Number.isFinite(rawStep) || rawStep <= 0) return 0.1;
+    const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep)));
+    const normalized = rawStep / magnitude;
+    const factor = normalized <= 1 ? 1 : normalized <= 2 ? 2 : normalized <= 5 ? 5 : 10;
+    return factor * magnitude;
+  };
+  const responseDomain = seriesList => {
+    const values = (seriesList || []).flatMap(series => (series || [])
+      .map(point => point && point.value)
+      .filter(Number.isFinite));
+    if (!values.length) return { min: -1, max: 1, step: 0.5, ticks: [-1, -0.5, 0, 0.5, 1] };
+    let minValue = Math.min(0, ...values);
+    let maxValue = Math.max(0, ...values);
+    const spread = maxValue - minValue;
+    const step = niceStep(spread > 0 ? spread / 4 : Math.max(Math.abs(maxValue), 0.1) / 2);
+    let min = Math.floor(minValue / step) * step;
+    let max = Math.ceil(maxValue / step) * step;
+    if (min === 0) min = -step;
+    if (max === 0) max = step;
+    if (min === max) { min -= step; max += step; }
+    const ticks = [];
+    const count = Math.min(12, Math.round((max - min) / step));
+    for (let i = 0; i <= count; i++) ticks.push(Number((min + i * step).toPrecision(12)));
+    return { min, max, step, ticks };
+  };
   const getPath = (object, path) => path.reduce((value, key) => value == null ? undefined : value[key], object);
   const setPath = (object, path, value) => {
     let target=object;
@@ -35,11 +79,11 @@
       speedSteps:$('optSpeedSteps'),resolution:$('optResolution'),run:$('btnRunOptimization'),
       cancel:$('btnCancelOptimization'),apply:$('btnApplyOptimizedDesign'),canvas:$('optimizationCanvas'),
       status:$('optimizationStatus'),detail:$('optimizationSelectionDetail'),
-      ranking:$('optimizationRanking'),progress:$('optimizationProgress')
+      ranking:$('optimizationRanking'),progress:$('optimizationProgress'),summary:$('optimizationResponseSummary')
     };
     const model={
-      rows:[],xValues:[],yValues:[],selected:null,best:null,scale:0.1,
-      plot:null,baseSignature:null,scanning:false,cancelled:false,scanFrame:null,
+      rows:[],xValues:[],yValues:[],selected:null,best:null,baseParams:null,
+      response:null,baseSignature:null,scanning:false,cancelled:false,scanFrame:null,
       scanConfig:null,completedRows:0,validCount:0
     };
 
@@ -119,7 +163,7 @@
       model.xValues=linspace(config.xMin,config.xMax,config.resolution);
       model.yValues=linspace(config.yMin,config.yMax,config.resolution);
       model.rows=Array.from({length:config.resolution},()=>Array(config.resolution).fill(null));
-      model.selected=null;model.best=null;model.scale=0.1;model.baseSignature=signature;
+      model.selected=null;model.best=null;model.response=null;model.baseParams=baseParams;model.baseSignature=signature;
       model.scanConfig=config;model.completedCandidates=0;model.validCount=0;model.scanning=true;model.cancelled=false;
       const totalCandidates=config.resolution*config.resolution;
       ui.run.disabled=true;ui.cancel.disabled=false;ui.apply.disabled=true;
@@ -188,6 +232,56 @@
         '</div><div class="opt-detail-status '+(stable?'stable':'unstable')+'">'+status+'</div>'+
         '<div class="opt-detail-foot">Objective: minimize the maximum real eigenvalue across '+candidate.validSamples+' sampled speeds. This is a sampled search, not a proof between speed samples.</div>';
       ui.apply.disabled=JSON.stringify(state.params)!==model.baseSignature;
+      model.response=buildResponseComparison(candidate);
+      renderResponseSummary(model.response);
+      draw();
+    }
+    function buildResponseComparison(candidate){
+      if(!candidate||!model.baseParams||!model.scanConfig)return null;
+      const config=model.scanConfig;
+      const speeds=linspace(config.speedMin,config.speedMax,config.speedSteps);
+      const startingModel=(()=>{try{return assembleWhippleModel(clone(model.baseParams));}catch(error){return null;}})();
+      const candidateParams=clone(model.baseParams);
+      setPath(candidateParams,getAxis(config.xKey).path,candidate.x);
+      setPath(candidateParams,getAxis(config.yKey).path,candidate.y);
+      const selectedModel=(()=>{try{return assembleWhippleModel(candidateParams);}catch(error){return null;}})();
+      const evaluateCurve=bicycleModel=>bicycleModel
+        ? sampleResponse(speeds,speed=>{
+            const result=maxRealEigenvalue(bicycleModel,speed);
+            return result&&result.maxRe;
+          })
+        : speeds.map(speed=>({speed,value:null}));
+      const starting=evaluateCurve(startingModel);
+      const selected=evaluateCurve(selectedModel);
+      return {
+        speeds,starting,selected,
+        startingWorst:findWorstResponse(starting),
+        selectedWorst:findWorstResponse(selected),
+        speedSamples:speeds.length
+      };
+    }
+    function renderResponseSummary(response){
+      if(!ui.summary)return;
+      if(!response){
+        ui.summary.innerHTML='<div class="opt-response-empty">Run the search and select a candidate to compare its response across speed.</div>';
+        return;
+      }
+      const fmtWorst=point=>point
+        ? '<strong>'+format(point.value,5)+' s⁻¹</strong><small>Worst at '+format(point.speed,2)+' m/s</small>'
+        : '<strong>—</strong><small>No valid speed samples</small>';
+      const start=fmtWorst(response.startingWorst);
+      const selected=fmtWorst(response.selectedWorst);
+      const delta=response.startingWorst&&response.selectedWorst
+        ? response.selectedWorst.value-response.startingWorst.value : NaN;
+      const deltaLabel=Number.isFinite(delta)?(delta>0?'+':'')+format(delta,5)+' s⁻¹':'—';
+      const deltaClass=!Number.isFinite(delta)?'neutral':delta < -1e-8?'better':delta > 1e-8?'worse':'neutral';
+      const validStart=response.starting.filter(point=>Number.isFinite(point.value)).length;
+      const validSelected=response.selected.filter(point=>Number.isFinite(point.value)).length;
+      ui.summary.innerHTML=
+        '<div class="opt-response-metric"><span>STARTING BICYCLE · WORST</span>'+start+'</div>'+
+        '<div class="opt-response-metric"><span>SELECTED CANDIDATE · WORST</span>'+selected+'</div>'+
+        '<div class="opt-response-metric '+deltaClass+'"><span>CHANGE IN WORST-CASE RATE</span><strong>'+deltaLabel+'</strong><small>Candidate minus starting bicycle</small></div>'+
+        '<div class="opt-response-sample-note">'+validStart+'/'+response.speedSamples+' starting samples · '+validSelected+'/'+response.speedSamples+' candidate samples evaluated</div>';
     }
     function renderRanking(candidates){
       ui.ranking.innerHTML=candidates.map((candidate,index)=>{
@@ -217,59 +311,89 @@
     }
     function draw(){
       const canvas=ui.canvas,rect=canvas.getBoundingClientRect();
-      const width=Math.max(320,rect.width),height=Math.max(300,rect.height),dpr=window.devicePixelRatio||1;
+      const width=Math.max(320,rect.width||320),height=Math.max(300,rect.height||340),dpr=window.devicePixelRatio||1;
       if(canvas.width!==Math.round(width*dpr)||canvas.height!==Math.round(height*dpr)){
         canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);
       }
       const ctx=canvas.getContext('2d');if(!ctx)return;
       ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width,height);
       ctx.fillStyle='#f2f0e8';ctx.fillRect(0,0,width,height);
-      if(!model.rows.length){
+      const response=model.response;
+      if(!response){
         ctx.fillStyle='#68716c';ctx.font='13px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
-        ctx.fillText('Run an optimization to map the design space.',width/2,height/2);return;
+        ctx.fillText('Run the optimization to compare stability across speed.',width/2,height/2);
+        return;
       }
-      const pad={left:68,right:24,top:28,bottom:54};
-      const plotW=width-pad.left-pad.right,plotH=height-pad.top-pad.bottom;
-      const cellW=plotW/model.xValues.length,cellH=plotH/model.yValues.length;
-      model.plot={...pad,plotW,plotH,cellW,cellH};
-      for(let iy=0;iy<model.yValues.length;iy++)for(let ix=0;ix<model.xValues.length;ix++){
-        const candidate=model.rows[iy][ix],x=pad.left+ix*cellW,y=pad.top+(model.yValues.length-1-iy)*cellH;
-        ctx.fillStyle=candidate?colorForScore(candidate.score,model.scale):'#dedcd2';
-        ctx.fillRect(x,y,cellW+0.5,cellH+0.5);
+      const allValues=[...response.starting,...response.selected]
+        .map(point=>point.value).filter(Number.isFinite);
+      if(!allValues.length){
+        ctx.fillStyle='#bd5736';ctx.font='13px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
+        ctx.fillText('No valid eigenvalue samples are available for this comparison.',width/2,height/2);
+        return;
       }
-      ctx.strokeStyle='rgba(104,113,108,.48)';ctx.lineWidth=1;ctx.strokeRect(pad.left,pad.top,plotW,plotH);
-      const xAxis=getAxis(model.scanConfig.xKey),yAxis=getAxis(model.scanConfig.yKey);
-      ctx.fillStyle='#46514f';ctx.font='11px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
-      ctx.fillText(xAxis.short+' ('+xAxis.unit+')',pad.left+plotW/2,height-14);
-      ctx.save();ctx.translate(17,pad.top+plotH/2);ctx.rotate(-Math.PI/2);
-      ctx.fillText(yAxis.short+' ('+yAxis.unit+')',0,0);ctx.restore();
-      ctx.font='10px "IBM Plex Mono", monospace';ctx.fillStyle='#68716c';
-      ctx.textAlign='left';ctx.fillText(format(model.xValues[0],xAxis.digits),pad.left,pad.top+plotH+17);
-      ctx.textAlign='right';ctx.fillText(format(model.xValues[model.xValues.length-1],xAxis.digits),pad.left+plotW,pad.top+plotH+17);
-      ctx.textAlign='right';ctx.fillText(format(model.yValues[0],yAxis.digits),pad.left-8,pad.top+plotH);
-      ctx.fillText(format(model.yValues[model.yValues.length-1],yAxis.digits),pad.left-8,pad.top+10);
-
-      if(model.selected){
-        const selected=selectedCandidate();
-        if(selected){
-          const ix=model.selected.ix,iy=model.selected.iy;
-          const x=pad.left+ix*cellW,y=pad.top+(model.yValues.length-1-iy)*cellH;
-          ctx.strokeStyle='#202a2e';ctx.lineWidth=2.5;ctx.strokeRect(x+1,y+1,Math.max(0,cellW-2),Math.max(0,cellH-2));
-          ctx.beginPath();ctx.arc(x+cellW/2,y+cellH/2,4,0,Math.PI*2);ctx.fillStyle='#f2f0e8';ctx.fill();ctx.strokeStyle='#202a2e';ctx.stroke();
-        }
+      const domain=responseDomain([response.starting,response.selected]);
+      const pad={left:76,right:22,top:34,bottom:54};
+      const plotW=Math.max(1,width-pad.left-pad.right),plotH=Math.max(1,height-pad.top-pad.bottom);
+      const speedMin=response.speeds[0],speedMax=response.speeds[response.speeds.length-1];
+      const toX=speed=>pad.left+(speed-speedMin)/(speedMax-speedMin)*plotW;
+      const toY=value=>pad.top+(domain.max-value)/(domain.max-domain.min)*plotH;
+      ctx.font='10px "IBM Plex Mono", monospace';
+      ctx.textAlign='right';ctx.textBaseline='middle';
+      domain.ticks.forEach(tick=>{
+        const y=toY(tick);
+        ctx.beginPath();
+        ctx.strokeStyle=Math.abs(tick)<1e-12?'#747a72':'#dedcd2';
+        ctx.lineWidth=Math.abs(tick)<1e-12?1.7:1;
+        ctx.setLineDash(Math.abs(tick)<1e-12?[]:[2,4]);
+        ctx.moveTo(pad.left,y);ctx.lineTo(pad.left+plotW,y);ctx.stroke();
+        ctx.fillStyle='#68716c';
+        ctx.fillText(format(tick,Math.abs(domain.step)>=1?1:Math.abs(domain.step)>=0.1?2:3),pad.left-9,y);
+      });
+      ctx.setLineDash([]);
+      const xTicks=5;
+      ctx.textAlign='center';ctx.textBaseline='top';
+      for(let i=0;i<xTicks;i++){
+        const speed=speedMin+(speedMax-speedMin)*i/(xTicks-1);
+        const x=toX(speed);
+        ctx.beginPath();ctx.strokeStyle='#e3e0d6';ctx.lineWidth=1;
+        ctx.moveTo(x,pad.top);ctx.lineTo(x,pad.top+plotH);ctx.stroke();
+        ctx.fillStyle='#68716c';ctx.fillText(format(speed,2),x,pad.top+plotH+9);
       }
-      ctx.fillStyle='#68716c';ctx.font='10px "IBM Plex Sans", sans-serif';ctx.textAlign='left';
-      ctx.fillText('Color = worst-case max Re(λ) across speed interval · teal indicates decay; orange indicates growth',pad.left,pad.top-10);
-    }
-    function selectFromCanvas(event){
-      if(!model.plot||!model.rows.length)return;
-      const rect=ui.canvas.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top,p=model.plot;
-      if(x<p.left||x>p.left+p.plotW||y<p.top||y>p.top+p.plotH)return;
-      const ix=clamp(Math.floor((x-p.left)/p.cellW),0,model.xValues.length-1);
-      const displayRow=clamp(Math.floor((y-p.top)/p.cellH),0,model.yValues.length-1);
-      const iy=model.yValues.length-1-displayRow;
-      if(!model.rows[iy][ix])return;
-      model.selected={ix,iy};renderSelection();draw();
+      ctx.strokeStyle='#747a72';ctx.lineWidth=1;ctx.strokeRect(pad.left,pad.top,plotW,plotH);
+      const drawSeries=(series,color,dash,lineWidth)=>{
+        ctx.save();ctx.beginPath();ctx.rect(pad.left,pad.top,plotW,plotH);ctx.clip();
+        ctx.strokeStyle=color;ctx.lineWidth=lineWidth;ctx.lineJoin='round';ctx.lineCap='round';ctx.setLineDash(dash);
+        let started=false;
+        series.forEach(point=>{
+          if(!Number.isFinite(point.value)){started=false;return;}
+          const x=toX(point.speed),y=toY(point.value);
+          if(!started){ctx.beginPath();ctx.moveTo(x,y);started=true;}
+          else ctx.lineTo(x,y);
+        });
+        ctx.stroke();ctx.restore();
+      };
+      drawSeries(response.starting,'#202a2e',[],2.6);
+      drawSeries(response.selected,'#34736c',[7,4],2.6);
+      const drawWorst=(point,color,filled)=>{
+        if(!point)return;
+        const x=toX(point.speed),y=toY(point.value);
+        ctx.beginPath();ctx.arc(x,y,4.5,0,Math.PI*2);
+        ctx.fillStyle=filled?color:'#f2f0e8';ctx.fill();
+        ctx.strokeStyle=color;ctx.lineWidth=2;ctx.stroke();
+      };
+      drawWorst(response.startingWorst,'#202a2e',true);
+      drawWorst(response.selectedWorst,'#34736c',false);
+      ctx.fillStyle='#46514f';ctx.font='600 10px "IBM Plex Sans", sans-serif';ctx.textAlign='center';ctx.textBaseline='alphabetic';
+      ctx.fillText('FORWARD SPEED (m/s)',pad.left+plotW/2,height-12);
+      ctx.save();ctx.translate(15,pad.top+plotH/2);ctx.rotate(-Math.PI/2);
+      ctx.fillText('MAXIMUM EIGENVALUE GROWTH RATE (s⁻¹)',0,0);ctx.restore();
+      const zeroY=toY(0);
+      ctx.fillStyle='#46514f';ctx.font='500 9px "IBM Plex Mono", monospace';ctx.textAlign='left';
+      ctx.fillText('Re(λ) = 0 · NEUTRAL BOUNDARY',pad.left+6,Math.max(pad.top+10,zeroY-6));
+      canvas.setAttribute('aria-label',
+        'Line chart of maximum real eigenvalue versus forward speed. Solid graphite line is the starting bicycle; dashed teal line is the selected candidate. The horizontal zero line is the neutral stability boundary. Starting worst rate: '+
+        (response.startingWorst?format(response.startingWorst.value,5)+' per second at '+format(response.startingWorst.speed,2)+' meters per second':'unavailable')+
+        '. Candidate worst rate: '+(response.selectedWorst?format(response.selectedWorst.value,5)+' per second at '+format(response.selectedWorst.speed,2)+' meters per second':'unavailable')+'.');
     }
     function applySelected(){
       const candidate=selectedCandidate();if(!candidate||JSON.stringify(state.params)!==model.baseSignature)return;
@@ -297,12 +421,11 @@
       ui.run.addEventListener('click',run);
       ui.cancel.addEventListener('click',()=>stopScan('Optimization cancelled.'));
       ui.apply.addEventListener('click',applySelected);
-      ui.canvas.addEventListener('click',selectFromCanvas);
       window.addEventListener('resize',draw);
       ui.cancel.disabled=true;ui.apply.disabled=true;
     }
     bind();
     return {run,draw,activate,getResults:()=>model.rows,getBest:()=>model.best};
   }
-  return {create,linspace,colorForScore};
+  return {create,linspace,sampleResponse,findWorstResponse,niceStep,responseDomain};
 });
