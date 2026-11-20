@@ -24,7 +24,7 @@ test('relative axle drop accounts for both front and rear wheel changes', () => 
   const refFront = 0.742, refRear = 0.704;
   assert.ok(Math.abs(relativeAxleDrop(refFront, refRear, refFront, 0.684) - 0.010) < 1e-12);
   assert.ok(Math.abs(relativeAxleDrop(refFront, refRear, 0.722, refRear) + 0.010) < 1e-12);
-  assert.equal(relativeAxleDrop(refFront, refRear, 0.722, 0.684), 0);
+  assert.ok(Math.abs(relativeAxleDrop(refFront, refRear, 0.722, 0.684)) < 1e-12);
   assert.equal(relativeAxleDrop(refFront, refRear, refFront, refRear), 0);
 });
 
