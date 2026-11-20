@@ -646,3 +646,23 @@ button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px s
   pointer-events: none;
 }
 .instrument-unit.is-empty { display: none; }
+
+input[type="range"].sci-slider::-moz-range-track,
+input[type="range"]:not(.sci-slider)::-moz-range-track {
+  background:
+    repeating-linear-gradient(to right, transparent 0, transparent calc(10% - 1px), rgba(32,42,46,.24) calc(10% - 1px), rgba(32,42,46,.24) 10%),
+    var(--well);
+}
+.optimization-swatch.better { background: var(--stable) !important; }
+.optimization-swatch.neutral { background: var(--paper) !important; border: 1px solid var(--rule-strong) !important; }
+.optimization-swatch.worse { background: var(--signal) !important; }
+.leg-item:nth-child(1) .leg-swatch { background: var(--stable) !important; }
+.leg-item:nth-child(2) .leg-swatch { background: var(--signal) !important; }
+.leg-item:nth-child(3) .leg-swatch { background: var(--signal) !important; }
+.geometry-legend-item:nth-child(1) .geometry-legend-swatch { background: var(--ink-soft) !important; }
+.geometry-legend-item:nth-child(2) .geometry-legend-swatch { background: var(--signal) !important; }
+.geometry-legend-item:nth-child(3) .geometry-legend-swatch { background: var(--rule-strong) !important; }
+.geometry-legend-item:nth-child(4) .geometry-legend-swatch { background: var(--signal) !important; }
+.geometry-legend-item:nth-child(5) .geometry-legend-swatch { background: var(--stable) !important; }
+.geometry-legend-item:nth-child(n+6) .geometry-legend-swatch { background: var(--ink-soft) !important; }
+@media (max-width: 760px) { .app-header { position: relative; } }
