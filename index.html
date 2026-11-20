@@ -6078,6 +6078,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
               throw new Error('Missing required wheelbase or headAngleDeg numeric fields.');
             }
             appState.params = Object.assign({}, JSON.parse(JSON.stringify(PRESETS.mulletMX)), parsed);
+            window.JBike6AppRegressions.normalizeWheelPitchReference(appState.params, parsed);
             recomputeAll(true);
             jsonStatusMsg.style.color = '#047857';
             jsonStatusMsg.textContent = 'Configuration applied successfully.';
