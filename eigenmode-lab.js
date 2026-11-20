@@ -99,7 +99,8 @@
     const matrixNorm = Math.sqrt(A.flat().reduce((sum, value) => sum + value * value, 0));
     const vectorNorm = Math.sqrt(stateVector.reduce((sum, value) => sum + abs(value) ** 2, 0));
     const relativeResidual = residualNorm / Math.max((matrixNorm + abs(lambda)) * vectorNorm, EPS);
-    const phaseDifferenceDeg = wrapDegrees((arg(q[1]) - arg(q[0])) * 180 / Math.PI);
+    const phaseDifferenceDeg = magnitude[0] > EPS && magnitude[1] > EPS
+      ? wrapDegrees((arg(q[1]) - arg(q[0])) * 180 / Math.PI) : null;
     const magnitude = [abs(q[0]), abs(q[1])];
     return {
       coordinates: { lean: q[0], steer: q[1] },
@@ -123,7 +124,7 @@
       throw new TypeError('Eigenmode lab requires app state, maxRealEigenvalue(), and charPolyCoeffs().');
     }
     const ui = {
-      mode: $('eigenmodeSelect'), speed: $('eigenmodeSpeed'),
+      mode: $('eigenmodeSelect'), speed: $('eigenmodeSpeed'), vector: $('eigenmodeStateVector'),
       frequency: $('eigenmodeFrequency'), damping: $('eigenmodeDamping'),
       ratio: $('eigenmodeRatio'), phaseDifference: $('eigenmodePhaseDifference'),
       residual: $('eigenmodeResidual'), timeConstant: $('eigenmodeTimeConstant'),
@@ -224,7 +225,9 @@
         return;
       }
       const mode=model.mode,lean=mode.coordinates.lean,steer=mode.coordinates.steer;
-      const topH=Math.min(146,height*0.46),center={x:Math.min(width*0.29,205),y:topH*0.58};
+      const compact = width < 620;
+      const topH = compact ? 190 : Math.min(146,height*0.46);
+      const center = compact ? {x:width/2,y:58} : {x:Math.min(width*0.29,205),y:topH*0.58};
       const radius=Math.min(52,topH*0.37,width*0.11);
       ctx.strokeStyle='#cbd5e1';ctx.lineWidth=1;ctx.beginPath();ctx.arc(center.x,center.y,radius,0,Math.PI*2);ctx.stroke();
       ctx.setLineDash([3,4]);ctx.beginPath();
@@ -240,7 +243,8 @@
         ctx.font='700 11px system-ui,sans-serif';ctx.textAlign='left';ctx.fillText(label,point.x+6,point.y-5);
       };
       drawPhasor(lean,'#059669','Lean');drawPhasor(steer,'#d97706','Steer');
-      const sx=Math.max(width*0.48,300),sw=Math.max(150,width-sx-22);
+      const sx = compact ? 16 : Math.max(width*0.48,300);
+      const sw = compact ? width-32 : Math.max(150,width-sx-22);
       ctx.fillStyle='#0f172a';ctx.font='700 11px system-ui,sans-serif';ctx.textAlign='left';ctx.fillText('GENERALIZED COORDINATES',sx,20);
       const drawBar=(y,label,value,color)=>{
         ctx.fillStyle='#475569';ctx.font='600 11px system-ui,sans-serif';ctx.fillText(label,sx,y);
@@ -306,6 +310,9 @@
         ui.phaseDifference.textContent=fmt(model.mode.phaseDifferenceDeg,1)+'°';
         ui.residual.textContent=model.mode.relativeResidual.toExponential(2);
         ui.timeConstant.textContent=Number.isFinite(model.mode.timeConstant)?model.mode.timeConstant.toFixed(3)+' s':'—';
+        ui.vector.textContent='x = ['+model.mode.stateVector.map(value =>
+          fmt(value.re,3)+(Math.abs(value.im)>1e-8?(value.im>=0?' + ':' − ')+fmt(Math.abs(value.im),3)+'i':'')
+        ).join('  ·  ')+']ᵀ';
         ui.phase.disabled=!model.mode.oscillatory;ui.play.disabled=!model.mode.oscillatory;
         ui.play.textContent=model.playing?'Pause cycle':'Play cycle';
         setStatus(model.mode.oscillatory
