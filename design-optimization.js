@@ -165,6 +165,7 @@
       model.rows=Array.from({length:config.resolution},()=>Array(config.resolution).fill(null));
       model.selected=null;model.best=null;model.response=null;model.baseParams=baseParams;model.baseSignature=signature;
       model.scanConfig=config;model.completedCandidates=0;model.validCount=0;model.scanning=true;model.cancelled=false;
+      renderResponseSummary(null);
       const totalCandidates=config.resolution*config.resolution;
       ui.run.disabled=true;ui.cancel.disabled=false;ui.apply.disabled=true;
       ui.run.textContent='Optimizing…';ui.progress.value=0;
@@ -184,7 +185,7 @@
           const ix=model.completedCandidates%config.resolution;
           const candidate=evaluateCandidate(baseParams,config,model.xValues[ix],model.yValues[iy],speeds);
           model.rows[iy][ix]=candidate;
-          if(candidate){model.validCount++;model.scale=Math.max(model.scale,Math.abs(candidate.score));}
+          if(candidate)model.validCount++;
           model.completedCandidates++;
         }
         ui.progress.value=model.completedCandidates/totalCandidates*100;
