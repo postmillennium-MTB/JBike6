@@ -1612,10 +1612,10 @@
 
   
     /* Interactive visualization workspace */
-    .viz-workspace-nav{position:sticky;top:0;z-index:35;display:flex;gap:.4rem;overflow-x:auto;padding:.55rem .65rem;margin:-.2rem 0 .1rem;background:rgba(248,250,252,.96);border:1px solid var(--border-light);border-radius:13px;backdrop-filter:blur(12px);scrollbar-width:thin}
+    .viz-workspace-nav{position:sticky;top:var(--app-header-height,72px);z-index:35;display:flex;gap:.4rem;overflow-x:auto;padding:.55rem .65rem;margin:-.2rem 0 .1rem;background:rgba(248,250,252,.96);border:1px solid var(--border-light);border-radius:13px;backdrop-filter:blur(12px);scrollbar-width:thin}
     .viz-workspace-nav button{flex:0 0 auto;border:1px solid #dbe5ec;background:#fff;color:#475569;border-radius:999px;padding:.48rem .78rem;font:600 .72rem var(--font-sans);cursor:pointer;white-space:nowrap}
     .viz-workspace-nav button[aria-current="location"]{background:#0f766e;color:#fff;border-color:#0f766e}
-    .viz-camera-presets{display:inline-flex;gap:.25rem;align-items:center}
+    .viz-camera-presets{display:inline-flex;gap:.25rem;align-items:center}.pz-hover-readout{font:600 .7rem var(--font-mono);color:#0f766e;padding:.35rem .55rem;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:8px;margin:.35rem 0}
     .viz-camera-presets .btn-action,.landscape-camera-preset{min-height:34px;padding:.3rem .55rem;font-size:.68rem}
     .landscape-camera-preset{border:1px solid var(--border-mid);border-radius:8px;background:#fff;color:var(--text-body);cursor:pointer}
     .landscape-camera-preset.hidden{display:none}
@@ -2248,6 +2248,7 @@
             <canvas id="poleZeroCanvas" role="img" aria-label="Interactive three-dimensional pole-zero map with real and imaginary pole coordinates and bicycle forward speed as the third axis"></canvas>
             <div class="pz-canvas-hint" id="pzCanvasHint">Drag to orbit · Scroll or use +/- to zoom · Select a marker for details</div>
           </div>
+          <div id="pzHoverReadout" class="pz-hover-readout" aria-live="polite">Move over the plot to inspect coordinates; select a marker for modal details.</div>
           <div id="pzSelectionReadout" class="pz-selection-readout" role="status" aria-live="polite">Select a pole or zero in the plot to inspect its location and dynamics.</div>
         </div>
       </div>
@@ -6285,6 +6286,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
               speedInput: document.getElementById('pzSpeedScrubber'),
               speedReadout: document.getElementById('pzSpeedReadout'),
               selectionReadout: document.getElementById('pzSelectionReadout'),
+              hoverReadout: document.getElementById('pzHoverReadout'),
               btn2D: document.getElementById('btnPz2D'),
               btn3D: document.getElementById('btnPz3D'),
               btnReset: document.getElementById('btnPzReset'),
