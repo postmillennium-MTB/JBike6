@@ -2059,6 +2059,7 @@
                 <span id="pinBtnLabel">Pin Baseline</span>
               </button>
               <button type="button" id="btnClearBaseline" class="btn-action hidden">Clear Pin</button>
+              <span id="legendPinnedItem" class="root-pinned-status hidden">PINNED · <strong id="legendPinnedName">Baseline</strong></span>
               <button type="button" id="btnResetRootCam" class="btn-action hidden">Reset 3D View</button><div class="viz-camera-presets root-camera-presets" role="group" aria-label="Root locus camera presets" style="display:none"><button type="button" data-root-camera="front" class="btn-action">Front</button><button type="button" data-root-camera="side" class="btn-action">Side</button><button type="button" data-root-camera="top" class="btn-action">Top</button></div>
               <div class="seg-group light" role="group" aria-label="Root Locus View Mode">
                 <button type="button" id="btnRootMode2D" class="seg-btn active">2D Classic Plot</button>
@@ -2067,16 +2068,15 @@
             </div>
           </div>
 
-          <div class="legend-bar">
-            <span class="leg-item"><span class="leg-swatch" style="background:#2563eb;"></span>Re(&lambda;) Growth/Decay (1/s)</span>
-            <span class="leg-item"><span class="leg-swatch" style="background:#06b6d4;"></span>Im(&lambda;) Oscillation Freq (rad/s)</span>
-            <span class="leg-item"><span class="leg-swatch" style="background:rgba(16,185,129,0.35);height:10px;"></span>Self-Stable Zone (Re(&lambda;) &lt; 0)</span>
-            <span class="leg-item"><span class="leg-swatch" style="background:#d946ef;width:3px;height:12px;"></span>Double Root</span>
-            <span id="legendPinnedItem" class="leg-item hidden" style="color:#202a2e;"><span class="leg-swatch" style="border-top:2px dashed #4f46e5;background:transparent;"></span>Pinned: <strong id="legendPinnedName">Baseline</strong></span>
+          <div id="rootPlotDescription" class="sr-only">
+            Root-locus plot. Teal points represent imaginary eigenvalue components and oscillation frequency.
+            Orange points represent real eigenvalue components and growth or decay. The shaded interval is
+            self-stable where the maximum real eigenvalue is negative. Vertical markers identify weave,
+            capsize, and the currently selected operating speed. Double-root markers are highlighted in orange.
           </div>
 
           <div class="canvas-stage root-h">
-            <canvas id="rootCanvas"></canvas>
+            <canvas id="rootCanvas" aria-describedby="rootPlotDescription"></canvas>
             <div id="rootHoverCard" class="hover-card hidden">
               <div class="hover-card-head">
                 <span id="hoverSpeedLabel" style="color:#34d399;">v = 0.00 m/s</span>
@@ -4415,9 +4415,9 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const toWorld = (px, py) => ({ x: (px - offsetX) / scale, y: (offsetY - py) / scale });
         geomTransform = { toPx, toWorld, scale };
 
-        // Grid
-        ctx.strokeStyle = '#d6d3c8';
-        ctx.lineWidth = 1;
+        // Fine 250 mm drafting grid; primary geometry remains visually dominant.
+        ctx.strokeStyle = 'rgba(116, 122, 114, 0.17)';
+        ctx.lineWidth = 0.75;
         const gridStep = 0.25;
         for (let gx = Math.ceil(minX / gridStep) * gridStep; gx <= maxX; gx += gridStep) {
           const p0 = toPx(gx, minY), p1 = toPx(gx, maxY);
@@ -5132,7 +5132,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const { sweepData, minVelPlot, maxVelPlot, vw, vc, doubleRoots } = appState.analysis;
         const unit = appState.unit;
 
-        const padL = 54, padR = 20, padT = 18, padB = 42;
+        const padL = 54, padR = 20, padT = 32, padB = 42;
         const plotW = width - padL - padR;
         const plotH = height - padT - padB;
         const yMin = -10, yMax = 10;
@@ -5149,8 +5149,15 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const v0 = Math.max(minVelPlot, vw);
           const v1 = vc !== null ? Math.min(vc, maxVelPlot) : maxVelPlot;
           if (v1 > v0) {
-            ctx.fillStyle = 'rgba(52, 115, 108, 0.11)';
-            ctx.fillRect(toPxX(v0), padT, toPxX(v1) - toPxX(v0), plotH);
+            const zoneX = toPxX(v0), zoneWidth = toPxX(v1) - zoneX;
+            ctx.fillStyle = 'rgba(52, 115, 108, 0.075)';
+            ctx.fillRect(zoneX, padT, zoneWidth, plotH);
+            if (zoneWidth > 82) {
+              ctx.fillStyle = 'rgba(52, 115, 108, 0.88)';
+              ctx.font = '8px "IBM Plex Mono", monospace';
+              ctx.textAlign = 'left';
+              ctx.fillText('SELF-STABLE', zoneX + 5, padT + plotH - 8);
+            }
           }
         }
 
@@ -5161,8 +5168,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         for (let yv = yMin; yv <= yMax; yv += 2) {
           const py = toPxY(yv);
           ctx.beginPath();
-          ctx.strokeStyle = yv === 0 ? '#68716c' : '#dedcd2';
-          ctx.lineWidth = yv === 0 ? 1.5 : 1;
+          ctx.strokeStyle = yv === 0 ? '#747a72' : 'rgba(116, 122, 114, 0.2)';
+          ctx.lineWidth = yv === 0 ? 1.25 : 0.7;
           ctx.moveTo(padL, py); ctx.lineTo(padL + plotW, py); ctx.stroke();
           ctx.fillText(yv.toString(), padL - 8, py + 3.5);
         }
@@ -5179,8 +5186,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const vMs = ds / UNIT_CONFIG[unit].factor;
           const px = toPxX(vMs);
           ctx.beginPath();
-          ctx.strokeStyle = '#dedcd2';
-          ctx.lineWidth = 1;
+          ctx.strokeStyle = 'rgba(116, 122, 114, 0.18)';
+          ctx.lineWidth = 0.7;
           ctx.moveTo(px, padT); ctx.lineTo(px, padT + plotH); ctx.stroke();
           ctx.fillText(ds.toFixed(0), px, padT + plotH + 17);
         }
@@ -5194,8 +5201,16 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.save();
         ctx.translate(15, padT + plotH * 0.5);
         ctx.rotate(-Math.PI / 2);
-        ctx.fillText('Re(λ) & Im(λ)  [1/s]', 0, 0);
+        ctx.fillText('Eigenvalue component  [s⁻¹]', 0, 0);
         ctx.restore();
+
+        // Direct series labels live on the plot surface; no detached legend is needed.
+        ctx.font = '9px "IBM Plex Mono", monospace';
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#34736c';
+        ctx.fillText('IM(λ) · OSCILLATION', padL, 19);
+        ctx.fillStyle = '#bd5736';
+        ctx.fillText('RE(λ) · GROWTH / DECAY', padL + 136, 19);
 
         ctx.save();
         ctx.beginPath();
@@ -5225,7 +5240,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.setLineDash([]);
         }
 
-        // Im(lambda) in Cyan
+        // Imaginary eigenvalue component: oscillation frequency (teal).
         ctx.fillStyle = '#34736c';
         for (const step of sweepData) {
           const px = toPxX(step.v);
@@ -5236,7 +5251,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           }
         }
 
-        // Re(lambda) in Blue
+        // Real eigenvalue component: growth and decay rate (orange).
         ctx.fillStyle = '#bd5736';
         for (const step of sweepData) {
           const px = toPxX(step.v);
@@ -5335,15 +5350,15 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.fillStyle = '#f2f0e8';
         ctx.fillRect(0, 0, width, height);
 
-        // 1. Draw the Re(lambda) = 0 Stability Plane (translucent emerald plane)
+        // 1. Draw the Re(lambda) = 0 stability plane.
         const p00 = proj(minVelPlot, 0, -8);
         const p10 = proj(maxVelPlot, 0, -8);
         const p11 = proj(maxVelPlot, 0, 8);
         const p01 = proj(minVelPlot, 0, 8);
 
         ctx.save();
-        ctx.fillStyle = 'rgba(52, 115, 108, 0.14)';
-        ctx.strokeStyle = 'rgba(52, 115, 108, 0.55)';
+        ctx.fillStyle = 'rgba(52, 115, 108, 0.105)';
+        ctx.strokeStyle = 'rgba(52, 115, 108, 0.42)';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(p00.x, p00.y);
@@ -5354,9 +5369,9 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.fill();
         ctx.stroke();
 
-        // Stability plane grid lines
-        ctx.strokeStyle = 'rgba(52, 115, 108, 0.2)';
-        ctx.lineWidth = 1;
+        // Fine reference lines on the Re(λ) = 0 stability plane.
+        ctx.strokeStyle = 'rgba(52, 115, 108, 0.13)';
+        ctx.lineWidth = 0.7;
         for (let imG = -8; imG <= 8; imG += 4) {
           const a = proj(minVelPlot, 0, imG), b = proj(maxVelPlot, 0, imG);
           ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
@@ -5379,6 +5394,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.fillText(label, pB.x + 5, pB.y + 3);
         };
 
+        ctx.font = '9px "IBM Plex Mono", monospace';
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#34736c';
+        ctx.fillText('REFERENCE PLANE · Re(λ) = 0', 12, 17);
+        ctx.fillStyle = '#68716c';
+        ctx.fillText('TEAL · DECAY     ORANGE · GROWTH', 12, 31);
+
         drawAxisLine(axOrigin, axSpeed, '#202a2e', `Speed v (${UNIT_CONFIG[unit].label})`);
         drawAxisLine(axReNeg, axRePos, '#bd5736', '+Re(λ) Unstable');
         drawAxisLine(axOrigin, axImPos, '#68716c', 'Im(λ) Freq');
@@ -5386,7 +5408,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.font = '700 10px "IBM Plex Sans", sans-serif';
         ctx.fillText('-Re(λ) Stable', axReNeg.x - 10, axReNeg.y + 12);
 
-        // 3. Plot the 4 Eigenvalue Trajectories through 3D (v, Re, Im) Space
+        // 3. Plot the four eigenvalue trajectories through (v, Re, Im) space.
         for (const step of sweepData) {
           for (const r of step.roots) {
             if (Math.abs(r.re) > 9.5 || Math.abs(r.im) > 9.5) continue;
@@ -5398,7 +5420,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(pt.x, pt.y); ctx.lineTo(ptShadow.x, ptShadow.y); ctx.stroke();
 
-            // Root point colored by stability (emerald if Re<0, rose/blue if Re>=0)
+            // Root point colored by stability (teal if Re<0, orange otherwise).
             ctx.fillStyle = r.re < -1e-5 ? '#34736c' : '#bd5736';
             ctx.beginPath();
             ctx.arc(pt.x, pt.y, Math.max(2, 2.8 * pt.scale / baseScale), 0, Math.PI * 2);
