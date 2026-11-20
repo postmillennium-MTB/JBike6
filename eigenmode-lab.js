@@ -380,6 +380,17 @@
         ui.phaseDifference.textContent=fmt(model.mode.phaseDifferenceDeg,1)+'°';
         ui.residual.textContent=model.mode.relativeResidual.toExponential(2);
         ui.timeConstant.textContent=Number.isFinite(model.mode.timeConstant)?model.mode.timeConstant.toFixed(3)+' s':'—';
+        if (typeof window !== 'undefined' && window.JBike6EngineeringInspector) {
+          window.JBike6EngineeringInspector.publish('eigenmode',
+            'Eigenmode λ' + (model.modeIndex + 1), [
+              { label: 'Eigenvalue', value: fmt(root.re, 4) + (root.im >= 0 ? ' + ' : ' − ') + fmt(Math.abs(root.im), 4) + 'i s⁻¹' },
+              { label: 'Frequency', value: fmt(model.mode.frequencyHz, 3) + ' Hz' },
+              { label: 'Damping ratio', value: fmt(model.mode.dampingRatio * 100, 2) + '%' },
+              { label: 'Steer / lean', value: fmt(model.mode.steerToLeanRatio, 3) },
+              { label: 'Phase difference', value: fmt(model.mode.phaseDifferenceDeg, 1) + '°' },
+              { label: 'Eigenpair residual', value: model.mode.relativeResidual.toExponential(2) }
+            ], 'Mode shape and eigenpair are evaluated at the current operating speed using the live 4×4 state matrix.');
+        }
         ui.vector.textContent='x = ['+model.mode.stateVector.map(value =>
           fmt(value.re,3)+(Math.abs(value.im)>1e-8?(value.im>=0?' + ':' − ')+fmt(Math.abs(value.im),3)+'i':'')
         ).join('  ·  ')+']ᵀ';
