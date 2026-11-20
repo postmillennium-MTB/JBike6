@@ -330,7 +330,7 @@
       state.mode=mode==='2d'?'2d':'3d';
       if(btn2D){btn2D.classList.toggle('active',state.mode==='2d');btn2D.setAttribute('aria-pressed',String(state.mode==='2d'));}
       if(btn3D){btn3D.classList.toggle('active',state.mode==='3d');btn3D.setAttribute('aria-pressed',String(state.mode==='3d'));}
-      canvas.style.cursor=state.mode==='3d'?'grab':'crosshair';document.querySelectorAll('.viz-camera-presets').forEach(el=>el.style.display=state.mode==='3d'?'inline-flex':'none');render();
+      canvas.style.cursor=state.mode==='3d'?'grab':'crosshair';document.querySelectorAll('.pz-camera-presets').forEach(el=>el.style.display=state.mode==='3d'?'inline-flex':'none');render();
     }
     function zoom(factor){state.camera.zoom=Math.max(.55,Math.min(2.6,state.camera.zoom*factor));render();}
 
