@@ -3860,7 +3860,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // Left-half s-plane light stability tint (Re(s) < 0)
         const zeroX = toX(0);
         if (zeroX > padL) {
-          ctx.fillStyle = 'rgba(16, 185, 129, 0.08)';
+          ctx.fillStyle = 'rgba(52, 115, 108, 0.08)';
           ctx.fillRect(padL, padT, Math.min(plotW, zeroX - padL), plotH);
         }
 
@@ -4608,7 +4608,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
           ctx.font = '600 11px system-ui, sans-serif';
           const tw = ctx.measureText(label).width + 10;
-          ctx.fillStyle = 'rgba(15, 23, 42, 0.86)';
+          ctx.fillStyle = 'rgba(32, 42, 46, 0.86)';
           ctx.beginPath();
           if (ctx.roundRect) ctx.roundRect(pt.x + 11, pt.y - 10, tw, 20, 6);
           else ctx.rect(pt.x + 11, pt.y - 10, tw, 20);
@@ -4844,11 +4844,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         if (p.rider.m > 0) {
           const rCom3 = leanPoint(p.rider.x, p.rider.y, 0);
           const rGround3 = { x: rCom3.x, y: 0, z: rCom3.z };
-          line3D(seat3, rCom3, 'rgba(5, 150, 105, 0.45)', 2);
-          line3D(rCom3, rGround3, 'rgba(5, 150, 105, 0.3)', 1.2);
+          line3D(seat3, rCom3, 'rgba(52, 115, 108, 0.45)', 2);
+          line3D(rCom3, rGround3, 'rgba(52, 115, 108, 0.3)', 1.2);
 
           const c2 = proj(rCom3.x, rCom3.y, rCom3.z);
-          ctx.fillStyle = 'rgba(5, 150, 105, 0.25)';
+          ctx.fillStyle = 'rgba(52, 115, 108, 0.25)';
           ctx.beginPath(); ctx.arc(c2.x, c2.y, 22 * cam.zoom, 0, Math.PI * 2); ctx.fill();
           ctx.fillStyle = '#34736c';
           ctx.strokeStyle = '#f2f0e8fff';
@@ -5142,7 +5142,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const v0 = Math.max(minVelPlot, vw);
           const v1 = vc !== null ? Math.min(vc, maxVelPlot) : maxVelPlot;
           if (v1 > v0) {
-            ctx.fillStyle = 'rgba(16, 185, 129, 0.11)';
+            ctx.fillStyle = 'rgba(52, 115, 108, 0.11)';
             ctx.fillRect(toPxX(v0), padT, toPxX(v1) - toPxX(v0), plotH);
           }
         }
@@ -5198,7 +5198,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // Pinned Baseline curve
         if (appState.pinnedBaseline) {
           const base = appState.pinnedBaseline;
-          ctx.strokeStyle = 'rgba(79, 70, 229, 0.58)';
+          ctx.strokeStyle = 'rgba(189, 87, 54, 0.58)';
           ctx.lineWidth = 1.75;
           ctx.setLineDash([5, 4]);
           for (let bIdx = 0; bIdx < 4; bIdx++) {
@@ -5335,8 +5335,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const p01 = proj(minVelPlot, 0, 8);
 
         ctx.save();
-        ctx.fillStyle = 'rgba(16, 185, 129, 0.14)';
-        ctx.strokeStyle = 'rgba(5, 150, 105, 0.55)';
+        ctx.fillStyle = 'rgba(52, 115, 108, 0.14)';
+        ctx.strokeStyle = 'rgba(52, 115, 108, 0.55)';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(p00.x, p00.y);
@@ -5348,7 +5348,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.stroke();
 
         // Stability plane grid lines
-        ctx.strokeStyle = 'rgba(5, 150, 105, 0.2)';
+        ctx.strokeStyle = 'rgba(52, 115, 108, 0.2)';
         ctx.lineWidth = 1;
         for (let imG = -8; imG <= 8; imG += 4) {
           const a = proj(minVelPlot, 0, imG), b = proj(maxVelPlot, 0, imG);
@@ -5387,7 +5387,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             const ptShadow = proj(step.v, 0, r.im); // Projection onto Re=0 plane
 
             // Subtle drop-line to Re=0 plane to highlight sign crossing
-            ctx.strokeStyle = r.re < 0 ? 'rgba(5, 150, 105, 0.22)' : 'rgba(225, 29, 72, 0.22)';
+            ctx.strokeStyle = r.re < 0 ? 'rgba(52, 115, 108, 0.22)' : 'rgba(189, 87, 54, 0.22)';
             ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(pt.x, pt.y); ctx.lineTo(ptShadow.x, ptShadow.y); ctx.stroke();
 
