@@ -973,6 +973,17 @@
     .eigen-state-vector strong { color:#334e60; font-size:.67rem; }
     .eigen-state-vector code { color:#0f766e; font:.7rem var(--font-mono); overflow-wrap:anywhere; }
     .eigen-state-vector span { color:#718394; font-size:.61rem; }
+    .eigen-verification-panel { margin:.65rem 0 .8rem; padding:.75rem; border:1px solid #dce6ed; border-radius:11px; background:#fff; }
+    .eigen-verification-head { display:flex; justify-content:space-between; align-items:flex-start; gap:.6rem; flex-wrap:wrap; }
+    .eigen-verification-head strong { display:block; color:#183448; font-size:.72rem; }
+    .eigen-verification-head span { display:block; margin-top:.15rem; color:#718394; font-size:.62rem; }
+    .eigenpair-readout { color:#0f766e; font:650 .65rem/1.5 var(--font-mono); text-align:right; }
+    #eigenpairCanvas { display:block; width:100%; height:176px; margin-top:.35rem; }
+    .eigenpair-legend { display:flex; flex-wrap:wrap; gap:.8rem; color:#718394; font-size:.6rem; }
+    .eigenpair-legend span { display:flex; align-items:center; gap:.3rem; }
+    .eigenpair-swatch { display:inline-block; width:9px; height:9px; border-radius:2px; }
+    .eigenpair-swatch.ax { background:#0d9488; }
+    .eigenpair-swatch.lx { background:#d97706; }
     .eigen-mode-canvas-box { min-width:0; min-height:300px; border:1px solid #dce6ed; border-radius:11px; overflow:hidden; background:#f8fafc; }
     #eigenmodeCanvas { display:block; width:100%; height:300px; }
     .eigen-mode-side { display:flex; flex-direction:column; align-items:stretch; gap:.65rem; }
@@ -2130,6 +2141,14 @@
           <div class="eigen-stat"><span>Eigenvector residual</span><strong id="eigenmodeResidual">—</strong></div>
         </div>
                 <div class="eigen-state-vector"><strong>Normalized state eigenvector</strong><code id="eigenmodeStateVector">x = [—]ᵀ</code><span>State order: [φ, φ̇, δ, δ̇] · phase-normalized; largest displacement component = 1</span></div>
+        <section class="eigen-verification-panel" aria-labelledby="eigenVerificationTitle">
+          <div class="eigen-verification-head">
+            <div><strong id="eigenVerificationTitle">06 · Visual eigenpair verification</strong><span>Compare A x with λ x for the selected bicycle mode</span></div>
+            <div id="eigenpairReadout" class="eigenpair-readout">Waiting for an eigenvalue…</div>
+          </div>
+          <canvas id="eigenpairCanvas" role="img" aria-label="Component-by-component comparison of A times the selected eigenvector with its eigenvalue times the eigenvector"></canvas>
+          <div class="eigenpair-legend"><span><i class="eigenpair-swatch ax"></i>A x · matrix transformation</span><span><i class="eigenpair-swatch lx"></i>λ x · eigenvalue scaling</span></div>
+        </section>
         <div class="eigen-mode-visual">
           <div class="eigen-mode-canvas-box"><canvas id="eigenmodeCanvas" aria-label="Complex lean and steer eigenvector phasors and normalized modal time response"></canvas></div>
           <div class="eigen-mode-side">
