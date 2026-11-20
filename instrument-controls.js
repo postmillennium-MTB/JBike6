@@ -95,6 +95,7 @@
       syncParameterEntries();
     };
     input.addEventListener('change', commit);
+    input.addEventListener('blur', sync);
     input.addEventListener('keydown', event => {
       if (event.key === 'Enter') {
         event.preventDefault();
