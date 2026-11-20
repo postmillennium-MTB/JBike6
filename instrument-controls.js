@@ -50,7 +50,7 @@
     if (!raw || element.dataset.instrumentReadout === raw) return;
 
     const expression = new RegExp(
-      '([+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+-]?\\d+)?)\\s*(N·m·s/rad|N·m/\\(rad·s\\)|N·m/rad|N·m|m/s²|km/h|m/s|mph|mm|kg|Hz|rad|m|s|°|%|")',
+      '([+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+-]?\\d+)?)(\\s*)(N·m·s/rad|N·m/\\(rad·s\\)|N·m/rad|N·m|m/s²|km/h|m/s|mph|mm|kg|Hz|rad|m|s|°|%|")',
       'gi'
     );
     const fragments = [];
@@ -68,9 +68,11 @@
 
       const unit = document.createElement('small');
       unit.className = 'instrument-readout-unit';
-      unit.textContent = match[2] === '"' ? 'in' : match[2];
+      unit.textContent = match[3];
 
-      fragments.push(value, unit);
+      fragments.push(value);
+      if (match[2]) fragments.push(document.createTextNode(match[2]));
+      fragments.push(unit);
       cursor = match.index + match[0].length;
     }
 
