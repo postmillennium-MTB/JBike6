@@ -3610,9 +3610,12 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           if (maxPoleRe < -1e-5) {
             pzTag.textContent = 'Open-Loop LHP Stable';
             pzTag.className = 'pill-badge pill-emerald';
-          } else {
+          } else if (maxPoleRe > 1e-5) {
             pzTag.textContent = 'Open-Loop RHP Unstable';
             pzTag.className = 'pill-badge pill-rose';
+          } else {
+            pzTag.textContent = 'Open-Loop Marginal';
+            pzTag.className = 'pill-badge pill-amber';
           }
         }
 
