@@ -1010,15 +1010,9 @@
     .opt-action-row .btn-action { flex:1; justify-content:center; }
     .optimization-progress { width:100%; height:7px; accent-color:#079b79; }
     .optimization-results { display:flex; flex-direction:column; gap:.8rem; min-width:0; }
-    .optimization-map-card, .optimization-inspector { min-width:0; padding:.9rem; }
-    .optimization-canvas-stage { height:clamp(340px,44vw,520px); min-height:320px; border:1px solid #dce6ed; border-radius:11px; overflow:hidden; background:#f8fafc; }
+    .optimization-response-card, .optimization-inspector { min-width:0; padding:.9rem; }
+    .optimization-canvas-stage { height:clamp(300px,35vw,420px); min-height:300px; overflow:hidden; background:#f2f0e8; }
     #optimizationCanvas { display:block; width:100%; height:100%; }
-    .optimization-legend { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:.55rem; color:#687d8d; font-size:.64rem; }
-    .optimization-legend span { display:inline-flex; align-items:center; gap:.32rem; }
-    .optimization-swatch { width:10px; height:10px; border-radius:3px; display:inline-block; }
-    .optimization-swatch.better { background:#0d9488; }
-    .optimization-swatch.neutral { background:#dedcd2; border:1px solid #cbd5e1; }
-    .optimization-swatch.worse { background:#e14b4b; }
     .optimization-inspector-head { align-items:center; }
     .optimization-selection-detail { margin-top:.65rem; }
     .opt-detail-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.45rem; }
@@ -2614,7 +2608,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           <div id="optimizationStatus" class="landscape-status" data-kind="neutral" role="status" aria-live="polite">Ready · configure the design variables and run the search.</div>
         </aside>
         <div class="optimization-results">
-          <section class="panel-card optimization-map-card">
+          <section class="panel-card optimization-response-card">
             <div class="panel-head">
               <div><h3 class="panel-title">Stability response across speed</h3><p class="viz-sub">Maximum real eigenvalue versus forward speed · lower is better, zero is the neutral boundary.</p></div>
               <span class="pill-badge pill-slate">Speed sweep</span>
