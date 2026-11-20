@@ -117,7 +117,7 @@ h1, h2, h3, h4, .brand-title, .viz-title, .panel-title {
   font-size: 1.58rem;
   line-height: .9;
   letter-spacing: .015em;
-  text-transform: uppercase;
+  text-transform: none;
 }
 .brand-badge {
   display: inline-block;
