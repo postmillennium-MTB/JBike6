@@ -1610,6 +1610,17 @@
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
     }
 
+  
+    /* Interactive visualization workspace */
+    .viz-workspace-nav{position:sticky;top:0;z-index:35;display:flex;gap:.4rem;overflow-x:auto;padding:.55rem .65rem;margin:-.2rem 0 .1rem;background:rgba(248,250,252,.96);border:1px solid var(--border-light);border-radius:13px;backdrop-filter:blur(12px);scrollbar-width:thin}
+    .viz-workspace-nav button{flex:0 0 auto;border:1px solid #dbe5ec;background:#fff;color:#475569;border-radius:999px;padding:.48rem .78rem;font:600 .72rem var(--font-sans);cursor:pointer;white-space:nowrap}
+    .viz-workspace-nav button[aria-current="location"]{background:#0f766e;color:#fff;border-color:#0f766e}
+    .viz-camera-presets{display:inline-flex;gap:.25rem;align-items:center}
+    .viz-camera-presets .btn-action,.landscape-camera-preset{min-height:34px;padding:.3rem .55rem;font-size:.68rem}
+    .landscape-camera-preset{border:1px solid var(--border-mid);border-radius:8px;background:#fff;color:var(--text-body);cursor:pointer}
+    .landscape-camera-preset.hidden{display:none}
+    @media(max-width:700px){.viz-workspace-nav{top:0;margin:0 -.1rem .1rem;padding:.45rem}.viz-camera-presets{width:100%;order:4}.viz-camera-presets .btn-action{flex:1}}
+
   </style>
 </head>
 <body>
@@ -1672,6 +1683,8 @@
   <!-- MAIN WORKSPACE                                                        -->
   <!-- ===================================================================== -->
   <main class="main-wrap">
+
+    <nav id="vizWorkspaceNav" class="viz-workspace-nav" aria-label="Visualization workspace"></nav>
 
     <!-- KPI SUMMARY STRIP -->
     <section class="kpi-grid">
@@ -2217,6 +2230,7 @@
               <button type="button" id="btnPzZoomIn" class="btn-action" aria-label="Zoom in">+</button>
               <button type="button" id="btnPzZoomOut" class="btn-action" aria-label="Zoom out">−</button>
               <button type="button" id="btnPzReset" class="btn-action">Reset view</button>
+              <div class="viz-camera-presets" role="group" aria-label="3D camera presets"><button type="button" data-pz-camera="front" class="btn-action">Front</button><button type="button" data-pz-camera="side" class="btn-action">Side</button><button type="button" data-pz-camera="top" class="btn-action">Top</button></div>
             </div>
             <div class="pz-speed-control">
               <label for="pzSpeedScrubber">Speed slice</label>
@@ -2459,6 +2473,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
                 <button type="button" class="landscape-view-btn active" data-landscape-view="heatmap" aria-pressed="true">2D heatmap</button>
                 <button type="button" class="landscape-view-btn" data-landscape-view="surface3d" aria-pressed="false">3D surface</button>
                 <button type="button" id="btnResetLandscapeCamera" class="landscape-reset hidden" title="Reset 3D camera" aria-label="Reset 3D camera">↺</button>
+                <button type="button" class="landscape-camera-preset hidden" data-landscape-camera="front">Front</button><button type="button" class="landscape-camera-preset hidden" data-landscape-camera="side">Side</button><button type="button" class="landscape-camera-preset hidden" data-landscape-camera="top">Top</button>
               </div>
             </div>
 
@@ -2581,6 +2596,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
   <!-- ===================================================================== -->
   <!-- JAVASCRIPT PHYSICS ENGINE, 3D PROJECTION & INTERACTIVE RENDERERS      -->
   <!-- ===================================================================== -->
+  <script src="viz-workspace.js"></script>
   <script src="stability-landscape.js"></script>
   <script src="eigenmode-lab.js"></script>
   <script src="design-optimization.js"></script>
