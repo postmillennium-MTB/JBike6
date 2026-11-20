@@ -275,7 +275,7 @@
       };
       drawBar(45,'Lean amplitude |φ|',mode.leanAmplitude,'#34736c');
       drawBar(83,'Steer amplitude |δ|',mode.steerAmplitude,'#bd5736');
-      ctx.fillStyle='#46514f';ctx.font='11px "IBM Plex Sans", sans-serif';
+      ctx.fillStyle='#46514f';ctx.font='10px "IBM Plex Mono", monospace';
       ctx.fillText('Steer / lean amplitude: '+fmt(mode.steerToLeanRatio,3),sx,124);
       ctx.fillText('Steer phase relative to lean: '+fmt(mode.phaseDifferenceDeg,1)+'°',sx,compact?170:140);
 
@@ -300,7 +300,7 @@
       }
       ctx.strokeStyle='#b9b9ae';ctx.lineWidth=1;
       for(const level of [-1,0,1]){const y=toY(level);ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(padL+plotW,y);ctx.stroke();}
-      ctx.fillStyle='#68716c';ctx.font='10px "IBM Plex Sans", sans-serif';ctx.textAlign='right';
+      ctx.fillStyle='#68716c';ctx.font='10px "IBM Plex Mono", monospace';ctx.textAlign='right';
       ctx.fillText('+1',padL-7,toY(1)+3);ctx.fillText('0',padL-7,toY(0)+3);ctx.fillText('−1',padL-7,toY(-1)+3);
       const trace=(value,color)=>{
         ctx.strokeStyle=color;ctx.lineWidth=2.1;ctx.beginPath();
@@ -310,7 +310,7 @@
       trace(lean,'#34736c');trace(steer,'#bd5736');
       const cursorX=toX(model.phaseDeg);ctx.strokeStyle='#202a2e';ctx.setLineDash([4,3]);
       ctx.beginPath();ctx.moveTo(cursorX,padT);ctx.lineTo(cursorX,padT+plotH);ctx.stroke();ctx.setLineDash([]);
-      ctx.fillStyle='#202a2e';ctx.font='600 10px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
+      ctx.fillStyle='#202a2e';ctx.font='9px "IBM Plex Mono", monospace';ctx.textAlign='center';
       ctx.fillText('0°',padL,height-6);ctx.fillText('180°',padL+plotW/2,height-6);ctx.fillText('360° phase',padL+plotW,height-6);
       ctx.textAlign='left';ctx.fillStyle='#34736c';ctx.fillText('— Lean',padL+5,padT-7);
       ctx.fillStyle='#bd5736';ctx.fillText('— Steer',padL+75,padT-7);
