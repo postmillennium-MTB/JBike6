@@ -359,7 +359,7 @@
       ctx.lineWidth = 1;
       ctx.strokeRect(left, top, plotW, plotH);
       ctx.fillStyle = '#46514f';
-      ctx.font = '11px "IBM Plex Sans", sans-serif';
+      ctx.font = '10px "IBM Plex Mono", monospace';
       ctx.textAlign = 'center';
       for (let t = 0; t <= 4; t++) {
         const ix = Math.round(t * (nx - 1) / 4);
