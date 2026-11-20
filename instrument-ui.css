@@ -676,3 +676,41 @@ input[type="range"]:not(.sci-slider)::-moz-range-track {
   text-transform: uppercase;
   vertical-align: .08em;
 }
+
+/* The two horizontal navigation rails are deliberately staggered beneath the nameplate. */
+.viz-workspace-nav {
+  top: var(--app-header-height);
+  z-index: 35;
+  gap: 0;
+  margin: 0;
+  padding: 4px 0;
+  border: 0;
+  border-bottom: 1px solid var(--rule-strong);
+  border-radius: 0;
+  background: rgba(242,240,232,.97);
+  box-shadow: none;
+  backdrop-filter: blur(6px);
+}
+.viz-workspace-nav button {
+  min-height: 29px;
+  padding: 5px 10px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font: 500 .61rem var(--font-mono);
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+.viz-workspace-nav button:hover { background: var(--panel); color: var(--ink); }
+.viz-workspace-nav button[aria-current="location"] {
+  border-bottom-color: var(--signal);
+  background: transparent;
+  color: var(--ink);
+}
+.lab-nav-bar { top: calc(var(--app-header-height) + 38px); }
+@media (max-width: 760px) {
+  .viz-workspace-nav { position: static; margin: 0; padding: 4px 0; }
+  .lab-nav-bar { top: auto; }
+}
