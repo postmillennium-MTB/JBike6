@@ -81,7 +81,7 @@
     const state = {
       mode: '3d', camera: { yaw: -0.62, pitch: 0.48, zoom: 1 },
       data: null, extents: { reMin: -8, reMax: 6, imMax: 8 },
-      tracks: { poles: [], zeros: [], closedPoles: [] },
+      tracks: { poles: [], zeros: [], closedPoles: [] }, visible:{poles:true,zeros:true,closed:true},
       pointer: null, dragging: false, moved: false, selected: null, plotArea: null, hover: null
     };
 
@@ -154,17 +154,17 @@
     function drawCurrentMarkers(ctx, width, height, is3D) {
       const cur = state.data.current;
       const at = p => is3D ? projectRoot({ re:p.re, im:p.im, v:cur.v },width,height) : to2D(p);
-      (cur.poles || []).forEach((p,i) => {
+      if(state.visible.poles)(cur.poles || []).forEach((p,i) => {
         const q = at(p), status = classifyPole(p);
         drawCross(ctx,q,status === 'stable' ? '#059669' : status === 'unstable' ? '#e11d48' : '#d97706',5.5,2.2);
         if (state.selected && state.selected.kind === 'pole' && state.selected.index === i) drawRing(ctx,q);
       });
-      (cur.zeros || []).forEach((p,i) => {
+      if(state.visible.zeros)(cur.zeros || []).forEach((p,i) => {
         const q=at(p); ctx.save(); ctx.strokeStyle='#d97706'; ctx.lineWidth=2;
         ctx.beginPath(); ctx.arc(q.x,q.y,6,0,Math.PI*2); ctx.stroke(); ctx.restore();
         if (state.selected && state.selected.kind==='zero' && state.selected.index===i) drawRing(ctx,q);
       });
-      (cur.closedPoles || []).forEach((p,i) => {
+      if(state.visible.closed)(cur.closedPoles || []).forEach((p,i) => {
         const q=at(p); ctx.save(); ctx.strokeStyle='#4f46e5'; ctx.lineWidth=2;
         ctx.beginPath(); ctx.moveTo(q.x,q.y-5); ctx.lineTo(q.x+5,q.y); ctx.lineTo(q.x,q.y+5); ctx.lineTo(q.x-5,q.y); ctx.closePath(); ctx.stroke(); ctx.restore();
         if (state.selected && state.selected.kind==='closed' && state.selected.index===i) drawRing(ctx,q);
@@ -219,18 +219,18 @@
       ctx.fillText(data.minSpeed.toFixed(1),v0.x+5,v0.y+16);ctx.fillText(data.maxSpeed.toFixed(1),v1.x+5,v1.y+16);
 
       // Continuity-matched pole branches, colored by stable / unstable half-plane.
-      state.tracks.poles.forEach(track=>{
+      if(state.visible.poles)state.tracks.poles.forEach(track=>{
         for(let i=1;i<track.length;i++){
           const a=track[i-1],b=track[i],color=(a.re+b.re)/2 < -EPS?'rgba(5,150,105,.86)':'rgba(225,29,72,.88)';
           drawLine(ctx,projectRoot(a,width,height),projectRoot(b,width,height),color,1.85);
         }
       });
-      state.tracks.zeros.forEach(track=>{
+      if(state.visible.zeros)state.tracks.zeros.forEach(track=>{
         ctx.save();ctx.strokeStyle='rgba(217,119,6,.78)';ctx.lineWidth=1.35;ctx.setLineDash([4,3]);ctx.beginPath();
         track.forEach((p,i)=>{const q=projectRoot(p,width,height);i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y);});
         ctx.stroke();ctx.restore();
       });
-      state.tracks.closedPoles.forEach(track=>{
+      if(state.visible.closed)state.tracks.closedPoles.forEach(track=>{
         for(let i=1;i<track.length;i++)drawLine(ctx,projectRoot(track[i-1],width,height),projectRoot(track[i],width,height),'rgba(79,70,229,.68)',1.3,[4,3]);
       });
       drawCurrentMarkers(ctx,width,height,true);
@@ -289,7 +289,7 @@
     }
     function findHit(x,y) {
       const cur=state.data.current,sets=[
-        {kind:'pole',items:cur.poles||[]},{kind:'zero',items:cur.zeros||[]},{kind:'closed',items:cur.closedPoles||[]}
+        {kind:'pole',items:state.visible.poles?(cur.poles||[]):[]},{kind:'zero',items:state.visible.zeros?(cur.zeros||[]):[]},{kind:'closed',items:state.visible.closed?(cur.closedPoles||[]):[]}
       ];
       let hit=null,best=18*18;
       sets.forEach(set=>set.items.forEach((p,index)=>{
@@ -340,6 +340,7 @@
       if(btnReset)btnReset.addEventListener('click',()=>{state.camera={yaw:-.62,pitch:.48,zoom:1};render();});
       if(btnZoomIn)btnZoomIn.addEventListener('click',()=>zoom(1.16));
       if(btnZoomOut)btnZoomOut.addEventListener('click',()=>zoom(1/1.16));
+      document.querySelectorAll('[data-pz-trace]').forEach(button=>button.addEventListener('click',()=>{const key=button.dataset.pzTrace;state.visible[key]=!state.visible[key];button.classList.toggle('active',state.visible[key]);button.setAttribute('aria-pressed',String(state.visible[key]));if(state.selected&&((state.selected.kind==='pole'&&!state.visible.poles)||(state.selected.kind==='zero'&&!state.visible.zeros)||(state.selected.kind==='closed'&&!state.visible.closed)))state.selected=null;render();}));
       document.querySelectorAll('[data-pz-camera]').forEach(button=>button.addEventListener('click',()=>setCameraPreset(button.dataset.pzCamera)));
       if(speedInput)speedInput.addEventListener('input',()=>{if(typeof opts.onSpeedChange==='function')opts.onSpeedChange(Number(speedInput.value));});
       canvas.addEventListener('pointerdown',event=>{
