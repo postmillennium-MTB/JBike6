@@ -25,6 +25,11 @@
     }
     return worst;
   };
+  const precisionForStep = step => {
+    const magnitude = Math.abs(Number(step));
+    if (!Number.isFinite(magnitude) || magnitude <= 0) return 3;
+    return Math.min(8, Math.max(0, Math.ceil(-Math.log10(magnitude) - 1e-10)));
+  };
   const niceStep = rawStep => {
     if (!Number.isFinite(rawStep) || rawStep <= 0) return 0.1;
     const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep)));
@@ -266,7 +271,7 @@
       const selected=fmtWorst(response.selectedWorst);
       const delta=response.startingWorst&&response.selectedWorst
         ? response.selectedWorst.value-response.startingWorst.value : NaN;
-      const deltaLabel=Number.isFinite(delta)?(delta>0?'+':'')+format(delta,5)+' s⁻¹':'—';
+      const deltaLabel=Number.isFinite(delta)?(delta>0?'+':'')+format(delta,6)+' s⁻¹':'—';
       const deltaClass=!Number.isFinite(delta)?'neutral':delta < -1e-8?'better':delta > 1e-8?'worse':'neutral';
       const validStart=response.starting.filter(point=>Number.isFinite(point.value)).length;
       const validSelected=response.selected.filter(point=>Number.isFinite(point.value)).length;
@@ -340,7 +345,7 @@
         ctx.setLineDash(Math.abs(tick)<1e-12?[]:[2,4]);
         ctx.moveTo(pad.left,y);ctx.lineTo(pad.left+plotW,y);ctx.stroke();
         ctx.fillStyle='#68716c';
-        ctx.fillText(format(tick,Math.abs(domain.step)>=1?1:Math.abs(domain.step)>=0.1?2:3),pad.left-9,y);
+        ctx.fillText(format(tick,precisionForStep(domain.step)),pad.left-9,y);
       });
       ctx.setLineDash([]);
       const xTicks=5;
@@ -420,5 +425,5 @@
     bind();
     return {run,draw,activate,getResults:()=>model.rows,getBest:()=>model.best};
   }
-  return {create,linspace,sampleResponse,findWorstResponse,niceStep,responseDomain};
+  return {create,linspace,sampleResponse,findWorstResponse,niceStep,precisionForStep,responseDomain};
 });
