@@ -60,6 +60,10 @@
       if (!select) return;
       const update = () => inputIds.forEach(id => setUnit(id, selectedUnit(select)));
       select.addEventListener('change', update);
+      if (typeof MutationObserver === 'function') {
+        const observer = new MutationObserver(update);
+        observer.observe(select, { childList: true });
+      }
       update();
     });
     document.querySelectorAll('input[type="range"]').forEach(input => {
