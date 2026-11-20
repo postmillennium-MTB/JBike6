@@ -1651,7 +1651,36 @@
     .engineering-inspector-value span { color:#64748b; font-size:.65rem; }
     .engineering-inspector-value strong { color:#0f172a; font:600 .78rem "IBM Plex Mono", monospace; overflow-wrap:anywhere; }
     .engineering-inspector-note,.engineering-inspector-empty { margin:0; color:#64748b; font-size:.7rem; line-height:1.45; }
-  </style>
+  
+    /* Single primary navigation: the old workspace switcher remains only as hidden JS routing state. */
+    .lab-nav-bar { display: none !important; }
+    .viz-workspace-nav {
+      position: sticky; top: var(--app-header-height, 72px); z-index: 35;
+      display: flex; align-items: stretch; gap: .12rem; overflow-x: auto;
+      padding: .12rem .15rem 0; margin: 0 0 .35rem;
+      background: var(--bg-app); border: 0; border-bottom: 1px solid var(--border-mid);
+      border-radius: 0; backdrop-filter: none; scrollbar-width: none;
+    }
+    .viz-workspace-nav::-webkit-scrollbar { display: none; }
+    .viz-workspace-nav button {
+      flex: 0 0 auto; border: 0; border-bottom: 2px solid transparent;
+      background: transparent; color: var(--text-muted); border-radius: 0;
+      padding: .62rem .78rem .55rem; font: 600 .72rem var(--font-mono);
+      letter-spacing: .025em; text-transform: uppercase; cursor: pointer;
+      white-space: nowrap; transition: color .15s ease, border-color .15s ease;
+    }
+    .viz-workspace-nav button:hover { color: var(--text-main); background: transparent; }
+    .viz-workspace-nav button[aria-current="location"] {
+      color: var(--text-main); background: transparent; border-bottom-color: var(--accent-amber, #bd5736);
+    }
+    @media (max-width: 700px) {
+      .viz-workspace-nav {
+        top: 0; margin: 0 -.1rem .25rem; padding: .05rem 0 0;
+      }
+      .viz-workspace-nav button { padding: .58rem .66rem .5rem; font-size: .64rem; }
+    }
+
+</style>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -1718,7 +1747,7 @@
   <!-- ===================================================================== -->
   <main class="main-wrap">
 
-    <nav id="vizWorkspaceNav" class="viz-workspace-nav" aria-label="Visualization workspace"></nav>\n    <section id="engineeringInspector" class="engineering-inspector" aria-label="Linked engineering inspector"><div class="engineering-inspector-empty">Select a point, mode, or component in any visualization to inspect it here.</div></section>
+    <nav id="vizWorkspaceNav" class="viz-workspace-nav" aria-label="Primary workspace navigation"></nav>\n    <section id="engineeringInspector" class="engineering-inspector" aria-label="Linked engineering inspector"><div class="engineering-inspector-empty">Select a point, mode, or component in any visualization to inspect it here.</div></section>
 
     <!-- KPI SUMMARY STRIP -->
     <section class="kpi-grid">
