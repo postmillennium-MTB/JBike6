@@ -1615,7 +1615,7 @@
     .viz-workspace-nav{position:sticky;top:var(--app-header-height,72px);z-index:35;display:flex;gap:.4rem;overflow-x:auto;padding:.55rem .65rem;margin:-.2rem 0 .1rem;background:rgba(248,250,252,.96);border:1px solid var(--border-light);border-radius:13px;backdrop-filter:blur(12px);scrollbar-width:thin}
     .viz-workspace-nav button{flex:0 0 auto;border:1px solid #dbe5ec;background:#fff;color:#475569;border-radius:999px;padding:.48rem .78rem;font:600 .72rem var(--font-sans);cursor:pointer;white-space:nowrap}
     .viz-workspace-nav button[aria-current="location"]{background:#0f766e;color:#fff;border-color:#0f766e}
-    .viz-camera-presets{display:inline-flex;gap:.25rem;align-items:center}.pz-hover-readout{font:600 .7rem var(--font-mono);color:#0f766e;padding:.35rem .55rem;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:8px;margin:.35rem 0}
+    .viz-camera-presets{display:inline-flex;gap:.25rem;align-items:center}.pz-trace-legend{display:flex;flex-wrap:wrap;gap:.35rem}.pz-trace-toggle{border:1px solid #cbd5e1;background:#fff;color:#475569;border-radius:999px;padding:.32rem .58rem;font:600 .68rem var(--font-sans);cursor:pointer}.pz-trace-toggle[aria-pressed="false"]{opacity:.42;text-decoration:line-through}.pz-trace-toggle.active{border-color:#0f766e;background:#f0fdfa}.pz-hover-readout{font:600 .7rem var(--font-mono);color:#0f766e;padding:.35rem .55rem;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:8px;margin:.35rem 0}
     .viz-camera-presets .btn-action,.landscape-camera-preset{min-height:34px;padding:.3rem .55rem;font-size:.68rem}
     .landscape-camera-preset{border:1px solid var(--border-mid);border-radius:8px;background:#fff;color:var(--text-body);cursor:pointer}
     .landscape-camera-preset.hidden{display:none}
@@ -2238,11 +2238,10 @@
               <strong id="pzSpeedReadout">6.50 m/s</strong>
             </div>
           </div>
-          <div class="legend-bar" style="margin-bottom:0.4rem;">
-            <span class="leg-item"><strong style="color:#059669;">&times;</strong> Stable poles</span>
-            <span class="leg-item"><strong style="color:#e11d48;">&times;</strong> Unstable poles</span>
-            <span class="leg-item"><strong style="color:#d97706;">&#9675;</strong> Transmission zeros</span>
-            <span class="leg-item"><strong style="color:#4f46e5;">◆</strong> Closed-loop poles</span>
+          <div class="legend-bar pz-trace-legend" style="margin-bottom:0.4rem;" role="group" aria-label="Visible pole-zero traces">
+            <button type="button" class="pz-trace-toggle active" data-pz-trace="poles" aria-pressed="true"><strong style="color:#059669;">×</strong> Open-loop poles</button>
+            <button type="button" class="pz-trace-toggle active" data-pz-trace="zeros" aria-pressed="true"><strong style="color:#d97706;">○</strong> Transmission zeros</button>
+            <button type="button" class="pz-trace-toggle active" data-pz-trace="closed" aria-pressed="true"><strong style="color:#4f46e5;">◆</strong> Closed-loop poles</button>
           </div>
           <div class="pz-canvas-box">
             <canvas id="poleZeroCanvas" role="img" aria-label="Interactive three-dimensional pole-zero map with real and imaginary pole coordinates and bicycle forward speed as the third axis"></canvas>
