@@ -5460,21 +5460,33 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
       // ===================================================================
       window.addEventListener('load', () => {
         if (window.JBike6Landscape) {
-          stabilityLandscape = window.JBike6Landscape.create({
-            state: appState,
-            assembleWhippleModel,
-            maxRealEigenvalue,
-            onApply: (patch) => {
-              patch.paths.forEach(item => {
-                let target = appState.params;
-                for (let i = 0; i < item.path.length - 1; i++) target = target[item.path[i]];
-                target[item.path[item.path.length - 1]] = item.value;
-              });
-              if (patch.headAngleDeg !== undefined) appState.params.refHeadAngleDeg = patch.headAngleDeg;
-              if (patch.wheelbase !== undefined) appState.params.refWheelbase = patch.wheelbase;
-              recomputeAll(false);
+          try {
+            stabilityLandscape = window.JBike6Landscape.create({
+              state: appState,
+              assembleWhippleModel,
+              maxRealEigenvalue,
+              onApply: (patch) => {
+                patch.paths.forEach(item => {
+                  let target = appState.params;
+                  for (let i = 0; i < item.path.length - 1; i++) target = target[item.path[i]];
+                  target[item.path[item.path.length - 1]] = item.value;
+                });
+                if (patch.headAngleDeg !== undefined) appState.params.refHeadAngleDeg = patch.headAngleDeg;
+                if (patch.wheelbase !== undefined) appState.params.refWheelbase = patch.wheelbase;
+                recomputeAll(false);
+              }
+            });
+          } catch (error) {
+            // Optional analysis workspaces must never prevent the core bike
+            // model, geometry diagram, or simulator from initializing.
+            console.error('[JBike6] Stability Landscape initialization failed:', error);
+            const status = document.getElementById('landscapeStatus');
+            if (status) {
+              status.textContent = 'Stability Landscape could not initialize. The core bicycle tools remain available.';
+              status.dataset.kind = 'error';
             }
-          });
+            stabilityLandscape = null;
+          }
         }
         bindEvents();
         initGeometryCanvasInteractions();

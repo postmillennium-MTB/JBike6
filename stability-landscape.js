@@ -145,10 +145,14 @@
     function updateAxisLabels() {
       const x = getAxis(model.xKey);
       const y = getAxis(model.yKey);
-      $('landscapeXLabel').textContent = x.short + ' (' + x.unit + ')';
-      $('landscapeYLabel').textContent = y.short + ' (' + y.unit + ')';
-      $('landscapeXAxisLabel').textContent = x.short + ' · ' + x.unit;
-      $('landscapeYAxisLabel').textContent = y.short + ' · ' + y.unit;
+
+      // The visible page uses the axis-label IDs below. Older versions of
+      // this module also addressed landscapeXLabel / landscapeYLabel, which
+      // are not present in the current markup and caused startup to throw.
+      const xLabel = $('landscapeXAxisLabel');
+      const yLabel = $('landscapeYAxisLabel');
+      if (xLabel) xLabel.textContent = x.short + ' · ' + x.unit;
+      if (yLabel) yLabel.textContent = y.short + ' · ' + y.unit;
     }
 
     function readScanControls() {
