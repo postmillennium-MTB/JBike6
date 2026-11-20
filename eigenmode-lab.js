@@ -335,7 +335,7 @@
       }
       const names = ['φ · lean', 'φ̇ · roll rate', 'δ · steer', 'δ̇ · steer rate'];
       const maxValue = Math.max(EPS, ...metrics.Ax.map(abs), ...metrics.lambdaX.map(abs));
-      const labelW = Math.min(112, width * .29), barW = Math.max(60, width - labelW - 24);
+      const labelW = Math.min(112, width * .29), barW = Math.max(45, width - labelW - 76);
       ctx.font = '10px system-ui,sans-serif'; ctx.textBaseline = 'middle';
       names.forEach((name, i) => {
         const y = 24 + i * 38;
@@ -368,9 +368,10 @@
         const eigenpair = computeEigenpairMetrics(stateA,model.mode.stateVector,root);
         if (ui.equationReadout) {
           const rq = eigenpair.rayleigh;
-          ui.equationReadout.textContent = 'xᴴAx / xᴴx = ' + fmt(rq.re,4) +
-            (rq.im >= 0 ? ' + ' : ' − ') + fmt(Math.abs(rq.im),4) + 'i  ·  residual ' +
-            eigenpair.relativeResidual.toExponential(2);
+          ui.equationReadout.textContent = 'λ = ' + fmt(root.re,4) +
+            (root.im >= 0 ? ' + ' : ' − ') + fmt(Math.abs(root.im),4) + 'i  ·  xᴴAx/xᴴx = ' +
+            fmt(rq.re,4) + (rq.im >= 0 ? ' + ' : ' − ') + fmt(Math.abs(rq.im),4) +
+            'i  ·  residual ' + eigenpair.relativeResidual.toExponential(2);
         }
         drawEigenpair(eigenpair);
         ui.frequency.textContent=model.mode.frequencyHz.toFixed(3)+' Hz';
