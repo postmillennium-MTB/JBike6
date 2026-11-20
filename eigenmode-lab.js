@@ -329,7 +329,7 @@
       ctx.clearRect(0, 0, width, height);
       ctx.fillStyle = '#f2f0e8'; ctx.fillRect(0, 0, width, height);
       if (!metrics) {
-        ctx.fillStyle = '#718394'; ctx.font = '12px "IBM Plex Sans", sans-serif';
+        ctx.fillStyle = '#68716c'; ctx.font = '12px "IBM Plex Sans", sans-serif';
         ctx.fillText('Select a valid eigenvalue to evaluate A x = λ x.', 12, 28);
         return;
       }
@@ -339,7 +339,7 @@
       ctx.font = '10px "IBM Plex Sans", sans-serif'; ctx.textBaseline = 'middle';
       names.forEach((name, i) => {
         const y = 24 + i * 38;
-        ctx.fillStyle = '#52697b'; ctx.textAlign = 'left'; ctx.fillText(name, 8, y + 4);
+        ctx.fillStyle = '#46514f'; ctx.textAlign = 'left'; ctx.fillText(name, 8, y + 4);
         const axW = barW * abs(metrics.Ax[i]) / maxValue;
         const lxW = barW * abs(metrics.lambdaX[i]) / maxValue;
         ctx.fillStyle = '#dedcd2'; ctx.fillRect(labelW, y - 8, barW, 8);
