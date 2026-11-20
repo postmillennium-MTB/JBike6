@@ -1165,6 +1165,19 @@
       background: var(--bg-subtle);
     }
 
+    .pz-toolbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.5rem; margin:.45rem 0 .55rem; }
+    .pz-toolbar-actions { display:flex; flex-wrap:wrap; align-items:center; gap:.35rem; }
+    .pz-toolbar .btn-action { padding:.3rem .52rem; font-size:.68rem; }
+    .pz-speed-control { display:flex; flex:1 1 180px; align-items:center; gap:.55rem; min-width:160px; }
+    .pz-speed-control label { color:var(--text-muted); font-size:.66rem; font-weight:700; white-space:nowrap; }
+    .pz-speed-control input { width:100%; min-width:75px; accent-color:#7c3aed; }
+    .pz-speed-control strong { color:#5b21b6; font:.68rem var(--font-mono); white-space:nowrap; }
+    .pz-canvas-box { height:390px; background:linear-gradient(160deg,#fbfdff,#f3f7fb); }
+    #poleZeroCanvas { touch-action:none; cursor:grab; }
+    .pz-canvas-hint { position:absolute; right:9px; bottom:8px; padding:.24rem .45rem; border-radius:6px; background:rgba(15,23,42,.78); color:#e2e8f0; font-size:.59rem; pointer-events:none; }
+    .pz-selection-readout { min-height:2.6em; margin-top:.45rem; padding:.48rem .58rem; border:1px solid var(--border-light); border-radius:8px; background:#f8fafc; color:#526477; font:.64rem/1.5 var(--font-mono); overflow-wrap:anywhere; }
+    @media (max-width:600px) { .pz-canvas-box { height:340px; } .pz-speed-control { flex:1 1 100%; } .pz-toolbar-actions { width:100%; } }
+
     .ctrl-lab-split {
       display: grid;
       grid-template-columns: 340px 1fr;
@@ -2076,18 +2089,37 @@
         </div>
 
         <div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
-            <strong style="font-size:0.8rem;color:var(--text-main);">s-Plane Pole-Zero Map (pzmap(G))</strong>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:0.4rem;flex-wrap:wrap;">
+            <strong style="font-size:0.8rem;color:var(--text-main);">Interactive s-Plane Pole-Zero Map</strong>
             <span id="pzStabilityTag" class="pill-badge pill-emerald">Open-Loop LHP Stable</span>
           </div>
+          <div class="pz-toolbar">
+            <div class="pz-toolbar-actions">
+              <div class="seg-group light" role="group" aria-label="Pole-zero map view">
+                <button type="button" id="btnPz3D" class="seg-btn active" aria-pressed="true">3D Sweep</button>
+                <button type="button" id="btnPz2D" class="seg-btn" aria-pressed="false">2D pzmap</button>
+              </div>
+              <button type="button" id="btnPzZoomIn" class="btn-action" aria-label="Zoom in">+</button>
+              <button type="button" id="btnPzZoomOut" class="btn-action" aria-label="Zoom out">−</button>
+              <button type="button" id="btnPzReset" class="btn-action">Reset view</button>
+            </div>
+            <div class="pz-speed-control">
+              <label for="pzSpeedScrubber">Speed slice</label>
+              <input id="pzSpeedScrubber" type="range" min="0.2" max="25" step="0.05" value="6.5" />
+              <strong id="pzSpeedReadout">6.50 m/s</strong>
+            </div>
+          </div>
           <div class="legend-bar" style="margin-bottom:0.4rem;">
-            <span class="leg-item"><strong style="color:#2563eb;">&times;</strong> Open-Loop Poles</span>
-            <span class="leg-item"><strong style="color:#d97706;">&#9675;</strong> Zeros (RHP = Countersteer)</span>
-            <span class="leg-item"><strong style="color:#059669;">&times;</strong> Closed-Loop Poles</span>
+            <span class="leg-item"><strong style="color:#059669;">&times;</strong> Stable poles</span>
+            <span class="leg-item"><strong style="color:#e11d48;">&times;</strong> Unstable poles</span>
+            <span class="leg-item"><strong style="color:#d97706;">&#9675;</strong> Transmission zeros</span>
+            <span class="leg-item"><strong style="color:#4f46e5;">◆</strong> Closed-loop poles</span>
           </div>
           <div class="pz-canvas-box">
-            <canvas id="poleZeroCanvas"></canvas>
+            <canvas id="poleZeroCanvas" role="img" aria-label="Interactive three-dimensional pole-zero map with real and imaginary pole coordinates and bicycle forward speed as the third axis"></canvas>
+            <div class="pz-canvas-hint" id="pzCanvasHint">Drag to orbit · Scroll or use +/- to zoom · Select a marker for details</div>
           </div>
+          <div id="pzSelectionReadout" class="pz-selection-readout" role="status" aria-live="polite">Select a pole or zero in the plot to inspect its location and dynamics.</div>
         </div>
       </div>
 
@@ -2437,6 +2469,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
   <script src="stability-landscape.js"></script>
   <script src="eigenmode-lab.js"></script>
   <script src="design-optimization.js"></script>
+  <script src="pole-zero-lab.js"></script>
   <script>
     (function () {
       'use strict';
@@ -2776,6 +2809,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
       let stabilityLandscape = null;
       let eigenmodeLab = null;
       let designOptimization = null;
+      let poleZeroLab = null;
 
       // ===================================================================
       // 4. EXACT 4-BODY WHIPPLE-CARVALLO / MEIJAARD ET AL. (2007) SOLVER
@@ -3601,7 +3635,48 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         drawControlResponseCanvas();
       }
 
+      function buildPoleZeroPlotData(currentSS) {
+        const analysis = appState.analysis;
+        const model = analysis.model;
+        const minSpeed = Math.min(analysis.minVelPlot, appState.sim.speedMs);
+        const maxSpeed = Math.max(analysis.maxVelPlot, appState.sim.speedMs);
+        const samples = [];
+        const sampleCount = 45;
+
+        for (let i = 0; i < sampleCount; i++) {
+          const v = minSpeed + (maxSpeed - minSpeed) * i / (sampleCount - 1);
+          const tf = computeStateSpaceAndTF(model, v, appState.ssOutputType);
+          if (!tf) continue;
+          samples.push({
+            v,
+            poles: tf.poles,
+            zeros: tf.zeros,
+            closedPoles: appState.control.feedbackEnabled
+              ? computeClosedLoopPoles(model, v, appState.control.kp, appState.control.kd, appState.control.ki)
+              : []
+          });
+        }
+
+        const current = {
+          v: appState.sim.speedMs,
+          poles: currentSS.poles,
+          zeros: currentSS.zeros,
+          closedPoles: appState.control.feedbackEnabled
+            ? computeClosedLoopPoles(model, appState.sim.speedMs, appState.control.kp, appState.control.kd, appState.control.ki)
+            : []
+        };
+        if (!samples.some(sample => Math.abs(sample.v - current.v) < 1e-5)) {
+          samples.push(current);
+          samples.sort((a, b) => a.v - b.v);
+        }
+        return { samples, current, minSpeed, maxSpeed };
+      }
+
       function drawPoleZeroCanvas(ss) {
+        if (poleZeroLab && ss) {
+          poleZeroLab.update(buildPoleZeroPlotData(ss));
+          return;
+        }
         const canvas = document.getElementById('poleZeroCanvas');
         if (!canvas) return;
         const { ctx, width, height } = setupHiDPICanvas(canvas);
@@ -6040,6 +6115,31 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             eigenmodeLab = null;
           }
         }
+        if (window.JBike6PoleZeroLab) {
+          try {
+            poleZeroLab = window.JBike6PoleZeroLab.create({
+              canvas: document.getElementById('poleZeroCanvas'),
+              speedInput: document.getElementById('pzSpeedScrubber'),
+              speedReadout: document.getElementById('pzSpeedReadout'),
+              selectionReadout: document.getElementById('pzSelectionReadout'),
+              btn2D: document.getElementById('btnPz2D'),
+              btn3D: document.getElementById('btnPz3D'),
+              btnReset: document.getElementById('btnPzReset'),
+              btnZoomIn: document.getElementById('btnPzZoomIn'),
+              btnZoomOut: document.getElementById('btnPzZoomOut'),
+              onSpeedChange: (speed) => {
+                setTestSpeedAndRun(speed);
+                updateControlTheoryLab();
+              }
+            });
+          } catch (error) {
+            console.error('[JBike6] 3D Pole-Zero Map initialization failed:', error);
+            const readout = document.getElementById('pzSelectionReadout');
+            if (readout) readout.textContent = 'Interactive pole-zero map unavailable: ' + error.message;
+            poleZeroLab = null;
+          }
+        }
+
         if (window.JBike6DesignOptimization && window.JBike6Landscape) {
           try {
             designOptimization = window.JBike6DesignOptimization.create({
