@@ -1268,6 +1268,37 @@
       .kpi-card, .panel-card, .lab-nav-bar .seg-btn { transition: none; }
     }
 
+    .geometry-legend {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .38rem .85rem;
+      padding: .65rem .15rem .05rem;
+      color: var(--text-muted);
+      font-size: .68rem;
+    }
+    .geometry-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: .34rem;
+      white-space: nowrap;
+    }
+    .geometry-legend-swatch {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+      flex: 0 0 auto;
+    }
+    .geometry-legend-note {
+      flex-basis: 100%;
+      color: #64748b;
+      font-size: .65rem;
+      line-height: 1.4;
+    }
+    .geometry-viz-toolbar { gap: .4rem; }
+    .geometry-viz-toolbar .btn-action { min-height: 34px; }
+
     /* Phone layout: keep the identity compact and put the model controls on a tidy grid. */
     @media (max-width: 700px) {
       .app-header { position: relative; }
@@ -1300,8 +1331,14 @@
       .panel-card { padding: .85rem; }
       .viz-title { font-size: .92rem; }
       .viz-sub { font-size: .7rem; line-height: 1.4; }
-      .canvas-stage.geom-h { height: clamp(280px, 78vw, 350px); min-height: 280px; }
-      #geomCanvas { display: block; width: 100%; height: 100%; min-height: 280px; touch-action: pan-y; }
+      .geometry-viz-toolbar { width: 100%; justify-content: flex-start; }
+      .geometry-viz-toolbar .seg-group { margin-left: auto; }
+      .canvas-stage.geom-h { height: clamp(320px, 88vw, 420px); min-height: 320px; }
+      #geomCanvas { display: block; width: 100%; height: 100%; min-height: 320px; touch-action: none; }
+      .geometry-legend { gap: .34rem .6rem; padding-top: .55rem; font-size: .64rem; }
+      .geometry-legend-note { font-size: .61rem; }
+      #dumbbellToggleWrap { min-height: 36px; }
+      #btnZoomGeomIn, #btnZoomGeomOut { min-width: 36px; justify-content: center; }
     }
   </style>
 </head>
@@ -1676,23 +1713,36 @@
               <h2 class="viz-title" id="geomVizTitle">Bicycle Geometry &amp; Principal Inertia Diagram</h2>
               <p class="viz-sub" id="geomVizSub">Drag the green Rider CoM or amber Front CoM handles directly on the blueprint</p>
             </div>
-            <div class="viz-toolbar">
-              <label id="dumbbellToggleWrap" class="btn-action" style="cursor:pointer;">
+            <div class="viz-toolbar geometry-viz-toolbar">
+              <label id="dumbbellToggleWrap" class="btn-action" style="cursor:pointer;" title="Show component and assembly principal-inertia glyphs in both views">
                 <input id="chkShowDumbbells" type="checkbox" checked style="accent-color:#059669;" />
-                <span>6-Disk Dumbbells</span>
+                <span>Principal inertia glyphs</span>
               </label>
-              <button type="button" id="btnResetGeomCam" class="btn-action hidden">Reset 3D Camera</button>
+              <button type="button" id="btnZoomGeomOut" class="btn-action hidden" title="Zoom out" aria-label="Zoom out">−</button>
+              <button type="button" id="btnZoomGeomIn" class="btn-action hidden" title="Zoom in" aria-label="Zoom in">+</button>
+              <button type="button" id="btnResetGeomCam" class="btn-action hidden">Reset camera</button>
               <div class="seg-group light" role="group" aria-label="Geometry View Mode">
-                <button type="button" id="btnGeomMode2D" class="seg-btn active">2D Blueprint</button>
-                <button type="button" id="btnGeomMode3D" class="seg-btn">3D Interactive Ride</button>
+                <button type="button" id="btnGeomMode2D" class="seg-btn active" aria-pressed="true">2D Blueprint</button>
+                <button type="button" id="btnGeomMode3D" class="seg-btn" aria-pressed="false">3D Interactive Ride</button>
               </div>
             </div>
           </div>
 
           <div class="canvas-stage geom-h">
-            <canvas id="geomCanvas"></canvas>
+            <canvas id="geomCanvas" aria-label="Interactive bicycle geometry and principal inertia visualization"></canvas>
             <div id="geomDragBadge" class="overlay-badge hidden">Dragging CoM...</div>
-            <div id="geom3dHint" class="camera-hint hidden">Drag to orbit 3D bike &bull; Scroll to zoom &bull; Live lean &phi;(t) &amp; steer &delta;(t)</div>
+            <div id="geom3dHint" class="camera-hint hidden">Drag to orbit &bull; Pinch or use + / − to zoom &bull; Live roll and steering motion</div>
+          </div>
+          <div class="geometry-legend" id="geomLegend" aria-label="Geometry and inertia legend">
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#475569;"></span>Frame</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#059669;"></span>Rider</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#6366f1;"></span>Rack</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#d97706;"></span>Fork</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#0891b2;"></span>Basket</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#0f766e;"></span>Rear assembly axes</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#c2410c;"></span>Steering assembly axes</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#7c3aed;"></span>Total CoM</span>
+            <span class="geometry-legend-note">Inertia glyphs show scaled radii of gyration, not physical component dimensions.</span>
           </div>
         </section>
 
@@ -3705,46 +3755,131 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
       let lastPointer = { x: 0, y: 0 };
 
       function drawInertiaDumbbell(ctx, toPx, comp, color) {
-        if (!comp || comp.m <= 1e-6) return;
-        const cx = comp.x;
-        const cy = comp.y;
-        const alpha = (comp.alphaDeg || 0) * DEG2RAD;
-        const cosA = Math.cos(alpha);
-        const sinA = Math.sin(alpha);
+        if (!comp || !(comp.m > 1e-8)) return;
 
-        const r1 = Math.sqrt(Math.max(comp.I22, 0) / comp.m);
-        const r2 = Math.sqrt(Math.max(comp.I11, 0) / comp.m);
-        const diskR = Math.max(4, Math.min(18, Math.pow(comp.m, 0.35) * 3.2));
+        // The 2D glyph is a schematic 0.75x radii-of-gyration ellipse,
+        // not the physical outline of the component.
+        const glyphScale = 0.75;
+        const cx = Number(comp.x) || 0;
+        const cy = Number(comp.y) || 0;
+        const alpha = (Number(comp.alphaDeg) || 0) * DEG2RAD;
+        const rAlong = Math.max(0.025, Math.min(0.48,
+          Math.sqrt(Math.max(Number(comp.I22) || 0, 0) / comp.m) * glyphScale));
+        const rAcross = Math.max(0.025, Math.min(0.48,
+          Math.sqrt(Math.max(Number(comp.I11) || 0, 0) / comp.m) * glyphScale));
+        const center = toPx(cx, cy);
+        const scale = geomTransform ? geomTransform.scale : 1;
+        const rx = rAlong * scale;
+        const ry = rAcross * scale;
 
-        const pCenter = toPx(cx, cy);
-        const p1A = toPx(cx + r1 * cosA, cy + r1 * sinA);
-        const p1B = toPx(cx - r1 * cosA, cy - r1 * sinA);
-        const p2A = toPx(cx - r2 * sinA, cy + r2 * cosA);
-        const p2B = toPx(cx + r2 * sinA, cy - r2 * cosA);
+        const alongA = toPx(cx + rAlong * Math.cos(alpha), cy + rAlong * Math.sin(alpha));
+        const alongB = toPx(cx - rAlong * Math.cos(alpha), cy - rAlong * Math.sin(alpha));
+        const acrossA = toPx(cx - rAcross * Math.sin(alpha), cy + rAcross * Math.cos(alpha));
+        const acrossB = toPx(cx + rAcross * Math.sin(alpha), cy - rAcross * Math.cos(alpha));
+
+        ctx.save();
+        ctx.fillStyle = color + '12';
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        if (typeof ctx.ellipse === 'function') {
+          ctx.ellipse(center.x, center.y, rx, ry, -alpha, 0, Math.PI * 2);
+        } else {
+          ctx.moveTo(alongA.x, alongA.y);
+          ctx.lineTo(acrossA.x, acrossA.y);
+          ctx.lineTo(alongB.x, alongB.y);
+          ctx.lineTo(acrossB.x, acrossB.y);
+          ctx.closePath();
+        }
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.setLineDash([4, 3]);
+        ctx.globalAlpha = 0.82;
+        ctx.beginPath();
+        ctx.moveTo(alongA.x, alongA.y); ctx.lineTo(alongB.x, alongB.y);
+        ctx.moveTo(acrossA.x, acrossA.y); ctx.lineTo(acrossB.x, acrossB.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+
+        for (const pt of [alongA, alongB, acrossA, acrossB]) {
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, 2.7, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.fill();
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 1.3;
+          ctx.stroke();
+        }
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, 3.6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawAssemblyPrincipalAxes2D(ctx, toPx, assembly, color, label) {
+        if (!assembly || !(assembly.m > 1e-8)) return;
+        const ixx = Math.max(0, Number(assembly.Ixx) || 0);
+        const iyy = Math.max(0, Number(assembly.Iyy) || 0);
+        const ixy = Number(assembly.Ixy) || 0;
+        const mean = 0.5 * (ixx + iyy);
+        const spread = Math.hypot(0.5 * (ixx - iyy), ixy);
+        const iMajor = Math.max(0, mean + spread);
+        const iMinor = Math.max(0, mean - spread);
+        const angle = 0.5 * Math.atan2(2 * ixy, ixx - iyy);
+        const glyphScale = 0.75;
+        const rAlong = Math.max(0.025, Math.min(0.48, Math.sqrt(iMinor / assembly.m) * glyphScale));
+        const rAcross = Math.max(0.025, Math.min(0.48, Math.sqrt(iMajor / assembly.m) * glyphScale));
+        const center = toPx(assembly.x, assembly.y);
+        const a1 = toPx(assembly.x + rAlong * Math.cos(angle), assembly.y + rAlong * Math.sin(angle));
+        const a2 = toPx(assembly.x - rAlong * Math.cos(angle), assembly.y - rAlong * Math.sin(angle));
+        const b1 = toPx(assembly.x - rAcross * Math.sin(angle), assembly.y + rAcross * Math.cos(angle));
+        const b2 = toPx(assembly.x + rAcross * Math.sin(angle), assembly.y - rAcross * Math.cos(angle));
 
         ctx.save();
         ctx.strokeStyle = color;
-        ctx.fillStyle = color + '22';
-        ctx.lineWidth = 1.5;
-
+        ctx.lineWidth = 2.2;
+        ctx.setLineDash([7, 4]);
         ctx.beginPath();
-        ctx.moveTo(p1A.x, p1A.y);
-        ctx.lineTo(p1B.x, p1B.y);
-        ctx.moveTo(p2A.x, p2A.y);
-        ctx.lineTo(p2B.x, p2B.y);
+        ctx.moveTo(a1.x, a1.y); ctx.lineTo(a2.x, a2.y);
+        ctx.moveTo(b1.x, b1.y); ctx.lineTo(b2.x, b2.y);
         ctx.stroke();
-
-        for (const pt of [p1A, p1B, p2A, p2B]) {
-          ctx.beginPath();
-          ctx.arc(pt.x, pt.y, diskR, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-        }
-
-        ctx.fillStyle = color;
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(pCenter.x, pCenter.y, 3.5, 0, Math.PI * 2);
+        ctx.arc(center.x, center.y, 5, 0, Math.PI * 2);
         ctx.fill();
+        ctx.stroke();
+        ctx.font = '600 10px system-ui, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillStyle = color;
+        ctx.fillText(label, center.x + 8, center.y - 7);
+        ctx.restore();
+      }
+
+      function drawSystemCenterOfMass2D(ctx, toPx, model) {
+        if (!model || !(model.mT > 1e-8)) return;
+        const point = toPx(model.xT, -model.zT);
+        ctx.save();
+        ctx.strokeStyle = '#7c3aed';
+        ctx.fillStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(point.x - 11, point.y); ctx.lineTo(point.x + 11, point.y);
+        ctx.moveTo(point.x, point.y - 11); ctx.lineTo(point.x, point.y + 11);
+        ctx.stroke();
+        ctx.font = '700 10px system-ui, sans-serif';
+        ctx.fillStyle = '#6d28d9';
+        ctx.textAlign = 'left';
+        ctx.fillText('Total CoM', point.x + 12, point.y + 4);
         ctx.restore();
       }
 
@@ -3937,12 +4072,17 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.fillText(`${p.headAngleDeg.toFixed(1)}°`, pSteerBot.x - arcR - 5, pSteerBot.y - 8);
         ctx.restore();
 
-        // 6-Disk Inertia Dumbbells
+        // Principal-inertia overlays: component ellipses plus the two Whipple
+        // rigid-body assemblies. These are scaled radii of gyration, not part shapes.
         if (appState.showDumbbells) {
+          drawAssemblyPrincipalAxes2D(ctx, toPx, model.compB_JB, '#0f766e', 'Rear assembly');
+          drawAssemblyPrincipalAxes2D(ctx, toPx, model.compH_JB, '#c2410c', 'Steering assembly');
           drawInertiaDumbbell(ctx, toPx, p.frame, '#475569');
           drawInertiaDumbbell(ctx, toPx, p.rider, '#059669');
           drawInertiaDumbbell(ctx, toPx, p.rack, '#6366f1');
           drawInertiaDumbbell(ctx, toPx, forkXY, '#d97706');
+          drawInertiaDumbbell(ctx, toPx, model.basketXY, '#0891b2');
+          drawSystemCenterOfMass2D(ctx, toPx, model);
         }
 
         // Draggable CoM Handles
@@ -4050,6 +4190,62 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
           return leanPoint(sx, sy, sz);
         };
+
+        // 3D wireframe ellipsoids visualize principal radii of gyration (scaled 0.75x).
+        // They follow the same lean/steer transforms as their associated rigid bodies.
+        const drawPrincipalInertiaEllipsoid3D = (comp, transformFn, color) => {
+          if (!comp || !(comp.m > 1e-8)) return;
+          const moments = [comp.I22, comp.I11, comp.Izz].map(value =>
+            Math.max(0, Number(value) || 0)
+          );
+          if (moments.every(value => value <= 1e-12)) return;
+          const radii = moments.map(value =>
+            Math.max(0.025, Math.min(0.48, Math.sqrt(value / comp.m) * 0.75))
+          );
+          const alpha = (Number(comp.alphaDeg) || 0) * DEG2RAD;
+          const ca = Math.cos(alpha), sa = Math.sin(alpha);
+          const point = (lx, ly, lz) => {
+            const localX = lx * ca - ly * sa;
+            const localY = lx * sa + ly * ca;
+            return transformFn(comp.x + localX, comp.y + localY, lz);
+          };
+          const rings = [
+            t => [radii[0] * Math.cos(t), radii[1] * Math.sin(t), 0],
+            t => [radii[0] * Math.cos(t), 0, radii[2] * Math.sin(t)],
+            t => [0, radii[1] * Math.cos(t), radii[2] * Math.sin(t)]
+          ];
+          ctx.save();
+          ctx.strokeStyle = color;
+          ctx.globalAlpha = 0.62;
+          ctx.lineWidth = 1.25;
+          for (const ring of rings) {
+            ctx.beginPath();
+            for (let i = 0; i <= 32; i++) {
+              const values = ring(i / 32 * Math.PI * 2);
+              const worldPoint = point(values[0], values[1], values[2]);
+              const screenPoint = proj(worldPoint.x, worldPoint.y, worldPoint.z);
+              if (i === 0) ctx.moveTo(screenPoint.x, screenPoint.y);
+              else ctx.lineTo(screenPoint.x, screenPoint.y);
+            }
+            ctx.stroke();
+          }
+          const centerWorld = point(0, 0, 0);
+          const centerScreen = proj(centerWorld.x, centerWorld.y, centerWorld.z);
+          ctx.globalAlpha = 0.95;
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(centerScreen.x, centerScreen.y, 2.8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        };
+
+        if (appState.showDumbbells) {
+          drawPrincipalInertiaEllipsoid3D(p.frame, leanPoint, '#475569');
+          drawPrincipalInertiaEllipsoid3D(p.rider, leanPoint, '#059669');
+          drawPrincipalInertiaEllipsoid3D(p.rack, leanPoint, '#6366f1');
+          drawPrincipalInertiaEllipsoid3D(model.forkXY, steerAndLeanPoint, '#d97706');
+          drawPrincipalInertiaEllipsoid3D(model.basketXY, steerAndLeanPoint, '#0891b2');
+        }
 
         // Helper: draw 3D wheel (tire ring + spokes)
         const draw3DWheel = (cx, cy, radius, isFront, color) => {
@@ -4160,6 +4356,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.fillText(`Lean φ(t) = ${(phi * RAD2DEG).toFixed(2)}°`, 14, 40);
         ctx.fillStyle = '#d97706';
         ctx.fillText(`Steer δ(t) = ${(delta * RAD2DEG).toFixed(2)}°`, 14, 58);
+        ctx.fillStyle = '#475569';
+        ctx.font = '10px system-ui, sans-serif';
+        ctx.fillText(appState.showDumbbells
+          ? 'Wireframes: 0.75x principal radii of gyration (not part dimensions)'
+          : 'Principal inertia overlays hidden', 14, 76);
       }
 
       function drawGeometryCanvas() {
@@ -4212,63 +4413,83 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
       function initGeometryCanvasInteractions() {
         const canvas = document.getElementById('geomCanvas');
         const badge = document.getElementById('geomDragBadge');
+        if (!canvas || !badge) return;
 
-        const getPointerPos = (e) => {
+        const activePointers = new Map();
+        let dragPointerId = null;
+        let dragFramePending = false;
+        let previousPinchDistance = null;
+
+        const getPointerPos = (event) => {
           const rect = canvas.getBoundingClientRect();
-          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-          return { x: clientX - rect.left, y: clientY - rect.top };
+          return { x: event.clientX - rect.left, y: event.clientY - rect.top };
         };
 
         const hitTest2D = (px, py) => {
-          if (!geomTransform || appState.geomViewMode !== '2d') return null;
+          if (!geomTransform || appState.geomViewMode !== '2d' ||
+              !appState.analysis || !appState.analysis.model) return null;
           const { toPx } = geomTransform;
           const p = appState.params;
-          const { forkXY } = appState.analysis.model;
-
+          const forkXY = appState.analysis.model.forkXY;
           if (p.rider.m > 0) {
-            const pr = toPx(p.rider.x, p.rider.y);
-            if (Math.hypot(px - pr.x, py - pr.y) <= 20) return 'rider';
+            const riderPoint = toPx(p.rider.x, p.rider.y);
+            if (Math.hypot(px - riderPoint.x, py - riderPoint.y) <= 23) return 'rider';
           }
-          if (p.fork.m > 0) {
-            const pf = toPx(forkXY.x, forkXY.y);
-            if (Math.hypot(px - pf.x, py - pf.y) <= 20) return 'fork';
+          if (p.fork.m > 0 && forkXY) {
+            const forkPoint = toPx(forkXY.x, forkXY.y);
+            if (Math.hypot(px - forkPoint.x, py - forkPoint.y) <= 23) return 'fork';
           }
           return null;
         };
 
-        const onStart = (e) => {
-          const pos = getPointerPos(e);
-          lastPointer = pos;
+        const scheduleDragRecompute = () => {
+          if (dragFramePending) return;
+          dragFramePending = true;
+          requestAnimationFrame(() => {
+            dragFramePending = false;
+            recomputeAll(false);
+          });
+        };
+
+        const getPinchDistance = () => {
+          const points = Array.from(activePointers.values());
+          if (points.length < 2) return null;
+          return Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
+        };
+
+        const onPointerDown = (event) => {
+          if (event.pointerType === 'mouse' && event.button !== 0) return;
+          const pos = getPointerPos(event);
+          activePointers.set(event.pointerId, pos);
+          try { canvas.setPointerCapture(event.pointerId); } catch (_) {}
+
           if (appState.geomViewMode === '3d') {
-            draggingGeom3D = true;
-            canvas.style.cursor = 'grabbing';
-            if (e.cancelable) e.preventDefault();
+            if (activePointers.size === 1) {
+              draggingGeom3D = true;
+              lastPointer = pos;
+            } else {
+              draggingGeom3D = false;
+              previousPinchDistance = getPinchDistance();
+            }
+            canvas.style.cursor = activePointers.size > 1 ? 'zoom-in' : 'grabbing';
+            event.preventDefault();
             return;
           }
+
+          if (activePointers.size > 1) return;
           const hit = hitTest2D(pos.x, pos.y);
           if (hit) {
             draggingGeomHandle = hit;
+            dragPointerId = event.pointerId;
             canvas.style.cursor = 'grabbing';
             badge.classList.remove('hidden');
-            if (e.cancelable) e.preventDefault();
+            event.preventDefault();
           }
         };
 
-        const onMove = (e) => {
-          const pos = getPointerPos(e);
-          if (draggingGeom3D && appState.geomViewMode === '3d') {
-            if (e.cancelable) e.preventDefault();
-            const dx = pos.x - lastPointer.x;
-            const dy = pos.y - lastPointer.y;
-            lastPointer = pos;
-            appState.geomCam3D.yaw -= dx * 0.008;
-            appState.geomCam3D.pitch = Math.max(-0.2, Math.min(1.35, appState.geomCam3D.pitch + dy * 0.008));
-            drawGeometryCanvas();
-            return;
-          }
-
-          if (!draggingGeomHandle) {
+        const onPointerMove = (event) => {
+          const pos = getPointerPos(event);
+          if (!activePointers.has(event.pointerId)) {
             if (appState.geomViewMode === '3d') {
               canvas.style.cursor = 'grab';
             } else {
@@ -4276,52 +4497,86 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             }
             return;
           }
+          const previous = activePointers.get(event.pointerId);
+          activePointers.set(event.pointerId, pos);
 
-          if (e.cancelable) e.preventDefault();
-          const wPos = geomTransform.toWorld(pos.x, pos.y);
+          if (appState.geomViewMode === '3d') {
+            if (activePointers.size >= 2) {
+              const distance = getPinchDistance();
+              if (distance && previousPinchDistance) {
+                const ratio = distance / Math.max(previousPinchDistance, 1);
+                appState.geomCam3D.zoom = Math.max(0.5, Math.min(2.8, appState.geomCam3D.zoom * ratio));
+                drawGeometryCanvas();
+              }
+              previousPinchDistance = distance;
+            } else if (draggingGeom3D) {
+              const dx = pos.x - previous.x;
+              const dy = pos.y - previous.y;
+              appState.geomCam3D.yaw -= dx * 0.008;
+              appState.geomCam3D.pitch = Math.max(-0.18,
+                Math.min(1.38, appState.geomCam3D.pitch + dy * 0.008));
+              drawGeometryCanvas();
+            }
+            event.preventDefault();
+            return;
+          }
+
+          if (!draggingGeomHandle || dragPointerId !== event.pointerId) {
+            canvas.style.cursor = hitTest2D(pos.x, pos.y) ? 'grab' : 'default';
+            return;
+          }
+          const worldPos = geomTransform.toWorld(pos.x, pos.y);
           const p = appState.params;
 
           if (draggingGeomHandle === 'rider') {
-            p.rider.x = Math.max(0.05, Math.min(1.20, Number(wPos.x.toFixed(2))));
-            p.rider.y = Math.max(0.45, Math.min(1.50, Number(wPos.y.toFixed(2))));
-            badge.textContent = `Rider CoM: X = ${p.rider.x.toFixed(2)} m, Y = ${p.rider.y.toFixed(2)} m`;
+            p.rider.x = Math.max(0.05, Math.min(1.20, Number(worldPos.x.toFixed(2))));
+            p.rider.y = Math.max(0.45, Math.min(1.50, Number(worldPos.y.toFixed(2))));
+            badge.textContent = 'Rider CoM: X = ' + p.rider.x.toFixed(2) +
+              ' m, Y = ' + p.rider.y.toFixed(2) + ' m';
           } else if (draggingGeomHandle === 'fork') {
             const { w, c, lambda } = appState.analysis.model;
-            const dx = wPos.x - (w + c);
-            const dy = wPos.y;
+            const dx = worldPos.x - (w + c);
+            const dy = worldPos.y;
             const cosL = Math.cos(lambda), sinL = Math.sin(lambda);
             const u = dx * cosL + dy * sinL;
             const v = -dx * sinL + dy * cosL;
             p.fork.u = Math.max(-0.20, Math.min(0.30, Number(u.toFixed(3))));
             p.fork.v = Math.max(0.20, Math.min(1.30, Number(v.toFixed(3))));
-            badge.textContent = `Front CoM: U = ${p.fork.u >= 0 ? '+' : ''}${p.fork.u.toFixed(3)} m, V = ${p.fork.v.toFixed(3)} m`;
+            badge.textContent = 'Front CoM: U = ' + (p.fork.u >= 0 ? '+' : '') +
+              p.fork.u.toFixed(3) + ' m, V = ' + p.fork.v.toFixed(3) + ' m';
           }
-          recomputeAll(false);
+          scheduleDragRecompute();
+          event.preventDefault();
         };
 
-        const onEnd = () => {
-          draggingGeom3D = false;
-          if (draggingGeomHandle) {
+        const finishPointer = (event) => {
+          activePointers.delete(event.pointerId);
+          if (activePointers.size < 2) previousPinchDistance = null;
+          if (dragPointerId === event.pointerId) {
+            dragPointerId = null;
             draggingGeomHandle = null;
             badge.classList.add('hidden');
           }
+          if (activePointers.size === 0) draggingGeom3D = false;
           canvas.style.cursor = appState.geomViewMode === '3d' ? 'grab' : 'default';
         };
 
-        canvas.addEventListener('wheel', (e) => {
+        canvas.addEventListener('pointerdown', onPointerDown);
+        canvas.addEventListener('pointermove', onPointerMove);
+        canvas.addEventListener('pointerup', finishPointer);
+        canvas.addEventListener('pointercancel', finishPointer);
+        canvas.addEventListener('lostpointercapture', finishPointer);
+
+        canvas.addEventListener('wheel', (event) => {
           if (appState.geomViewMode !== '3d') return;
-          e.preventDefault();
-          const factor = e.deltaY > 0 ? 0.92 : 1.08;
-          appState.geomCam3D.zoom = Math.max(0.5, Math.min(2.4, appState.geomCam3D.zoom * factor));
+          event.preventDefault();
+          const factor = event.deltaY > 0 ? 0.92 : 1.08;
+          appState.geomCam3D.zoom = Math.max(0.5, Math.min(2.8, appState.geomCam3D.zoom * factor));
           drawGeometryCanvas();
         }, { passive: false });
 
-        canvas.addEventListener('mousedown', onStart);
-        window.addEventListener('mousemove', onMove);
-        window.addEventListener('mouseup', onEnd);
-        canvas.addEventListener('touchstart', onStart, { passive: false });
-        window.addEventListener('touchmove', onMove, { passive: false });
-        window.addEventListener('touchend', onEnd);
+        canvas.style.touchAction = 'none';
+        canvas.style.cursor = 'default';
       }
 
       // ===================================================================
@@ -5255,38 +5510,52 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           });
         });
 
-        // 2D / 3D Toggles for Geometry Blueprint
-        document.getElementById('btnGeomMode2D').addEventListener('click', () => {
-          appState.geomViewMode = '2d';
-          document.getElementById('btnGeomMode2D').classList.add('active');
-          document.getElementById('btnGeomMode3D').classList.remove('active');
-          document.getElementById('dumbbellToggleWrap').classList.remove('hidden');
-          document.getElementById('btnResetGeomCam').classList.add('hidden');
-          document.getElementById('geom3dHint').classList.add('hidden');
-          document.getElementById('geomVizTitle').textContent = 'Bicycle Geometry & Principal Inertia Diagram';
-          document.getElementById('geomVizSub').textContent = 'Drag the green Rider CoM or amber Front CoM handles directly on the blueprint';
+        // 2D / 3D Geometry & Principal Inertia Views
+        const btnGeom2D = document.getElementById('btnGeomMode2D');
+        const btnGeom3D = document.getElementById('btnGeomMode3D');
+        const btnGeomReset = document.getElementById('btnResetGeomCam');
+        const btnGeomZoomIn = document.getElementById('btnZoomGeomIn');
+        const btnGeomZoomOut = document.getElementById('btnZoomGeomOut');
+        const geom3dHint = document.getElementById('geom3dHint');
+
+        const setGeometryViewMode = (mode) => {
+          appState.geomViewMode = mode;
+          const is3D = mode === '3d';
+          btnGeom2D.classList.toggle('active', !is3D);
+          btnGeom3D.classList.toggle('active', is3D);
+          btnGeom2D.setAttribute('aria-pressed', is3D ? 'false' : 'true');
+          btnGeom3D.setAttribute('aria-pressed', is3D ? 'true' : 'false');
+          btnGeomReset.classList.toggle('hidden', !is3D);
+          btnGeomZoomIn.classList.toggle('hidden', !is3D);
+          btnGeomZoomOut.classList.toggle('hidden', !is3D);
+          geom3dHint.classList.toggle('hidden', !is3D);
+          document.getElementById('geomVizTitle').textContent = is3D
+            ? '3D Bicycle Geometry & Principal Inertia'
+            : 'Bicycle Geometry & Principal Inertia Diagram';
+          document.getElementById('geomVizSub').textContent = is3D
+            ? 'Orbit the model and inspect component inertia ellipsoids; the simulator drives live roll and steering'
+            : 'Drag the green Rider CoM or amber Front CoM handles; dashed axes show the combined assemblies';
+          drawGeometryCanvas();
+        };
+
+        btnGeom2D.addEventListener('click', () => setGeometryViewMode('2d'));
+        btnGeom3D.addEventListener('click', () => setGeometryViewMode('3d'));
+
+        btnGeomReset.addEventListener('click', () => {
+          appState.geomCam3D = { yaw: -0.62, pitch: 0.48, zoom: 1.0 };
+          drawGeometryCanvas();
+        });
+        btnGeomZoomIn.addEventListener('click', () => {
+          appState.geomCam3D.zoom = Math.min(2.8, appState.geomCam3D.zoom * 1.16);
+          drawGeometryCanvas();
+        });
+        btnGeomZoomOut.addEventListener('click', () => {
+          appState.geomCam3D.zoom = Math.max(0.5, appState.geomCam3D.zoom / 1.16);
           drawGeometryCanvas();
         });
 
-        document.getElementById('btnGeomMode3D').addEventListener('click', () => {
-          appState.geomViewMode = '3d';
-          document.getElementById('btnGeomMode3D').classList.add('active');
-          document.getElementById('btnGeomMode2D').classList.remove('active');
-          document.getElementById('dumbbellToggleWrap').classList.add('hidden');
-          document.getElementById('btnResetGeomCam').classList.remove('hidden');
-          document.getElementById('geom3dHint').classList.remove('hidden');
-          document.getElementById('geomVizTitle').textContent = '3D Interactive Perspective Ride View';
-          document.getElementById('geomVizSub').textContent = 'Real-time 3D roll φ(t) and steering δ(t) motion synced with the perturbation simulator';
-          drawGeometryCanvas();
-        });
-
-        document.getElementById('btnResetGeomCam').addEventListener('click', () => {
-          appState.geomCam3D = { yaw: -0.62, pitch: 0.34, zoom: 1.0 };
-          drawGeometryCanvas();
-        });
-
-        document.getElementById('chkShowDumbbells').addEventListener('change', (e) => {
-          appState.showDumbbells = e.target.checked;
+        document.getElementById('chkShowDumbbells').addEventListener('change', (event) => {
+          appState.showDumbbells = event.target.checked;
           drawGeometryCanvas();
         });
 
