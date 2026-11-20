@@ -27,6 +27,7 @@
     unit.setAttribute('aria-hidden', 'true');
     const currentUnit = UNIT_MAP[input.id];
     if (currentUnit) unit.textContent = currentUnit;
+    unit.classList.toggle('is-empty', !currentUnit);
     input.inputMode = 'decimal';
     input.parentNode.insertBefore(wrapper, input);
     wrapper.append(input, unit);
@@ -43,18 +44,49 @@
       input.style.paddingRight = value ? '' : '8px';
     }
   }
+  function decorateReadout(element) {
+    if (!element) return;
+    const raw = element.textContent.trim();
+    if (!raw || raw.includes('(') || element.dataset.instrumentReadout === raw) return;
+    const units = ['N·m·s/rad','N·m/rad','m/s²','km/h','m/s','N·m','mph','mm','kg','Hz','rad','m','s','°','%'];
+    let suffix = '';
+    for (const candidate of units) {
+      if (!raw.endsWith(candidate)) continue;
+      const start = raw.length - candidate.length;
+      if (start > 0 && (candidate === '°' || candidate === '%' || /\s/.test(raw[start - 1]))) {
+        suffix = candidate;
+        break;
+      }
+    }
+    if (!suffix) return;
+    const valueText = raw.slice(0, raw.length - suffix.length).trim();
+    if (!valueText) return;
+    const value = document.createElement('span');
+    value.className = 'instrument-readout-value';
+    value.textContent = valueText;
+    const unit = document.createElement('small');
+    unit.className = 'instrument-readout-unit';
+    unit.textContent = suffix;
+    element.replaceChildren(value, unit);
+    element.dataset.instrumentReadout = raw;
+  }
   function decorate() {
     Object.keys(UNIT_MAP).forEach(id => decorateNumberInput(document.getElementById(id)));
     ['inputMinVel', 'inputMaxVel'].forEach(id => {
       const input = document.getElementById(id);
-      const label = input && input.parentElement.querySelector('label');
+      const field = input && input.closest('.num-field');
+      const label = field && field.querySelector('label');
       if (label) label.textContent = label.textContent.replace(/\s*\([^)]*\)\s*$/, '');
     });
     ['optSpeedMin', 'optSpeedMax'].forEach(id => {
       const input = document.getElementById(id);
-      const label = input && input.parentElement.querySelector('span');
+      const field = input && input.closest('.landscape-field');
+      const label = field && field.querySelector('span');
       if (label) label.textContent = label.textContent.replace(/\s*\([^)]*\)\s*$/, '');
     });
+    const gravityInput = document.getElementById('inputGravity');
+    const gravityLabel = gravityInput && gravityInput.closest('.ctrl-group')?.querySelector('.ctrl-label');
+    if (gravityLabel) gravityLabel.textContent = 'Gravity g';
     Object.entries(RANGE_AXIS_MAP).forEach(([selectId, inputIds]) => {
       const select = document.getElementById(selectId);
       if (!select) return;
@@ -79,6 +111,14 @@
     document.querySelectorAll('input[type="number"]').forEach(input => {
       input.addEventListener('focus', () => input.select && input.select());
     });
+    const readouts = Array.from(document.querySelectorAll('.ctrl-val'));
+    readouts.forEach(decorateReadout);
+    if (typeof MutationObserver === 'function') {
+      const observer = new MutationObserver(records => {
+        records.forEach(record => decorateReadout(record.target));
+      });
+      readouts.forEach(element => observer.observe(element, { childList: true, characterData: true, subtree: true }));
+    }
   }
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', decorate, { once: true });
