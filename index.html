@@ -6,7 +6,7 @@
   <title>JBike6 Bicycle Stability &amp; Dynamics Lab</title>
   <style>
     :root {
-      --bg-app: #f1f5f9;
+      --bg-app: #dedcd2;
       --bg-card: #ffffff;
       --bg-subtle: #f8fafc;
       --bg-header: #0f172a;
@@ -137,7 +137,7 @@
     }
 
     .seg-group.light {
-      background: #f1f5f9;
+      background: #dedcd2;
       border-color: var(--border-light);
     }
 
@@ -277,10 +277,10 @@
     }
 
     .pill-emerald { background: var(--accent-emerald-bg); color: var(--accent-emerald-dark); border: 1px solid #a7f3d0; }
-    .pill-rose { background: var(--accent-rose-bg); color: #be123c; border: 1px solid #fecdd3; }
+    .pill-rose { background: var(--accent-rose-bg); color: #bd5736; border: 1px solid #fecdd3; }
     .pill-indigo { background: var(--accent-indigo-bg); color: #3730a3; border: 1px solid #c7d2fe; }
     .pill-amber { background: var(--accent-amber-bg); color: #b45309; border: 1px solid #fde68a; }
-    .pill-slate { background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
+    .pill-slate { background: #dedcd2; color: #334155; border: 1px solid #cbd5e1; }
 
     .kpi-val-row {
       margin-top: 0.45rem;
@@ -314,7 +314,7 @@
     /* Insight Banner */
     .insight-banner {
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: #f1f5f9;
+      color: #dedcd2;
       border-radius: 14px;
       padding: 0.75rem 1rem;
       border: 1px solid #334155;
@@ -388,7 +388,7 @@
       gap: 0.5rem;
       padding-bottom: 0.65rem;
       margin-bottom: 0.85rem;
-      border-bottom: 1px solid #f1f5f9;
+      border-bottom: 1px solid #dedcd2;
       flex-wrap: wrap;
     }
 
@@ -452,7 +452,7 @@
     }
 
     .wheel-pill.active .wheel-pill-title {
-      color: #064e3b;
+      color: #34736c;
     }
 
     .wheel-pill-sub {
@@ -703,7 +703,7 @@
     }
 
     .btn-action:hover {
-      background: #f1f5f9;
+      background: #dedcd2;
     }
 
     .btn-action.primary {
@@ -957,7 +957,7 @@
     .eigen-root-chip.neutral { border-left:3px solid #d69b38; }
     .eigen-root-chip.selected { outline:2px solid #2563eb; outline-offset:1px; background:#eff6ff; }
     .eigen-math-status { margin-top:.5rem; color:#65798a; font-size:.65rem; line-height:1.45; }
-    .eigen-math-status[data-kind="error"] { color:#be123c; }
+    .eigen-math-status[data-kind="error"] { color:#bd5736; }
     .eigen-math-status[data-kind="success"] { color:#087c70; }
     .eigen-mode-heading { margin-top:1rem; padding-top:.9rem; border-top:1px solid #e5edf2; }
     .eigen-mode-heading h4 { margin:0 0 .25rem; color:#183448; font-size:.88rem; }
@@ -1017,7 +1017,7 @@
     .optimization-legend span { display:inline-flex; align-items:center; gap:.32rem; }
     .optimization-swatch { width:10px; height:10px; border-radius:3px; display:inline-block; }
     .optimization-swatch.better { background:#0d9488; }
-    .optimization-swatch.neutral { background:#f1f5f9; border:1px solid #cbd5e1; }
+    .optimization-swatch.neutral { background:#dedcd2; border:1px solid #cbd5e1; }
     .optimization-swatch.worse { background:#e14b4b; }
     .optimization-inspector-head { align-items:center; }
     .optimization-selection-detail { margin-top:.65rem; }
@@ -1387,7 +1387,7 @@
     .landscape-zero-key { color: #526879; }
     .landscape-status { margin-top: .55rem; padding: .5rem .7rem; border-radius: 9px; background: #f1f5f8; color: #637888; font-size: .68rem; }
     .landscape-status[data-kind="success"] { background: #e8f8f2; color: #08745f; }
-    .landscape-status[data-kind="error"] { background: #fff1f2; color: #be123c; }
+    .landscape-status[data-kind="error"] { background: #fff1f2; color: #bd5736; }
     .landscape-status[data-kind="working"] { background: #eff6ff; color: #1d4ed8; }
     .landscape-inspector { padding: 1.05rem 1.25rem; }
     .landscape-selection-detail { margin-top: .85rem; padding: .8rem .9rem; border: 1px solid #e3ebef; border-radius: 11px; background: #f8fbfc; color: #627888; font-size: .7rem; line-height: 1.65; }
@@ -3870,7 +3870,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.textAlign = 'center';
         for (let r = reMin; r <= reMax; r += 2) {
           const px = toX(r);
-          ctx.strokeStyle = r === 0 ? '#68716c' : '#f1f5f9';
+          ctx.strokeStyle = r === 0 ? '#68716c' : '#dedcd2';
           ctx.lineWidth = r === 0 ? 1.5 : 1;
           ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, padT + plotH); ctx.stroke();
           ctx.fillText(String(r), px, padT + plotH + 14);
@@ -3878,7 +3878,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.textAlign = 'right';
         for (let im = imMin; im <= imMax; im += 4) {
           const py = toY(im);
-          ctx.strokeStyle = im === 0 ? '#68716c' : '#f1f5f9';
+          ctx.strokeStyle = im === 0 ? '#68716c' : '#dedcd2';
           ctx.lineWidth = im === 0 ? 1.5 : 1;
           ctx.beginPath(); ctx.moveTo(padL, py); ctx.lineTo(padL + plotW, py); ctx.stroke();
           ctx.fillText(String(im), padL - 6, py + 3);
@@ -3970,7 +3970,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.textAlign = 'right';
         for (const yv of [-maxDeg, -maxDeg * 0.5, 0, maxDeg * 0.5, maxDeg]) {
           const py = toY(yv);
-          ctx.strokeStyle = yv === 0 ? '#68716c' : '#f1f5f9';
+          ctx.strokeStyle = yv === 0 ? '#68716c' : '#dedcd2';
           ctx.lineWidth = yv === 0 ? 1.25 : 1;
           ctx.beginPath(); ctx.moveTo(padL, py); ctx.lineTo(padL + plotW, py); ctx.stroke();
           ctx.fillText(`${yv.toFixed(0)}°`, padL - 6, py + 3);
@@ -3979,7 +3979,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.textAlign = 'center';
         for (let ts = 0; ts <= duration; ts += duration <= 6 ? 1 : 2) {
           const px = toX(ts);
-          ctx.strokeStyle = '#f1f5f9';
+          ctx.strokeStyle = '#dedcd2';
           ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, padT + plotH); ctx.stroke();
           ctx.fillText(`${ts}s`, px, padT + plotH + 15);
         }
@@ -4912,7 +4912,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.save();
           ctx.fillStyle = '#f2f0e8';
           ctx.fillRect(0, 0, width, height);
-          ctx.fillStyle = '#b91c1c';
+          ctx.fillStyle = '#bd5736';
           ctx.font = '600 14px "IBM Plex Sans", sans-serif';
           ctx.textAlign = 'center';
           ctx.fillText('Geometry diagram could not render', width / 2, height / 2 - 12);
@@ -5160,7 +5160,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         for (let yv = yMin; yv <= yMax; yv += 2) {
           const py = toPxY(yv);
           ctx.beginPath();
-          ctx.strokeStyle = yv === 0 ? '#68716c' : '#f1f5f9';
+          ctx.strokeStyle = yv === 0 ? '#68716c' : '#dedcd2';
           ctx.lineWidth = yv === 0 ? 1.5 : 1;
           ctx.moveTo(padL, py); ctx.lineTo(padL + plotW, py); ctx.stroke();
           ctx.fillText(yv.toString(), padL - 8, py + 3.5);
@@ -5178,7 +5178,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const vMs = ds / UNIT_CONFIG[unit].factor;
           const px = toPxX(vMs);
           ctx.beginPath();
-          ctx.strokeStyle = '#f1f5f9';
+          ctx.strokeStyle = '#dedcd2';
           ctx.lineWidth = 1;
           ctx.moveTo(px, padT); ctx.lineTo(px, padT + plotH); ctx.stroke();
           ctx.fillText(ds.toFixed(0), px, padT + plotH + 17);
@@ -5273,7 +5273,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.strokeStyle = '#bd5736';
           ctx.lineWidth = 2;
           ctx.beginPath(); ctx.moveTo(px, toPxY(0)); ctx.lineTo(px, padT + plotH); ctx.stroke();
-          ctx.fillStyle = '#be123c';
+          ctx.fillStyle = '#bd5736';
           ctx.font = '700 10px "IBM Plex Sans", sans-serif';
           ctx.textAlign = 'left';
           ctx.fillText(`vc = ${formatSpeed(vc, unit)}`, px + 5, padT + plotH - 22);
@@ -5604,7 +5604,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         else ctx.rect(-16, -158, 32, 36);
         ctx.fill();
 
-        ctx.fillStyle = '#064e3b';
+        ctx.fillStyle = '#34736c';
         ctx.beginPath(); ctx.arc(0, -170, 11, 0, Math.PI * 2); ctx.fill();
 
         // Handlebars & front wheel projection
@@ -5662,7 +5662,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         for (const yv of [-maxDeg, -maxDeg * 0.5, 0, maxDeg * 0.5, maxDeg]) {
           const py = toPxY(yv);
           ctx.beginPath();
-          ctx.strokeStyle = yv === 0 ? '#68716c' : '#f1f5f9';
+          ctx.strokeStyle = yv === 0 ? '#68716c' : '#dedcd2';
           ctx.lineWidth = yv === 0 ? 1.25 : 1;
           ctx.moveTo(padL, py); ctx.lineTo(padL + plotW, py); ctx.stroke();
           ctx.fillText(`${yv.toFixed(0)}°`, padL - 6, py + 3);
@@ -5673,7 +5673,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         for (let ts = 0; ts <= duration; ts += stepT) {
           const px = toPxX(ts);
           ctx.beginPath();
-          ctx.strokeStyle = '#f1f5f9';
+          ctx.strokeStyle = '#dedcd2';
           ctx.moveTo(px, padT); ctx.lineTo(px, padT + plotH); ctx.stroke();
           ctx.fillText(`${ts}s`, px, padT + plotH + 15);
         }
@@ -6260,7 +6260,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             jsonStatusMsg.style.color = '#34736c';
             jsonStatusMsg.textContent = 'Copied configuration JSON to clipboard.';
           } catch (error) {
-            jsonStatusMsg.style.color = '#be123c';
+            jsonStatusMsg.style.color = '#bd5736';
             jsonStatusMsg.textContent = 'Copy failed: ' + error.message;
           }
         });
@@ -6277,7 +6277,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             jsonStatusMsg.style.color = '#34736c';
             jsonStatusMsg.textContent = 'Configuration applied successfully.';
           } catch (err) {
-            jsonStatusMsg.style.color = '#be123c';
+            jsonStatusMsg.style.color = '#bd5736';
             jsonStatusMsg.textContent = `Invalid JSON: ${err.message}`;
           }
         });
