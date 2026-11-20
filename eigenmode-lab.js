@@ -118,6 +118,26 @@
     };
   }
 
+  // Evaluate the selected complex eigenpair directly against the live 4x4 bicycle A matrix.
+  // The complex Rayleigh quotient xᴴAx / xᴴx should reproduce λ for an exact right eigenvector.
+  function computeEigenpairMetrics(A, vector, eigenvalue) {
+    if (!Array.isArray(A) || A.length !== 4 || A.some(row => !Array.isArray(row) || row.length !== 4) ||
+        !Array.isArray(vector) || vector.length !== 4 || !eigenvalue) {
+      throw new TypeError('A 4x4 state matrix, four-state eigenvector, and eigenvalue are required.');
+    }
+    const Ax = A.map(row => row.reduce((sum, value, index) => add(sum, scale(vector[index], value)), c()));
+    const lambdaX = vector.map(value => mul(eigenvalue, value));
+    const residual = Ax.map((value, index) => sub(value, lambdaX[index]));
+    const numerator = Ax.reduce((sum, value, index) => add(sum, mul(conj(vector[index]), value)), c());
+    const denominator = vector.reduce((sum, value) => sum + abs(value) ** 2, 0);
+    const rayleigh = scale(numerator, 1 / Math.max(denominator, EPS));
+    const residualNorm = Math.sqrt(residual.reduce((sum, value) => sum + abs(value) ** 2, 0));
+    const matrixNorm = Math.sqrt(A.flat().reduce((sum, value) => sum + value * value, 0));
+    const vectorNorm = Math.sqrt(vector.reduce((sum, value) => sum + abs(value) ** 2, 0));
+    const relativeResidual = residualNorm / Math.max((matrixNorm + abs(eigenvalue)) * vectorNorm, EPS);
+    return { Ax, lambdaX, residual, rayleigh, relativeResidual };
+  }
+
   function create(options) {
     const { state, maxRealEigenvalue, charPolyCoeffs } = options || {};
     if (!state || typeof maxRealEigenvalue !== 'function' || typeof charPolyCoeffs !== 'function') {
@@ -130,7 +150,8 @@
       residual: $('eigenmodeResidual'), timeConstant: $('eigenmodeTimeConstant'),
       phase: $('eigenmodePhase'), phaseValue: $('eigenmodePhaseValue'),
       play: $('btnEigenmodePlay'), status: $('eigenmodeStatus'),
-      canvas: $('eigenmodeCanvas'), mathMatrices: $('eigenMathMatrices'),
+      canvas: $('eigenmodeCanvas'), equationCanvas: $('eigenpairCanvas'),
+      equationReadout: $('eigenpairReadout'), mathMatrices: $('eigenMathMatrices'),
       mathA: $('eigenMathA'), mathPolynomial: $('eigenMathPolynomial'),
       mathRoots: $('eigenMathRoots'), mathStatus: $('eigenMathStatus')
     };
@@ -295,15 +316,63 @@
       ctx.fillStyle='#d97706';ctx.fillText('— Steer',padL+75,padT-7);
     }
 
+    function drawEigenpair(metrics) {
+      const canvas = ui.equationCanvas;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const width = Math.max(300, rect.width || 560), height = 176;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, width, height);
+      if (!metrics) {
+        ctx.fillStyle = '#718394'; ctx.font = '12px system-ui,sans-serif';
+        ctx.fillText('Select a valid eigenvalue to evaluate A x = λ x.', 12, 28);
+        return;
+      }
+      const names = ['φ · lean', 'φ̇ · roll rate', 'δ · steer', 'δ̇ · steer rate'];
+      const maxValue = Math.max(EPS, ...metrics.Ax.map(abs), ...metrics.lambdaX.map(abs));
+      const labelW = Math.min(112, width * .29), barW = Math.max(60, width - labelW - 24);
+      ctx.font = '10px system-ui,sans-serif'; ctx.textBaseline = 'middle';
+      names.forEach((name, i) => {
+        const y = 24 + i * 38;
+        ctx.fillStyle = '#52697b'; ctx.textAlign = 'left'; ctx.fillText(name, 8, y + 4);
+        const axW = barW * abs(metrics.Ax[i]) / maxValue;
+        const lxW = barW * abs(metrics.lambdaX[i]) / maxValue;
+        ctx.fillStyle = '#e8eef2'; ctx.fillRect(labelW, y - 8, barW, 8);
+        ctx.fillStyle = '#0d9488'; ctx.fillRect(labelW, y - 8, axW, 8);
+        ctx.fillStyle = '#e8eef2'; ctx.fillRect(labelW, y + 3, barW, 8);
+        ctx.fillStyle = '#d97706'; ctx.fillRect(labelW, y + 3, lxW, 8);
+        ctx.fillStyle = '#607587'; ctx.textAlign = 'right';
+        ctx.fillText('Δ ' + fmt(abs(metrics.residual[i]), 3), width - 8, y + 4);
+      });
+      ctx.fillStyle = '#8a9aa8'; ctx.font = '9px system-ui,sans-serif'; ctx.textAlign = 'left';
+      ctx.fillText('Bar lengths are normalized to the largest component across A x and λ x; Δ is the component residual.', 8, height - 7);
+    }
+
     function renderSelection() {
       const root=model.roots[model.modeIndex];
       if(!root||!state.analysis||!state.analysis.model){
         model.mode=null;ui.frequency.textContent='—';ui.damping.textContent='—';ui.ratio.textContent='—';
         ui.phaseDifference.textContent='—';ui.residual.textContent='—';ui.timeConstant.textContent='—';
-        ui.play.disabled=true;ui.phase.disabled=true;setStatus('No valid eigenvalues are available at this speed.','error');draw();return;
+        ui.play.disabled=true;ui.phase.disabled=true;
+        if (ui.equationReadout) ui.equationReadout.textContent = 'No valid eigenpair at this speed.';
+        drawEigenpair(null);setStatus('No valid eigenvalues are available at this speed.','error');draw();return;
       }
       try{
         model.mode=computeModeShape(state.analysis.model,state.sim.speedMs,root);
+        const stateA = stateMatrixFor(state.analysis.model,state.sim.speedMs);
+        const eigenpair = computeEigenpairMetrics(stateA,model.mode.stateVector,root);
+        if (ui.equationReadout) {
+          const rq = eigenpair.rayleigh;
+          ui.equationReadout.textContent = 'xᴴAx / xᴴx = ' + fmt(rq.re,4) +
+            (rq.im >= 0 ? ' + ' : ' − ') + fmt(Math.abs(rq.im),4) + 'i  ·  residual ' +
+            eigenpair.relativeResidual.toExponential(2);
+        }
+        drawEigenpair(eigenpair);
         ui.frequency.textContent=model.mode.frequencyHz.toFixed(3)+' Hz';
         ui.damping.textContent=(model.mode.dampingRatio*100).toFixed(1)+'%';
         ui.ratio.textContent=fmt(model.mode.steerToLeanRatio,3);
@@ -318,7 +387,11 @@
         setStatus(model.mode.oscillatory
           ?'Open-loop oscillatory mode · the traces include the modal growth/decay envelope.'
           :'Open-loop non-oscillatory mode · the eigenvector gives a fixed lean/steer proportion.','success');
-      }catch(error){model.mode=null;setStatus('Mode-shape calculation failed: '+error.message,'error');}
+      }catch(error){
+        model.mode=null;
+        if (ui.equationReadout) ui.equationReadout.textContent = 'Eigenpair verification unavailable: ' + error.message;
+        drawEigenpair(null);setStatus('Mode-shape calculation failed: '+error.message,'error');
+      }
       draw();
     }
 
@@ -378,8 +451,8 @@
         model.playing=true;model.lastTime=null;ui.play.textContent='Pause cycle';model.frame=requestAnimationFrame(animate);
       }
     });
-    window.addEventListener('resize',draw);
+    window.addEventListener('resize',()=>{draw();if(model.mode)renderSelection();});
     return {update,draw,stop:stopAnimation,getMode:()=>model.mode,getRoots:()=>model.roots.slice()};
   }
-  return {create,computeModeShape,stateMatrixFor};
+  return {create,computeModeShape,computeEigenpairMetrics,stateMatrixFor};
 });
