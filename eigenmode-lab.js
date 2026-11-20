@@ -169,7 +169,7 @@
           formatMatrix('v C₁', bicycle.C1.map(row => row.map(value => value * speed)), 'damping matrix') +
           formatMatrix('g K₀ + v² K₂', bicycle.K0.map((row, i) =>
             row.map((value, j) => bicycle.g * value + speed * speed * bicycle.K2[i][j])), 'stiffness matrix');
-        ui.mathA.innerHTML = '<div class="eigen-matrix-card wide"><div class="eigen-matrix-name">A · state matrix <span>4 × 4 · s⁻¹</span></div>' +
+        ui.mathA.innerHTML = '<div class="eigen-matrix-card wide"><div class="eigen-matrix-name">A · state matrix <span>4 × 4 · interleaved state order</span></div>' +
           '<div class="eigen-matrix-grid four">' + A.flat().map(value => '<span>' + fmt(value, 4) + '</span>').join('') + '</div></div>';
         ui.mathPolynomial.innerHTML = '<div class="eigen-poly-equation">det(λI − A) = 0</div><div class="eigen-poly-expanded">p(λ) = ' +
           polynomialText(coefficients) + '</div><div class="eigen-poly-note">Quartic coefficients are normalized by the leading coefficient. The characteristic roots are shared with the root-locus solver.</div>';
