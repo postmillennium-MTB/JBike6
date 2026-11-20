@@ -860,3 +860,84 @@ input[type="range"]:not(.sci-slider)::-moz-range-track {
   .matrix-box { padding: 8px; }
   .root-pinned-status { min-height: 26px; }
 }
+
+
+/* Final typography cleanup for matrix, eigenmode, and optimization workspaces. */
+.controls-col { counter-reset: control-group; }
+.controls-col > .panel-card { counter-increment: control-group; }
+.controls-col > .panel-card > .panel-head::before {
+  content: counter(control-group, decimal-leading-zero);
+  flex: 0 0 auto;
+  margin-right: 3px;
+  color: var(--signal);
+  font: 500 .62rem var(--font-mono);
+  letter-spacing: .04em;
+}
+.controls-col .ctrl-group {
+  padding-left: 8px;
+  border-left: 1px solid var(--rule);
+}
+.controls-col .ctrl-group:focus-within { border-left: 2px solid var(--signal); padding-left: 7px; }
+.eigen-step-heading strong, .eigen-mode-heading h4,
+.eigen-verification-head strong { color: var(--ink); }
+.eigen-step-heading small, .eigen-matrix-name span,
+.eigen-math-explain, .eigen-poly-note, .eigen-footnote,
+.eigen-mode-heading p, .eigen-mode-controls label,
+.eigen-state-vector span, .eigen-verification-head span,
+.eigenpair-legend, .opt-detail-grid span, .opt-detail-foot,
+.opt-ranking-row small, .optimization-method-note {
+  color: var(--muted);
+}
+.eigen-poly-equation, .eigen-state-vector code, .eigenpair-readout { color: var(--stable); }
+.eigen-poly-expanded { color: var(--ink); }
+.eigen-mode-callout {
+  border-left: 3px solid var(--stable);
+  background: var(--panel);
+  color: var(--ink-soft);
+}
+.eigen-phase-control { color: var(--ink-soft); }
+.optimization-hero h2 { color: var(--paper); }
+.optimization-hero p { color: #d0d1c8; }
+.optimization-objective span, .optimization-objective small { color: #c3c8bd; }
+.optimization-objective strong { color: var(--stable-wash); }
+.optimization-ranking-wrap h4 { color: var(--ink); }
+.optimization-method-note strong { color: var(--ink); }
+.opt-detail-grid strong, .opt-rank-score { color: var(--ink); }
+#hoverSpeedLabel { color: var(--signal) !important; font-family: var(--font-mono); }
+.hover-card { border-color: var(--rule-strong); }
+.hover-card-head { border-bottom-color: var(--rule-strong); }
+
+/* Geometry key is a compact drafting index, not a second panel of UI cards. */
+.geometry-legend {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  align-items: center;
+  gap: 5px 12px;
+  padding-top: 8px;
+  margin-top: 7px;
+  border-top: 1px solid var(--rule);
+}
+.geometry-legend-item {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-soft);
+  font: 500 .57rem var(--font-mono);
+}
+.geometry-legend-swatch { flex: 0 0 10px; width: 10px; height: 4px; }
+.geometry-legend-note {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font: .57rem/1.4 var(--font-body);
+}
+@media (max-width: 1100px) {
+  .geometry-legend { grid-template-columns: repeat(3,minmax(0,1fr)); }
+}
+@media (max-width: 760px) {
+  .geometry-legend { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 5px 8px; }
+}
+@media (max-width: 390px) {
+  .geometry-legend { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .geometry-legend-note { font-size: .54rem; }
+}
