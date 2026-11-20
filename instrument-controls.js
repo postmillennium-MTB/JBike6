@@ -47,27 +47,36 @@
   function decorateReadout(element) {
     if (!element) return;
     const raw = element.textContent.trim();
-    if (!raw || raw.includes('(') || element.dataset.instrumentReadout === raw) return;
-    const units = ['N·m·s/rad','N·m/rad','m/s²','km/h','m/s','N·m','mph','mm','kg','Hz','rad','m','s','°','%'];
-    let suffix = '';
-    for (const candidate of units) {
-      if (!raw.endsWith(candidate)) continue;
-      const start = raw.length - candidate.length;
-      if (start > 0 && (candidate === '°' || candidate === '%' || /\s/.test(raw[start - 1]))) {
-        suffix = candidate;
-        break;
-      }
+    if (!raw || element.dataset.instrumentReadout === raw) return;
+
+    const expression = new RegExp(
+      '([+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+-]?\\d+)?)\\s*(N·m·s/rad|N·m/\\(rad·s\\)|N·m/rad|N·m|m/s²|km/h|m/s|mph|mm|kg|Hz|rad|m|s|°|%|")',
+      'gi'
+    );
+    const fragments = [];
+    let cursor = 0;
+    let match;
+    let found = false;
+
+    while ((match = expression.exec(raw)) !== null) {
+      found = true;
+      if (match.index > cursor) fragments.push(document.createTextNode(raw.slice(cursor, match.index)));
+
+      const value = document.createElement('span');
+      value.className = 'instrument-readout-value';
+      value.textContent = match[1];
+
+      const unit = document.createElement('small');
+      unit.className = 'instrument-readout-unit';
+      unit.textContent = match[2] === '"' ? 'in' : match[2];
+
+      fragments.push(value, unit);
+      cursor = match.index + match[0].length;
     }
-    if (!suffix) return;
-    const valueText = raw.slice(0, raw.length - suffix.length).trim();
-    if (!valueText) return;
-    const value = document.createElement('span');
-    value.className = 'instrument-readout-value';
-    value.textContent = valueText;
-    const unit = document.createElement('small');
-    unit.className = 'instrument-readout-unit';
-    unit.textContent = suffix;
-    element.replaceChildren(value, unit);
+
+    if (!found) return;
+    if (cursor < raw.length) fragments.push(document.createTextNode(raw.slice(cursor)));
+    element.replaceChildren(...fragments);
     element.dataset.instrumentReadout = raw;
   }
   function decorate() {
