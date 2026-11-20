@@ -4415,9 +4415,9 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const toWorld = (px, py) => ({ x: (px - offsetX) / scale, y: (offsetY - py) / scale });
         geomTransform = { toPx, toWorld, scale };
 
-        // Grid
-        ctx.strokeStyle = '#d6d3c8';
-        ctx.lineWidth = 1;
+        // Fine 250 mm drafting grid; primary geometry remains visually dominant.
+        ctx.strokeStyle = 'rgba(116, 122, 114, 0.17)';
+        ctx.lineWidth = 0.75;
         const gridStep = 0.25;
         for (let gx = Math.ceil(minX / gridStep) * gridStep; gx <= maxX; gx += gridStep) {
           const p0 = toPx(gx, minY), p1 = toPx(gx, maxY);
@@ -5240,7 +5240,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.setLineDash([]);
         }
 
-        // Im(lambda) in Cyan
+        // Imaginary eigenvalue component: oscillation frequency (teal).
         ctx.fillStyle = '#34736c';
         for (const step of sweepData) {
           const px = toPxX(step.v);
@@ -5251,7 +5251,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           }
         }
 
-        // Re(lambda) in Blue
+        // Real eigenvalue component: growth and decay rate (orange).
         ctx.fillStyle = '#bd5736';
         for (const step of sweepData) {
           const px = toPxX(step.v);
@@ -5357,8 +5357,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const p01 = proj(minVelPlot, 0, 8);
 
         ctx.save();
-        ctx.fillStyle = 'rgba(52, 115, 108, 0.14)';
-        ctx.strokeStyle = 'rgba(52, 115, 108, 0.55)';
+        ctx.fillStyle = 'rgba(52, 115, 108, 0.105)';
+        ctx.strokeStyle = 'rgba(52, 115, 108, 0.42)';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(p00.x, p00.y);
@@ -5393,6 +5393,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.font = '700 10px "IBM Plex Sans", sans-serif';
           ctx.fillText(label, pB.x + 5, pB.y + 3);
         };
+
+        ctx.font = '9px "IBM Plex Mono", monospace';
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#34736c';
+        ctx.fillText('REFERENCE PLANE · Re(λ) = 0', 12, 17);
+        ctx.fillStyle = '#68716c';
+        ctx.fillText('TEAL · DECAY     ORANGE · GROWTH', 12, 31);
 
         drawAxisLine(axOrigin, axSpeed, '#202a2e', `Speed v (${UNIT_CONFIG[unit].label})`);
         drawAxisLine(axReNeg, axRePos, '#bd5736', '+Re(λ) Unstable');
