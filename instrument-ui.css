@@ -866,7 +866,7 @@ input[type="range"]:not(.sci-slider)::-moz-range-track {
 .controls-col { counter-reset: control-group; }
 .controls-col > .panel-card { counter-increment: control-group; }
 .controls-col > .panel-card > .panel-head::before {
-  content: "0" counter(control-group);
+  content: counter(control-group, decimal-leading-zero);
   flex: 0 0 auto;
   margin-right: 3px;
   color: var(--signal);
