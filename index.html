@@ -2615,18 +2615,30 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         </aside>
         <div class="optimization-results">
           <section class="panel-card optimization-map-card">
-            <div class="panel-head"><div><h3 class="panel-title">Worst-case stability response</h3><p class="viz-sub">Each cell evaluates every speed sample in the chosen interval. Teal indicates decay; orange indicates growth.</p></div><span class="pill-badge pill-slate">Sampled search</span></div>
-            <div class="optimization-canvas-stage"><canvas id="optimizationCanvas" aria-label="Heatmap of worst-case bicycle eigenvalue growth rate over two design parameters"></canvas></div>
-            <div class="optimization-legend"><span><i class="optimization-swatch better"></i>More negative · better</span><span><i class="optimization-swatch neutral"></i>Near neutral</span><span><i class="optimization-swatch worse"></i>Positive · unstable</span></div>
+            <div class="panel-head">
+              <div><h3 class="panel-title">Stability response across speed</h3><p class="viz-sub">Maximum real eigenvalue versus forward speed · lower is better, zero is the neutral boundary.</p></div>
+              <span class="pill-badge pill-slate">Speed sweep</span>
+            </div>
+            <div class="optimization-canvas-stage optimization-response-stage">
+              <canvas id="optimizationCanvas" role="img" aria-label="Line chart comparing maximum real eigenvalue across forward speed for the starting bicycle and selected candidate."></canvas>
+            </div>
+            <div class="opt-response-legend" aria-label="Chart series">
+              <span><i class="opt-response-line starting"></i>Starting bicycle · solid</span>
+              <span><i class="opt-response-line selected"></i>Selected candidate · dashed</span>
+              <span class="opt-response-zero-key">Horizontal zero line = neutral stability boundary</span>
+            </div>
+            <div id="optimizationResponseSummary" class="opt-response-summary" aria-live="polite">
+              <div class="opt-response-empty">Run the search and select a candidate to compare its response across speed.</div>
+            </div>
           </section>
           <section class="panel-card optimization-inspector">
-            <div class="optimization-inspector-head"><div><h3 class="panel-title">Selected design candidate</h3><p class="viz-sub">Select a heatmap cell or a top-ranked candidate.</p></div><button type="button" id="btnApplyOptimizedDesign" class="btn-action primary" disabled>Apply selected design</button></div>
+            <div class="optimization-inspector-head"><div><h3 class="panel-title">Selected design candidate</h3><p class="viz-sub">Choose a candidate from the ranked results to update the comparison.</p></div><button type="button" id="btnApplyOptimizedDesign" class="btn-action primary" disabled>Apply selected design</button></div>
             <div id="optimizationSelectionDetail" class="optimization-selection-detail">Run an optimization to compare candidate designs.</div>
             <div class="optimization-ranking-wrap"><h4>Top-ranked candidates</h4><div id="optimizationRanking" class="optimization-ranking">Results will appear here after a search.</div></div>
           </section>
         </div>
       </div>
-      <div class="optimization-method-note"><strong>Interpretation and limitations:</strong> The objective is the largest real part among all four open-loop eigenvalues, maximized over the sampled speeds, then minimized across the design grid. A negative score means every mode decays at every sampled speed; a positive score means at least one mode grows at a sampled speed. This coarse search is not a mathematical guarantee between speed samples, between grid points, or under model uncertainty. Optimization changes parameters only when you explicitly apply a candidate.</div>
+      <div class="optimization-method-note"><strong>Interpretation and limitations:</strong> At each speed, the curves show the largest real part among all four open-loop eigenvalues. Negative values mean all modeled modes decay at that operating speed; positive values mean at least one mode grows. The optimizer still minimizes the largest value across the sampled speed interval. The comparison is evaluated at the selected speed samples and is not a guarantee between samples or under model uncertainty. Optimization changes parameters only when you explicitly apply a candidate.</div>
     </section>
 
   </main>
