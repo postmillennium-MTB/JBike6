@@ -319,7 +319,7 @@
       const x=state.hover.x,y=state.hover.y;
       ctx.save();ctx.strokeStyle='rgba(189,87,54,.8)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
       ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,height);ctx.moveTo(0,y);ctx.lineTo(width,y);ctx.stroke();
-      ctx.setLineDash([]);ctx.fillStyle='#0f766e';ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();ctx.restore();
+      ctx.setLineDash([]);ctx.fillStyle='#bd5736';ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();ctx.restore();
     }
     function setCameraPreset(name){
       const presets={front:{yaw:0,pitch:.12,zoom:1},side:{yaw:Math.PI/2,pitch:.18,zoom:1},top:{yaw:0,pitch:1.18,zoom:1}};
