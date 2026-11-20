@@ -27,6 +27,7 @@
     unit.setAttribute('aria-hidden', 'true');
     const currentUnit = UNIT_MAP[input.id];
     if (currentUnit) unit.textContent = currentUnit;
+    unit.classList.toggle('is-empty', !currentUnit);
     input.inputMode = 'decimal';
     input.parentNode.insertBefore(wrapper, input);
     wrapper.append(input, unit);
@@ -42,6 +43,32 @@
       unit.classList.toggle('is-empty', !value);
       input.style.paddingRight = value ? '' : '8px';
     }
+  }
+  function decorateReadout(element) {
+    if (!element) return;
+    const raw = element.textContent.trim();
+    if (!raw || element.dataset.instrumentReadout === raw) return;
+    const units = ['N·m·s/rad','N·m/rad','m/s²','km/h','m/s','N·m','mph','mm','kg','Hz','rad','m','s','°','%'];
+    let suffix = '';
+    for (const candidate of units) {
+      if (!raw.endsWith(candidate)) continue;
+      const start = raw.length - candidate.length;
+      if (start > 0 && (candidate === '°' || candidate === '%' || /\s/.test(raw[start - 1]))) {
+        suffix = candidate;
+        break;
+      }
+    }
+    if (!suffix) return;
+    const valueText = raw.slice(0, raw.length - suffix.length).trim();
+    if (!valueText) return;
+    const value = document.createElement('span');
+    value.className = 'instrument-readout-value';
+    value.textContent = valueText;
+    const unit = document.createElement('small');
+    unit.className = 'instrument-readout-unit';
+    unit.textContent = suffix;
+    element.replaceChildren(value, unit);
+    element.dataset.instrumentReadout = raw;
   }
   function decorate() {
     Object.keys(UNIT_MAP).forEach(id => decorateNumberInput(document.getElementById(id)));
@@ -79,6 +106,14 @@
     document.querySelectorAll('input[type="number"]').forEach(input => {
       input.addEventListener('focus', () => input.select && input.select());
     });
+    const readouts = Array.from(document.querySelectorAll('.ctrl-val'));
+    readouts.forEach(decorateReadout);
+    if (typeof MutationObserver === 'function') {
+      const observer = new MutationObserver(records => {
+        records.forEach(record => decorateReadout(record.target));
+      });
+      readouts.forEach(element => observer.observe(element, { childList: true, characterData: true, subtree: true }));
+    }
   }
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', decorate, { once: true });
