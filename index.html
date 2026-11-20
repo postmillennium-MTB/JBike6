@@ -3132,6 +3132,16 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           if (Math.abs(s[1]) > 1.5) { s[1] = Math.sign(s[1]) * 1.5; s[3] = 0; }
 
           out.push({
+            t: i * dt,
+            phi: s[0],
+            delta: s[1],
+            tau: computeTorque(i * dt, s[0], s[2], s[4])
+          });
+        }
+
+        return out;
+      }
+
       function computeClosedLoopPoles(model, v, kp, kd, ki = 0) {
         // Closed-loop with steer torque tau = kp * phi + kd * phi_dot + ki * int(phi):
         const { g, M, C1, K0, K2 } = model;
