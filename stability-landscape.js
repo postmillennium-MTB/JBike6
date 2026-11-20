@@ -466,7 +466,7 @@
         ctx.globalAlpha = 0.96;
         ctx.fill();
         ctx.globalAlpha = 1;
-        ctx.strokeStyle = 'rgba(32,42,46,0.24)';
+        ctx.strokeStyle = 'rgba(32,42,46,0.15)';
         ctx.lineWidth = 0.65;
         ctx.stroke();
       });
