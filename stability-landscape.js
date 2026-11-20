@@ -172,18 +172,18 @@
     }
 
     function scan() {
+      model.xKey = ui.xAxis.value;
+      model.yKey = ui.yAxis.value;
+      if (model.xKey === model.yKey) {
+        setStatus('Choose two different parameters for the landscape axes.', 'error');
+        return;
+      }
+
       let controls;
       try {
         controls = readScanControls();
       } catch (error) {
         setStatus(error.message, 'error');
-        return;
-      }
-
-      model.xKey = ui.xAxis.value;
-      model.yKey = ui.yAxis.value;
-      if (model.xKey === model.yKey) {
-        setStatus('Choose two different parameters for the landscape axes.', 'error');
         return;
       }
 
@@ -234,6 +234,7 @@
       }
 
       model.grid = rows;
+      model.baseSignature = JSON.stringify(state.params);
       model.scale = Math.max(maxAbs, 0.05);
       model.selected = { ix: Math.floor(model.xValues.length / 2), iy: Math.floor(model.yValues.length / 2) };
       ui.run.disabled = false;
@@ -589,8 +590,13 @@
     }
 
     function activate() {
-      if (!model.grid) scan();
-      else draw();
+      const currentSignature = JSON.stringify(state.params);
+      if (!model.grid || model.baseSignature !== currentSignature) {
+        updateRangeInputs();
+        scan();
+      } else {
+        draw();
+      }
     }
 
     function bind() {
