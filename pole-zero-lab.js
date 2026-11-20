@@ -74,7 +74,7 @@
   function create(options) {
     const opts = options || {};
     const canvas = opts.canvas, speedInput = opts.speedInput, speedReadout = opts.speedReadout;
-    const selectionReadout = opts.selectionReadout, btn2D = opts.btn2D, btn3D = opts.btn3D;
+    const selectionReadout = opts.selectionReadout, hoverReadout=opts.hoverReadout, btn2D = opts.btn2D, btn3D = opts.btn3D;
     const btnReset = opts.btnReset, btnZoomIn = opts.btnZoomIn, btnZoomOut = opts.btnZoomOut;
     if (!canvas || !canvas.getContext) throw new TypeError('Pole-zero canvas is required.');
 
@@ -304,7 +304,7 @@
       if(!state.data)return;
       const surface=setupCanvas();surface.ctx.clearRect(0,0,surface.width,surface.height);
       if(state.mode==='3d')draw3D(surface.ctx,surface.width,surface.height);else draw2D(surface.ctx,surface.width,surface.height);
-      drawHoverCrosshair(surface.ctx,surface.width,surface.height);
+      drawHoverCrosshair(surface.ctx,surface.width,surface.height);updateHoverReadout();
       if(speedInput){
         speedInput.min=String(state.data.minSpeed);speedInput.max=String(state.data.maxSpeed);speedInput.step='0.05';
         speedInput.value=String(Math.max(state.data.minSpeed,Math.min(state.data.maxSpeed,state.data.current.v)));
@@ -313,6 +313,7 @@
       updateReadout();
     }
 
+    function updateHoverReadout(){if(!hoverReadout||!state.hover||!state.data)return;if(state.mode==='2d'&&state.plotArea){const a=state.plotArea,x=state.hover.x,y=state.hover.y;if(x>=a.left&&x<=a.left+a.width&&y>=a.top&&y<=a.top+a.height){const re=state.extents.reMin+(x-a.left)/a.width*(state.extents.reMax-state.extents.reMin);const im=state.extents.imMax-(y-a.top)/a.height*2*state.extents.imMax;hoverReadout.textContent='Cursor · Re(s) '+re.toFixed(3)+' s⁻¹ · Im(s) '+im.toFixed(3)+' rad/s';return;}}hoverReadout.textContent=state.mode==='3d'?'3D cursor · select a marker to inspect its exact pole/zero and speed.':'Move within the plot to read Re(s) and Im(s).';}
     function drawHoverCrosshair(ctx,width,height){
       if(!state.hover)return;
       const x=state.hover.x,y=state.hover.y;
@@ -329,7 +330,7 @@
       state.mode=mode==='2d'?'2d':'3d';
       if(btn2D){btn2D.classList.toggle('active',state.mode==='2d');btn2D.setAttribute('aria-pressed',String(state.mode==='2d'));}
       if(btn3D){btn3D.classList.toggle('active',state.mode==='3d');btn3D.setAttribute('aria-pressed',String(state.mode==='3d'));}
-      canvas.style.cursor=state.mode==='3d'?'grab':'crosshair';render();
+      canvas.style.cursor=state.mode==='3d'?'grab':'crosshair';document.querySelectorAll('.viz-camera-presets').forEach(el=>el.style.display=state.mode==='3d'?'inline-flex':'none');render();
     }
     function zoom(factor){state.camera.zoom=Math.max(.55,Math.min(2.6,state.camera.zoom*factor));render();}
 
