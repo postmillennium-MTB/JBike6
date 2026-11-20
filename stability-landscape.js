@@ -40,11 +40,11 @@
   }
 
   function colorFor(value, scale) {
-    if (!Number.isFinite(value)) return '#cbd5e1';
+    if (!Number.isFinite(value)) return '#b9b9ae';
     const t = clamp(value / Math.max(scale, 1e-9), -1, 1);
-    const negative = [14, 116, 144];
-    const neutral = [241, 245, 249];
-    const positive = [220, 72, 65];
+    const negative = [52, 115, 108];
+    const neutral = [242, 240, 232];
+    const positive = [189, 87, 54];
     const a = t < 0 ? negative : neutral;
     const b = t < 0 ? neutral : positive;
     const f = Math.abs(t);
@@ -327,9 +327,9 @@
       const nx = model.xValues.length, ny = model.yValues.length;
       const cw = plotW / nx, ch = plotH / ny;
       const scale = model.scale;
-      ctx.fillStyle = '#f8fafc';
+      ctx.fillStyle = '#f2f0e8';
       ctx.fillRect(0, 0, width, height);
-      ctx.fillStyle = '#64748b';
+      ctx.fillStyle = '#68716c';
       ctx.font = '600 11px Inter, system-ui, sans-serif';
       ctx.fillText('MAXIMUM REAL EIGENVALUE · s⁻¹', left, 17);
 
@@ -344,21 +344,21 @@
 
       if (model.selected) {
         const { ix, iy } = model.selected;
-        ctx.strokeStyle = '#0f172a';
+        ctx.strokeStyle = '#202a2e';
         ctx.lineWidth = 2.5;
         ctx.strokeRect(left + ix * cw + 1.4, top + (ny - 1 - iy) * ch + 1.4, cw - 2.8, ch - 2.8);
         ctx.beginPath();
         ctx.arc(left + (ix + 0.5) * cw, top + (ny - 1 - iy + 0.5) * ch, 4, 0, Math.PI * 2);
-        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = '#f2f0e8';
         ctx.fill();
-        ctx.strokeStyle = '#0f172a';
+        ctx.strokeStyle = '#202a2e';
         ctx.stroke();
       }
 
-      ctx.strokeStyle = '#94a3b8';
+      ctx.strokeStyle = '#b9b9ae';
       ctx.lineWidth = 1;
       ctx.strokeRect(left, top, plotW, plotH);
-      ctx.fillStyle = '#475569';
+      ctx.fillStyle = '#46514f';
       ctx.font = '11px Inter, system-ui, sans-serif';
       ctx.textAlign = 'center';
       for (let t = 0; t <= 4; t++) {
@@ -373,7 +373,7 @@
         ctx.fillText(format(model.yValues[iy], getAxis(model.yKey).digits), left - 10, py + 4);
       }
       ctx.textAlign = 'center';
-      ctx.fillStyle = '#334155';
+      ctx.fillStyle = '#46514f';
       ctx.font = '600 12px Inter, system-ui, sans-serif';
       ctx.fillText(getAxis(model.xKey).short + ' (' + getAxis(model.xKey).unit + ')', left + plotW / 2, height - 12);
       ctx.save();
@@ -389,7 +389,7 @@
       grad.addColorStop(1, colorFor(scale, scale));
       ctx.fillStyle = grad;
       ctx.fillRect(legendX, legendY, legendW, 8);
-      ctx.fillStyle = '#64748b';
+      ctx.fillStyle = '#68716c';
       ctx.font = '10px Inter, system-ui, sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText('Stable · −' + format(scale, 2), legendX, legendY + 21);
@@ -424,9 +424,9 @@
         width, height, baseScale
       );
 
-      ctx.fillStyle = '#f8fafc';
+      ctx.fillStyle = '#f2f0e8';
       ctx.fillRect(0, 0, width, height);
-      ctx.fillStyle = '#64748b';
+      ctx.fillStyle = '#68716c';
       ctx.font = '600 11px Inter, system-ui, sans-serif';
       ctx.fillText('3D STABILITY SURFACE · Z = MAX Re(λ)', 24, 22);
 
@@ -439,9 +439,9 @@
       ctx.beginPath();
       zeroPlane.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
       ctx.closePath();
-      ctx.fillStyle = 'rgba(148,163,184,0.12)';
+      ctx.fillStyle = 'rgba(32,42,46,0.035)';
       ctx.fill();
-      ctx.strokeStyle = 'rgba(100,116,139,0.55)';
+      ctx.strokeStyle = 'rgba(104,113,108,0.52)';
       ctx.setLineDash([5, 4]);
       ctx.stroke();
       ctx.setLineDash([]);
@@ -466,13 +466,13 @@
         ctx.globalAlpha = 0.96;
         ctx.fill();
         ctx.globalAlpha = 1;
-        ctx.strokeStyle = 'rgba(15,23,42,0.28)';
+        ctx.strokeStyle = 'rgba(32,42,46,0.24)';
         ctx.lineWidth = 0.65;
         ctx.stroke();
       });
 
       // Trace the Re(lambda)=0 contour where neighboring grid values change sign.
-      ctx.strokeStyle = '#0f172a';
+      ctx.strokeStyle = '#202a2e';
       ctx.lineWidth = 1.7;
       for (let iy = 0; iy < ny - 1; iy++) {
         for (let ix = 0; ix < nx - 1; ix++) {
@@ -516,10 +516,10 @@
         const point = projectSample(selectedSample());
         ctx.beginPath();
         ctx.arc(point.x, point.y, 6, 0, Math.PI * 2);
-        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = '#f2f0e8';
         ctx.fill();
         ctx.lineWidth = 2.5;
-        ctx.strokeStyle = '#0f172a';
+        ctx.strokeStyle = '#202a2e';
         ctx.stroke();
       }
 
@@ -527,7 +527,7 @@
       const xEnd = project3D(1, -1, -1, width, height, baseScale);
       const yEnd = project3D(-1, 1, -1, width, height, baseScale);
       const zEnd = project3D(-1, -1, 1, width, height, baseScale);
-      ctx.strokeStyle = '#334155';
+      ctx.strokeStyle = '#46514f';
       ctx.lineWidth = 1.5;
       [[axisStart, xEnd], [axisStart, yEnd], [axisStart, zEnd]].forEach(pair => {
         ctx.beginPath();
@@ -535,14 +535,14 @@
         ctx.lineTo(pair[1].x, pair[1].y);
         ctx.stroke();
       });
-      ctx.fillStyle = '#334155';
+      ctx.fillStyle = '#46514f';
       ctx.font = '600 11px Inter, system-ui, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(getAxis(model.xKey).short + ' (' + getAxis(model.xKey).unit + ')', xEnd.x + 12, xEnd.y + 17);
       ctx.fillText(getAxis(model.yKey).short + ' (' + getAxis(model.yKey).unit + ')', yEnd.x - 8, yEnd.y + 17);
       ctx.fillText('max Re(λ) · s⁻¹', zEnd.x - 8, zEnd.y - 12);
       ctx.textAlign = 'left';
-      ctx.fillStyle = '#64748b';
+      ctx.fillStyle = '#68716c';
       ctx.font = '10px Inter, system-ui, sans-serif';
       ctx.fillText('Drag to rotate · Scroll to zoom · Select a surface point', 24, height - 18);
       model.plot = null;
@@ -583,9 +583,9 @@
 
     function drawHoverCrosshair(ctx,width,height){
       if(!model.hover)return;
-      ctx.save();ctx.strokeStyle='rgba(15,118,110,.72)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+      ctx.save();ctx.strokeStyle='rgba(189,87,54,.8)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
       ctx.beginPath();ctx.moveTo(model.hover.x,0);ctx.lineTo(model.hover.x,height);ctx.moveTo(0,model.hover.y);ctx.lineTo(width,model.hover.y);ctx.stroke();
-      ctx.setLineDash([]);ctx.fillStyle='#0f766e';ctx.beginPath();ctx.arc(model.hover.x,model.hover.y,3,0,Math.PI*2);ctx.fill();ctx.restore();
+      ctx.setLineDash([]);ctx.fillStyle='#bd5736';ctx.beginPath();ctx.arc(model.hover.x,model.hover.y,3,0,Math.PI*2);ctx.fill();ctx.restore();
     }
     function setCameraPreset(name){
       const presets={front:{yaw:0,pitch:.32,zoom:1},side:{yaw:Math.PI/2,pitch:.32,zoom:1},top:{yaw:0,pitch:1.18,zoom:1}};

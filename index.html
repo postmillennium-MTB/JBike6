@@ -1635,6 +1635,10 @@
     .engineering-inspector-value strong { color:#0f172a; font:600 .78rem ui-monospace,monospace; overflow-wrap:anywhere; }
     .engineering-inspector-note,.engineering-inspector-empty { margin:0; color:#64748b; font-size:.7rem; line-height:1.45; }
   </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="instrument-ui.css" />
 </head>
 <body>
 
@@ -1645,14 +1649,14 @@
     <div class="header-inner">
       <div class="brand-group">
         <div class="brand-icon" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="#bd5736" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="6.5" cy="19.5" r="4.5" />
             <circle cx="21.5" cy="19.5" r="4.5" />
             <path d="M6.5 19.5 L12.5 11.5 L19.5 11.5 L21.5 19.5" />
             <path d="M12.5 11.5 L14.5 19.5 L6.5 19.5" />
             <path d="M18.2 8.2 L20.4 8.2" />
             <path d="M11.2 9.2 L13.8 9.2" />
-            <path d="M3 5 C7 3, 11 7, 15 4" stroke="#38bdf8" stroke-width="1.6" stroke-dasharray="2 2" />
+            <path d="M3 5 C7 3, 11 7, 15 4" stroke="#34736c" stroke-width="1.6" stroke-dasharray="2 2" />
           </svg>
         </div>
         <div>
@@ -2609,7 +2613,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
   <!-- ===================================================================== -->
   <!-- JAVASCRIPT PHYSICS ENGINE, 3D PROJECTION & INTERACTIVE RENDERERS      -->
   <!-- ===================================================================== -->
-  <script src="engineering-inspector.js"></script>\n  <script src="viz-workspace.js"></script>
+  <script src="engineering-inspector.js"></script>
+  <script src="instrument-controls.js"></script>\n  <script src="viz-workspace.js"></script>
   <script src="stability-landscape.js"></script>
   <script src="eigenmode-lab.js"></script>
   <script src="design-optimization.js"></script>
@@ -3861,11 +3866,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         // Grid & axes
         ctx.font = '500 10px monospace';
-        ctx.fillStyle = '#64748b';
+        ctx.fillStyle = '#68716c';
         ctx.textAlign = 'center';
         for (let r = reMin; r <= reMax; r += 2) {
           const px = toX(r);
-          ctx.strokeStyle = r === 0 ? '#475569' : '#f1f5f9';
+          ctx.strokeStyle = r === 0 ? '#68716c' : '#f1f5f9';
           ctx.lineWidth = r === 0 ? 1.5 : 1;
           ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, padT + plotH); ctx.stroke();
           ctx.fillText(String(r), px, padT + plotH + 14);
@@ -3873,13 +3878,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.textAlign = 'right';
         for (let im = imMin; im <= imMax; im += 4) {
           const py = toY(im);
-          ctx.strokeStyle = im === 0 ? '#475569' : '#f1f5f9';
+          ctx.strokeStyle = im === 0 ? '#68716c' : '#f1f5f9';
           ctx.lineWidth = im === 0 ? 1.5 : 1;
           ctx.beginPath(); ctx.moveTo(padL, py); ctx.lineTo(padL + plotW, py); ctx.stroke();
           ctx.fillText(String(im), padL - 6, py + 3);
         }
 
-        ctx.fillStyle = '#334155';
+        ctx.fillStyle = '#46514f';
         ctx.font = '600 10px system-ui, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('Re(s) [1/s]  ← LHP Stable | RHP Unstable →', padL + plotW * 0.5, height - 4);
@@ -3890,7 +3895,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.beginPath(); ctx.rect(padL, padT, plotW, plotH); ctx.clip();
 
         // Open-loop poles (blue 'x')
-        ctx.strokeStyle = '#2563eb';
+        ctx.strokeStyle = '#bd5736';
         ctx.lineWidth = 2.2;
         for (const p of ss.poles) {
           const px = toX(Math.max(reMin, Math.min(reMax, p.re)));
@@ -3902,7 +3907,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         // Transmission zeros (amber 'o')
-        ctx.strokeStyle = '#d97706';
+        ctx.strokeStyle = '#bd5736';
         ctx.lineWidth = 2;
         for (const z of ss.zeros) {
           if (Math.abs(z.re) > 25 || Math.abs(z.im) > 25) continue;
@@ -3920,7 +3925,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             appState.control.kd,
             appState.control.ki
           );
-          ctx.strokeStyle = '#059669';
+          ctx.strokeStyle = '#34736c';
           ctx.lineWidth = 2;
           for (const cp of clPoles) {
             const cxp = toX(Math.max(reMin, Math.min(reMax, cp.re)));
@@ -3933,7 +3938,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         ctx.restore();
-        ctx.strokeStyle = '#cbd5e1';
+        ctx.strokeStyle = '#b9b9ae';
         ctx.lineWidth = 1;
         ctx.strokeRect(padL, padT, plotW, plotH);
       }
@@ -3961,11 +3966,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const toY = (deg) => padT + ((maxDeg - deg) / (2 * maxDeg)) * plotH;
 
         ctx.font = '500 10px monospace';
-        ctx.fillStyle = '#64748b';
+        ctx.fillStyle = '#68716c';
         ctx.textAlign = 'right';
         for (const yv of [-maxDeg, -maxDeg * 0.5, 0, maxDeg * 0.5, maxDeg]) {
           const py = toY(yv);
-          ctx.strokeStyle = yv === 0 ? '#64748b' : '#f1f5f9';
+          ctx.strokeStyle = yv === 0 ? '#68716c' : '#f1f5f9';
           ctx.lineWidth = yv === 0 ? 1.25 : 1;
           ctx.beginPath(); ctx.moveTo(padL, py); ctx.lineTo(padL + plotW, py); ctx.stroke();
           ctx.fillText(`${yv.toFixed(0)}°`, padL - 6, py + 3);
@@ -3981,18 +3986,18 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         ctx.textAlign = 'left';
         ctx.font = '600 11px system-ui, sans-serif';
-        ctx.fillStyle = '#94a3b8';
+        ctx.fillStyle = '#b9b9ae';
         ctx.fillText('--- Uncontrolled Lean φ_open(t)', padL, 15);
-        ctx.fillStyle = '#059669';
+        ctx.fillStyle = '#34736c';
         ctx.fillText('— Controlled Lean φ_ctrl(t)', padL + 175, 15);
-        ctx.fillStyle = '#d97706';
+        ctx.fillStyle = '#bd5736';
         ctx.fillText('— Steer δ_ctrl(t)', padL + 335, 15);
 
         ctx.save();
         ctx.beginPath(); ctx.rect(padL, padT, plotW, plotH); ctx.clip();
 
         // Open-loop dashed reference
-        ctx.strokeStyle = '#94a3b8';
+        ctx.strokeStyle = '#b9b9ae';
         ctx.lineWidth = 1.75;
         ctx.setLineDash([5, 4]);
         ctx.beginPath();
@@ -4004,7 +4009,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.setLineDash([]);
 
         // Controlled lean angle
-        ctx.strokeStyle = '#059669';
+        ctx.strokeStyle = '#34736c';
         ctx.lineWidth = 2.2;
         ctx.beginPath();
         ctrlTraj.forEach((pt, i) => {
@@ -4014,7 +4019,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.stroke();
 
         // Controlled steer angle
-        ctx.strokeStyle = '#d97706';
+        ctx.strokeStyle = '#bd5736';
         ctx.lineWidth = 1.8;
         ctx.beginPath();
         ctrlTraj.forEach((pt, i) => {
@@ -4024,7 +4029,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.stroke();
 
         ctx.restore();
-        ctx.strokeStyle = '#cbd5e1';
+        ctx.strokeStyle = '#b9b9ae';
         ctx.strokeRect(padL, padT, plotW, plotH);
       }
 
@@ -4310,7 +4315,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         for (const pt of [alongA, alongB, acrossA, acrossB]) {
           ctx.beginPath();
           ctx.arc(pt.x, pt.y, 2.7, 0, Math.PI * 2);
-          ctx.fillStyle = '#ffffff';
+          ctx.fillStyle = '#f2f0e8fff';
           ctx.fill();
           ctx.strokeStyle = color;
           ctx.lineWidth = 1.3;
@@ -4351,7 +4356,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.moveTo(b1.x, b1.y); ctx.lineTo(b2.x, b2.y);
         ctx.stroke();
         ctx.setLineDash([]);
-        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = '#f2f0e8fff';
         ctx.strokeStyle = color;
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -4369,8 +4374,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         if (!model || !(model.mT > 1e-8)) return;
         const point = toPx(model.xT, -model.zT);
         ctx.save();
-        ctx.strokeStyle = '#7c3aed';
-        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#bd5736';
+        ctx.fillStyle = '#f2f0e8fff';
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.arc(point.x, point.y, 7, 0, Math.PI * 2);
@@ -4381,7 +4386,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.moveTo(point.x, point.y - 11); ctx.lineTo(point.x, point.y + 11);
         ctx.stroke();
         ctx.font = '700 10px system-ui, sans-serif';
-        ctx.fillStyle = '#6d28d9';
+        ctx.fillStyle = '#bd5736';
         ctx.textAlign = 'left';
         ctx.fillText('Total CoM', point.x + 12, point.y + 4);
         ctx.restore();
@@ -4410,7 +4415,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         geomTransform = { toPx, toWorld, scale };
 
         // Grid
-        ctx.strokeStyle = '#e2e8f0';
+        ctx.strokeStyle = '#d6d3c8';
         ctx.lineWidth = 1;
         const gridStep = 0.25;
         for (let gx = Math.ceil(minX / gridStep) * gridStep; gx <= maxX; gx += gridStep) {
@@ -4424,19 +4429,19 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         // Ground line
         const gLeft = toPx(minX, 0), gRight = toPx(maxX, 0);
-        ctx.strokeStyle = '#475569';
+        ctx.strokeStyle = '#68716c';
         ctx.lineWidth = 2;
         ctx.beginPath(); ctx.moveTo(gLeft.x, gLeft.y); ctx.lineTo(gRight.x, gRight.y); ctx.stroke();
 
         // X-Y Origin Axes at Rear Contact
         const orig = toPx(0, 0);
-        ctx.strokeStyle = '#0284c7';
+        ctx.strokeStyle = '#68716c';
         ctx.lineWidth = 1.8;
         ctx.beginPath();
         ctx.moveTo(orig.x, orig.y); ctx.lineTo(orig.x + 36, orig.y);
         ctx.moveTo(orig.x, orig.y); ctx.lineTo(orig.x, orig.y - 36);
         ctx.stroke();
-        ctx.fillStyle = '#0284c7';
+        ctx.fillStyle = '#68716c';
         ctx.font = '700 10px JetBrains Mono, monospace';
         ctx.fillText('X', orig.x + 40, orig.y + 3);
         ctx.fillText('Y', orig.x - 4, orig.y - 40);
@@ -4447,19 +4452,19 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const rPx = radius * scale;
           if (rPx < 2) return;
           ctx.save();
-          ctx.strokeStyle = '#1e293b';
+          ctx.strokeStyle = '#202a2e';
           ctx.lineWidth = Math.max(3, rPx * 0.11);
           ctx.beginPath();
           ctx.arc(center.x, center.y, Math.max(2, rPx - ctx.lineWidth * 0.5), 0, Math.PI * 2);
           ctx.stroke();
 
-          ctx.strokeStyle = '#64748b';
+          ctx.strokeStyle = '#68716c';
           ctx.lineWidth = 1.5;
           ctx.beginPath();
           ctx.arc(center.x, center.y, Math.max(1, rPx * 0.84), 0, Math.PI * 2);
           ctx.stroke();
 
-          ctx.strokeStyle = '#94a3b8';
+          ctx.strokeStyle = '#b9b9ae';
           ctx.lineWidth = 1;
           for (let i = 0; i < 12; i++) {
             const ang = (i * Math.PI) / 6;
@@ -4469,10 +4474,10 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             ctx.stroke();
           }
 
-          ctx.fillStyle = '#0f172a';
+          ctx.fillStyle = '#202a2e';
           ctx.beginPath(); ctx.arc(center.x, center.y, 4, 0, Math.PI * 2); ctx.fill();
 
-          ctx.fillStyle = '#334155';
+          ctx.fillStyle = '#46514f';
           ctx.font = '600 11px system-ui, sans-serif';
           ctx.textAlign = 'center';
           ctx.fillText(labelText, center.x, center.y - rPx - 8);
@@ -4491,7 +4496,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const pSteerTop = toPx(steerTopX, steerTopY);
 
         ctx.save();
-        ctx.strokeStyle = '#f59e0b';
+        ctx.strokeStyle = '#bd5736';
         ctx.lineWidth = 1.75;
         ctx.setLineDash([6, 4]);
         ctx.beginPath(); ctx.moveTo(pSteerBot.x, pSteerBot.y); ctx.lineTo(pSteerTop.x, pSteerTop.y); ctx.stroke();
@@ -4500,13 +4505,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // U-V basis vectors at steer ground intersection
         const uAxisEnd = toPx(xSteerGround + 0.16 * Math.sin(htaRad), 0.16 * Math.cos(htaRad));
         const vAxisEnd = toPx(xSteerGround - 0.16 * Math.cos(htaRad), 0.16 * Math.sin(htaRad));
-        ctx.strokeStyle = '#d97706';
+        ctx.strokeStyle = '#bd5736';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(pSteerBot.x, pSteerBot.y); ctx.lineTo(uAxisEnd.x, uAxisEnd.y);
         ctx.moveTo(pSteerBot.x, pSteerBot.y); ctx.lineTo(vAxisEnd.x, vAxisEnd.y);
         ctx.stroke();
-        ctx.fillStyle = '#b45309';
+        ctx.fillStyle = '#bd5736';
         ctx.font = '700 10px JetBrains Mono, monospace';
         ctx.fillText('U', uAxisEnd.x + 4, uAxisEnd.y);
         ctx.fillText('V', vAxisEnd.x - 10, vAxisEnd.y);
@@ -4523,7 +4528,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const pHeadBot = toPx(headBot.x, headBot.y), pHeadTop = toPx(headTop.x, headTop.y), pSeatTop = toPx(seatTop.x, seatTop.y);
 
         ctx.save();
-        ctx.strokeStyle = '#0f172a';
+        ctx.strokeStyle = '#202a2e';
         ctx.lineWidth = 3.5;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
@@ -4532,7 +4537,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.moveTo(pSeatTop.x, pSeatTop.y); ctx.lineTo(pHeadTop.x, pHeadTop.y); ctx.lineTo(pHeadBot.x, pHeadBot.y); ctx.lineTo(pBB.x, pBB.y);
         ctx.stroke();
 
-        ctx.strokeStyle = '#059669';
+        ctx.strokeStyle = '#34736c';
         ctx.lineWidth = 3.2;
         ctx.beginPath();
         ctx.moveTo(pHeadBot.x, pHeadBot.y); ctx.lineTo(pFront.x, pFront.y);
@@ -4544,17 +4549,17 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const pRearGround = toPx(0, 0);
 
         ctx.save();
-        ctx.strokeStyle = '#d97706';
+        ctx.strokeStyle = '#bd5736';
         ctx.lineWidth = 4;
         ctx.beginPath(); ctx.moveTo(pFrontGround.x, pFrontGround.y); ctx.lineTo(pSteerBot.x, pSteerBot.y); ctx.stroke();
 
-        ctx.fillStyle = '#b45309';
+        ctx.fillStyle = '#bd5736';
         ctx.font = '600 11px JetBrains Mono, monospace';
         ctx.textAlign = 'center';
         ctx.fillText(`Trail ${(c * 1000).toFixed(1)}mm`, (pFrontGround.x + pSteerBot.x) * 0.5, pFrontGround.y + 16);
 
         const wbY = pRearGround.y + 28;
-        ctx.strokeStyle = '#64748b';
+        ctx.strokeStyle = '#68716c';
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(pRearGround.x, pRearGround.y + 4); ctx.lineTo(pRearGround.x, wbY + 4);
@@ -4562,16 +4567,16 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.moveTo(pRearGround.x, wbY); ctx.lineTo(pFrontGround.x, wbY);
         ctx.stroke();
 
-        ctx.fillStyle = '#475569';
+        ctx.fillStyle = '#68716c';
         ctx.fillText(`Wheelbase w = ${w.toFixed(3)} m`, (pRearGround.x + pFrontGround.x) * 0.5, wbY - 4);
 
         const arcR = 34;
-        ctx.strokeStyle = '#d97706';
+        ctx.strokeStyle = '#bd5736';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.arc(pSteerBot.x, pSteerBot.y, arcR, Math.PI, Math.PI + htaRad, false);
         ctx.stroke();
-        ctx.fillStyle = '#b45309';
+        ctx.fillStyle = '#bd5736';
         ctx.textAlign = 'right';
         ctx.fillText(`${p.headAngleDeg.toFixed(1)}°`, pSteerBot.x - arcR - 5, pSteerBot.y - 8);
         ctx.restore();
@@ -4579,13 +4584,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // Principal-inertia overlays: component ellipses plus the two Whipple
         // rigid-body assemblies. These are scaled radii of gyration, not part shapes.
         if (appState.showDumbbells) {
-          drawAssemblyPrincipalAxes2D(ctx, toPx, model.compB_JB, '#0f766e', 'Rear assembly');
-          drawAssemblyPrincipalAxes2D(ctx, toPx, model.compH_JB, '#c2410c', 'Steering assembly');
-          drawInertiaDumbbell(ctx, toPx, p.frame, '#475569');
-          drawInertiaDumbbell(ctx, toPx, p.rider, '#059669');
-          drawInertiaDumbbell(ctx, toPx, p.rack, '#6366f1');
-          drawInertiaDumbbell(ctx, toPx, forkXY, '#d97706');
-          drawInertiaDumbbell(ctx, toPx, model.basketXY, '#0891b2');
+          drawAssemblyPrincipalAxes2D(ctx, toPx, model.compB_JB, '#34736c', 'Rear assembly');
+          drawAssemblyPrincipalAxes2D(ctx, toPx, model.compH_JB, '#bd5736', 'Steering assembly');
+          drawInertiaDumbbell(ctx, toPx, p.frame, '#68716c');
+          drawInertiaDumbbell(ctx, toPx, p.rider, '#34736c');
+          drawInertiaDumbbell(ctx, toPx, p.rack, '#747a72');
+          drawInertiaDumbbell(ctx, toPx, forkXY, '#bd5736');
+          drawInertiaDumbbell(ctx, toPx, model.basketXY, '#34736c');
           drawSystemCenterOfMass2D(ctx, toPx, model);
         }
 
@@ -4597,7 +4602,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.beginPath(); ctx.arc(pt.x, pt.y, 13, 0, Math.PI * 2); ctx.fill();
 
           ctx.fillStyle = fillColor;
-          ctx.strokeStyle = '#ffffff';
+          ctx.strokeStyle = '#f2f0e8fff';
           ctx.lineWidth = 2;
           ctx.beginPath(); ctx.arc(pt.x, pt.y, 7, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
 
@@ -4608,14 +4613,14 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           if (ctx.roundRect) ctx.roundRect(pt.x + 11, pt.y - 10, tw, 20, 6);
           else ctx.rect(pt.x + 11, pt.y - 10, tw, 20);
           ctx.fill();
-          ctx.fillStyle = '#ffffff';
+          ctx.fillStyle = '#f2f0e8fff';
           ctx.textAlign = 'left';
           ctx.fillText(label, pt.x + 16, pt.y + 4);
           ctx.restore();
         };
 
-        if (p.rider.m > 0) drawDragHandle(p.rider.x, p.rider.y, '#059669', `Rider CoM (${p.rider.m}kg)`);
-        if (p.fork.m > 0) drawDragHandle(forkXY.x, forkXY.y, '#d97706', `Front CoM (${p.fork.m}kg)`);
+        if (p.rider.m > 0) drawDragHandle(p.rider.x, p.rider.y, '#34736c', `Rider CoM (${p.rider.m}kg)`);
+        if (p.fork.m > 0) drawDragHandle(forkXY.x, forkXY.y, '#bd5736', `Front CoM (${p.fork.m}kg)`);
       }
 
       /**
@@ -4637,14 +4642,14 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         // Background subtle sky/floor gradient
         const grad = ctx.createLinearGradient(0, 0, 0, height);
-        grad.addColorStop(0, '#f8fafc');
-        grad.addColorStop(1, '#e2e8f0');
+        grad.addColorStop(0, '#f2f0e8');
+        grad.addColorStop(1, '#d6d3c8');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, width, height);
 
         // 1. Perspective Ground Grid (scrolls backward with wheelSpinAngle)
         const scrollX = (appState.sim.wheelSpinAngle * rR) % 0.5;
-        ctx.strokeStyle = '#cbd5e1';
+        ctx.strokeStyle = '#b9b9ae';
         ctx.lineWidth = 1;
         for (let gx = -1.5; gx <= 3.0; gx += 0.5) {
           const p0 = proj(gx - scrollX, 0, -1.5);
@@ -4655,7 +4660,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const p0 = proj(-1.5, 0, gz);
           const p1 = proj(3.0, 0, gz);
           ctx.beginPath();
-          ctx.strokeStyle = Math.abs(gz) < 1e-4 ? '#94a3b8' : '#cbd5e1';
+          ctx.strokeStyle = Math.abs(gz) < 1e-4 ? '#b9b9ae' : '#b9b9ae';
           ctx.lineWidth = Math.abs(gz) < 1e-4 ? 1.5 : 1;
           ctx.moveTo(p0.x, p0.y); ctx.lineTo(p1.x, p1.y); ctx.stroke();
         }
@@ -4744,11 +4749,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         };
 
         if (appState.showDumbbells) {
-          drawPrincipalInertiaEllipsoid3D(p.frame, leanPoint, '#475569');
-          drawPrincipalInertiaEllipsoid3D(p.rider, leanPoint, '#059669');
-          drawPrincipalInertiaEllipsoid3D(p.rack, leanPoint, '#6366f1');
-          drawPrincipalInertiaEllipsoid3D(model.forkXY, steerAndLeanPoint, '#d97706');
-          drawPrincipalInertiaEllipsoid3D(model.basketXY, steerAndLeanPoint, '#0891b2');
+          drawPrincipalInertiaEllipsoid3D(p.frame, leanPoint, '#68716c');
+          drawPrincipalInertiaEllipsoid3D(p.rider, leanPoint, '#34736c');
+          drawPrincipalInertiaEllipsoid3D(p.rack, leanPoint, '#747a72');
+          drawPrincipalInertiaEllipsoid3D(model.forkXY, steerAndLeanPoint, '#bd5736');
+          drawPrincipalInertiaEllipsoid3D(model.basketXY, steerAndLeanPoint, '#34736c');
         }
 
         // Helper: draw 3D wheel (tire ring + spokes)
@@ -4772,7 +4777,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.stroke();
 
           // Rotating spokes
-          ctx.strokeStyle = '#64748b';
+          ctx.strokeStyle = '#68716c';
           ctx.lineWidth = 1.2;
           const spin = appState.sim.wheelSpinAngle * (rR / Math.max(radius, 0.1));
           for (let i = 0; i < 8; i++) {
@@ -4785,8 +4790,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         };
 
         // Draw Rear & Front Wheels
-        draw3DWheel(0, rR, rR, false, '#0f172a');
-        draw3DWheel(w, rF, rF, true, '#0f172a');
+        draw3DWheel(0, rR, rR, false, '#202a2e');
+        draw3DWheel(w, rF, rF, true, '#202a2e');
 
         // Rear Frame 3D Geometry
         const bb = { x: w * 0.36, y: Math.min(rR, rF) * 0.82 };
@@ -4813,14 +4818,14 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const headBot3 = leanPoint(headBot.x, headBot.y, 0);
         const headTop3 = leanPoint(headTop.x, headTop.y, 0);
 
-        line3D(rearHubL, bb3, '#1e293b', 3);
-        line3D(rearHubR, bb3, '#1e293b', 3);
-        line3D(rearHubL, seat3, '#1e293b', 2.8);
-        line3D(rearHubR, seat3, '#1e293b', 2.8);
-        line3D(bb3, seat3, '#0f172a', 4);
-        line3D(seat3, headTop3, '#0f172a', 4);
-        line3D(bb3, headBot3, '#0f172a', 4.5);
-        line3D(headBot3, headTop3, '#0f172a', 5);
+        line3D(rearHubL, bb3, '#202a2e', 3);
+        line3D(rearHubR, bb3, '#202a2e', 3);
+        line3D(rearHubL, seat3, '#202a2e', 2.8);
+        line3D(rearHubR, seat3, '#202a2e', 2.8);
+        line3D(bb3, seat3, '#202a2e', 4);
+        line3D(seat3, headTop3, '#202a2e', 4);
+        line3D(bb3, headBot3, '#202a2e', 4.5);
+        line3D(headBot3, headTop3, '#202a2e', 5);
 
         // Steerable Front Fork & Wide MTB Handlebars
         const forkCrown3 = steerAndLeanPoint(headBot.x, headBot.y, 0);
@@ -4830,10 +4835,10 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const barLeft = steerAndLeanPoint(headTop.x - 0.04, headTop.y + 0.06, -0.39);
         const barRight = steerAndLeanPoint(headTop.x - 0.04, headTop.y + 0.06, 0.39);
 
-        line3D(forkCrown3, frontHubL, '#059669', 3.5);
-        line3D(forkCrown3, frontHubR, '#059669', 3.5);
-        line3D(steerAndLeanPoint(headTop.x, headTop.y, 0), stemTop, '#059669', 4);
-        line3D(barLeft, barRight, '#047857', 4.5);
+        line3D(forkCrown3, frontHubL, '#34736c', 3.5);
+        line3D(forkCrown3, frontHubR, '#34736c', 3.5);
+        line3D(steerAndLeanPoint(headTop.x, headTop.y, 0), stemTop, '#34736c', 4);
+        line3D(barLeft, barRight, '#34736c', 4.5);
 
         // Rider CoM 3D Sphere & Plumb Projection
         if (p.rider.m > 0) {
@@ -4845,22 +4850,22 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const c2 = proj(rCom3.x, rCom3.y, rCom3.z);
           ctx.fillStyle = 'rgba(5, 150, 105, 0.25)';
           ctx.beginPath(); ctx.arc(c2.x, c2.y, 22 * cam.zoom, 0, Math.PI * 2); ctx.fill();
-          ctx.fillStyle = '#059669';
-          ctx.strokeStyle = '#ffffff';
+          ctx.fillStyle = '#34736c';
+          ctx.strokeStyle = '#f2f0e8fff';
           ctx.lineWidth = 2;
           ctx.beginPath(); ctx.arc(c2.x, c2.y, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
         }
 
         // HUD Telemetry Overlay
-        ctx.fillStyle = '#0f172a';
+        ctx.fillStyle = '#202a2e';
         ctx.font = '700 12px JetBrains Mono, monospace';
         ctx.textAlign = 'left';
         ctx.fillText(`3D Ride View | v = ${formatSpeed(appState.sim.speedMs, appState.unit)}`, 14, 22);
-        ctx.fillStyle = '#059669';
+        ctx.fillStyle = '#34736c';
         ctx.fillText(`Lean φ(t) = ${(phi * RAD2DEG).toFixed(2)}°`, 14, 40);
-        ctx.fillStyle = '#d97706';
+        ctx.fillStyle = '#bd5736';
         ctx.fillText(`Steer δ(t) = ${(delta * RAD2DEG).toFixed(2)}°`, 14, 58);
-        ctx.fillStyle = '#475569';
+        ctx.fillStyle = '#68716c';
         ctx.font = '10px system-ui, sans-serif';
         ctx.fillText(appState.showDumbbells
           ? 'Wireframes: 0.75x principal radii of gyration (not part dimensions)'
@@ -4899,13 +4904,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           canvas.dataset.renderState = 'error';
           canvas.setAttribute('aria-label', 'Geometry diagram failed to render');
           ctx.save();
-          ctx.fillStyle = '#f8fafc';
+          ctx.fillStyle = '#f2f0e8';
           ctx.fillRect(0, 0, width, height);
           ctx.fillStyle = '#b91c1c';
           ctx.font = '600 14px system-ui, sans-serif';
           ctx.textAlign = 'center';
           ctx.fillText('Geometry diagram could not render', width / 2, height / 2 - 12);
-          ctx.fillStyle = '#64748b';
+          ctx.fillStyle = '#68716c';
           ctx.font = '12px system-ui, sans-serif';
           const message = String(err && err.message ? err.message : err).slice(0, 100);
           ctx.fillText(message, width / 2, height / 2 + 12, Math.max(100, width - 32));
@@ -5144,12 +5149,12 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         // Horizontal Y grid
         ctx.font = '500 11px monospace';
-        ctx.fillStyle = '#64748b';
+        ctx.fillStyle = '#68716c';
         ctx.textAlign = 'right';
         for (let yv = yMin; yv <= yMax; yv += 2) {
           const py = toPxY(yv);
           ctx.beginPath();
-          ctx.strokeStyle = yv === 0 ? '#64748b' : '#f1f5f9';
+          ctx.strokeStyle = yv === 0 ? '#68716c' : '#f1f5f9';
           ctx.lineWidth = yv === 0 ? 1.5 : 1;
           ctx.moveTo(padL, py); ctx.lineTo(padL + plotW, py); ctx.stroke();
           ctx.fillText(yv.toString(), padL - 8, py + 3.5);
@@ -5174,7 +5179,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         // Axis labels
-        ctx.fillStyle = '#334155';
+        ctx.fillStyle = '#46514f';
         ctx.font = '600 11px system-ui, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(`Forward Speed (${UNIT_CONFIG[unit].label})`, padL + plotW * 0.5, height - 7);
@@ -5214,7 +5219,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         // Im(lambda) in Cyan
-        ctx.fillStyle = '#06b6d4';
+        ctx.fillStyle = '#34736c';
         for (const step of sweepData) {
           const px = toPxX(step.v);
           for (const r of step.roots) {
@@ -5225,7 +5230,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         // Re(lambda) in Blue
-        ctx.fillStyle = '#2563eb';
+        ctx.fillStyle = '#bd5736';
         for (const step of sweepData) {
           const px = toPxX(step.v);
           for (const r of step.roots) {
@@ -5239,7 +5244,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         for (const dr of doubleRoots) {
           if (dr.v >= minVelPlot && dr.v <= maxVelPlot && dr.re >= yMin && dr.re <= yMax) {
             const px = toPxX(dr.v);
-            ctx.strokeStyle = '#d946ef';
+            ctx.strokeStyle = '#bd5736';
             ctx.lineWidth = 1.75;
             ctx.beginPath(); ctx.moveTo(px, toPxY(0)); ctx.lineTo(px, toPxY(dr.re)); ctx.stroke();
           }
@@ -5248,10 +5253,10 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // Weave & Capsize lines
         if (vw !== null && vw > 0 && vw >= minVelPlot && vw <= maxVelPlot) {
           const px = toPxX(vw);
-          ctx.strokeStyle = '#059669';
+          ctx.strokeStyle = '#34736c';
           ctx.lineWidth = 2;
           ctx.beginPath(); ctx.moveTo(px, toPxY(0)); ctx.lineTo(px, padT + plotH); ctx.stroke();
-          ctx.fillStyle = '#047857';
+          ctx.fillStyle = '#34736c';
           ctx.font = '700 10px system-ui, sans-serif';
           ctx.textAlign = 'left';
           ctx.fillText(`vw = ${formatSpeed(vw, unit)}`, px + 5, padT + plotH - 8);
@@ -5259,7 +5264,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         if (vc !== null && vc >= minVelPlot && vc <= maxVelPlot) {
           const px = toPxX(vc);
-          ctx.strokeStyle = '#e11d48';
+          ctx.strokeStyle = '#bd5736';
           ctx.lineWidth = 2;
           ctx.beginPath(); ctx.moveTo(px, toPxY(0)); ctx.lineTo(px, padT + plotH); ctx.stroke();
           ctx.fillStyle = '#be123c';
@@ -5271,7 +5276,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // Active Test Speed marker
         if (appState.sim.speedMs >= minVelPlot && appState.sim.speedMs <= maxVelPlot) {
           const pxSim = toPxX(appState.sim.speedMs);
-          ctx.strokeStyle = '#f59e0b';
+          ctx.strokeStyle = '#bd5736';
           ctx.lineWidth = 1.5;
           ctx.setLineDash([4, 3]);
           ctx.beginPath(); ctx.moveTo(pxSim, padT); ctx.lineTo(pxSim, padT + plotH); ctx.stroke();
@@ -5281,7 +5286,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // Hover crosshair
         if (appState.hoverSpeed !== null && appState.hoverSpeed >= minVelPlot && appState.hoverSpeed <= maxVelPlot) {
           const pxH = toPxX(appState.hoverSpeed);
-          ctx.strokeStyle = '#0f172a';
+          ctx.strokeStyle = '#202a2e';
           ctx.lineWidth = 1;
           ctx.setLineDash([3, 3]);
           ctx.beginPath(); ctx.moveTo(pxH, padT); ctx.lineTo(pxH, padT + plotH); ctx.stroke();
@@ -5289,7 +5294,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         ctx.restore();
-        ctx.strokeStyle = '#cbd5e1';
+        ctx.strokeStyle = '#b9b9ae';
         ctx.lineWidth = 1;
         ctx.strokeRect(padL, padT, plotW, plotH);
       }
@@ -5320,7 +5325,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         };
 
         // Background
-        ctx.fillStyle = '#f8fafc';
+        ctx.fillStyle = '#f2f0e8';
         ctx.fillRect(0, 0, width, height);
 
         // 1. Draw the Re(lambda) = 0 Stability Plane (translucent emerald plane)
@@ -5367,10 +5372,10 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.fillText(label, pB.x + 5, pB.y + 3);
         };
 
-        drawAxisLine(axOrigin, axSpeed, '#0f172a', `Speed v (${UNIT_CONFIG[unit].label})`);
-        drawAxisLine(axReNeg, axRePos, '#e11d48', '+Re(λ) Unstable');
-        drawAxisLine(axOrigin, axImPos, '#0284c7', 'Im(λ) Freq');
-        ctx.fillStyle = '#047857';
+        drawAxisLine(axOrigin, axSpeed, '#202a2e', `Speed v (${UNIT_CONFIG[unit].label})`);
+        drawAxisLine(axReNeg, axRePos, '#bd5736', '+Re(λ) Unstable');
+        drawAxisLine(axOrigin, axImPos, '#68716c', 'Im(λ) Freq');
+        ctx.fillStyle = '#34736c';
         ctx.font = '700 10px system-ui, sans-serif';
         ctx.fillText('-Re(λ) Stable', axReNeg.x - 10, axReNeg.y + 12);
 
@@ -5387,7 +5392,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             ctx.beginPath(); ctx.moveTo(pt.x, pt.y); ctx.lineTo(ptShadow.x, ptShadow.y); ctx.stroke();
 
             // Root point colored by stability (emerald if Re<0, rose/blue if Re>=0)
-            ctx.fillStyle = r.re < -1e-5 ? '#059669' : '#2563eb';
+            ctx.fillStyle = r.re < -1e-5 ? '#34736c' : '#bd5736';
             ctx.beginPath();
             ctx.arc(pt.x, pt.y, Math.max(2, 2.8 * pt.scale / baseScale), 0, Math.PI * 2);
             ctx.fill();
@@ -5397,14 +5402,14 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // 4. Mark Weave (vw) and Capsize (vc) crossings on the Re=0 plane
         if (vw !== null && vw >= minVelPlot && vw <= maxVelPlot) {
           const pVw = proj(vw, 0, 0);
-          ctx.fillStyle = '#059669';
+          ctx.fillStyle = '#34736c';
           ctx.beginPath(); ctx.arc(pVw.x, pVw.y, 5, 0, Math.PI * 2); ctx.fill();
           ctx.font = '700 11px system-ui, sans-serif';
           ctx.fillText(`vw = ${formatSpeed(vw, unit)}`, pVw.x + 8, pVw.y - 6);
         }
         if (vc !== null && vc >= minVelPlot && vc <= maxVelPlot) {
           const pVc = proj(vc, 0, 0);
-          ctx.fillStyle = '#e11d48';
+          ctx.fillStyle = '#bd5736';
           ctx.beginPath(); ctx.arc(pVc.x, pVc.y, 5, 0, Math.PI * 2); ctx.fill();
           ctx.font = '700 11px system-ui, sans-serif';
           ctx.fillText(`vc = ${formatSpeed(vc, unit)}`, pVc.x + 8, pVc.y + 12);
@@ -5553,14 +5558,14 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const cx = width * 0.5;
         const groundY = height - 30;
 
-        ctx.fillStyle = '#e2e8f0';
+        ctx.fillStyle = '#d6d3c8';
         ctx.fillRect(0, groundY, width, height - groundY);
-        ctx.strokeStyle = '#64748b';
+        ctx.strokeStyle = '#68716c';
         ctx.lineWidth = 2;
         ctx.beginPath(); ctx.moveTo(0, groundY); ctx.lineTo(width, groundY); ctx.stroke();
 
         ctx.save();
-        ctx.strokeStyle = '#cbd5e1';
+        ctx.strokeStyle = '#b9b9ae';
         ctx.lineWidth = 1;
         ctx.setLineDash([4, 4]);
         ctx.beginPath(); ctx.moveTo(cx, 24); ctx.lineTo(cx, groundY); ctx.stroke();
@@ -5574,20 +5579,20 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.rotate(phi);
 
         // Rear tire
-        ctx.fillStyle = '#1e293b';
+        ctx.fillStyle = '#202a2e';
         ctx.beginPath();
         if (ctx.roundRect) ctx.roundRect(-8, -74, 16, 74, 6);
         else ctx.rect(-8, -74, 16, 74);
         ctx.fill();
 
         // Frame mast
-        ctx.strokeStyle = '#0f172a';
+        ctx.strokeStyle = '#202a2e';
         ctx.lineWidth = 5;
         ctx.lineCap = 'round';
         ctx.beginPath(); ctx.moveTo(0, -65); ctx.lineTo(0, -125); ctx.stroke();
 
         // Rider silhouette
-        ctx.fillStyle = '#059669';
+        ctx.fillStyle = '#34736c';
         ctx.beginPath();
         if (ctx.roundRect) ctx.roundRect(-16, -158, 32, 36, 12);
         else ctx.rect(-16, -158, 32, 36);
@@ -5599,11 +5604,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // Handlebars & front wheel projection
         const barHalfW = 42 * Math.cos(delta);
         const barYawShift = 18 * Math.sin(delta);
-        ctx.strokeStyle = '#334155';
+        ctx.strokeStyle = '#46514f';
         ctx.lineWidth = 4;
         ctx.beginPath(); ctx.moveTo(-barHalfW + barYawShift, -124); ctx.lineTo(barHalfW + barYawShift, -124); ctx.stroke();
 
-        ctx.fillStyle = '#d97706';
+        ctx.fillStyle = '#bd5736';
         ctx.beginPath();
         if (ctx.roundRect) ctx.roundRect(barYawShift * 0.75 - 5, -68, 10, 62, 4);
         else ctx.rect(barYawShift * 0.75 - 5, -68, 10, 62);
@@ -5611,13 +5616,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         ctx.restore();
 
-        ctx.fillStyle = '#0f172a';
+        ctx.fillStyle = '#202a2e';
         ctx.font = '600 11px monospace';
         ctx.textAlign = 'left';
         ctx.fillText(`t = ${sample.t.toFixed(2)}s / ${appState.sim.duration}s`, 10, 18);
-        ctx.fillStyle = '#059669';
+        ctx.fillStyle = '#34736c';
         ctx.fillText(`Lean φ = ${(phi * RAD2DEG).toFixed(2)}°`, 10, 34);
-        ctx.fillStyle = '#d97706';
+        ctx.fillStyle = '#bd5736';
         ctx.fillText(`Steer δ = ${(delta * RAD2DEG).toFixed(2)}°`, 10, 50);
       }
 
@@ -5645,13 +5650,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const toPxY = (deg) => padT + ((maxDeg - deg) / (2 * maxDeg)) * plotH;
 
         ctx.font = '500 10px monospace';
-        ctx.fillStyle = '#64748b';
+        ctx.fillStyle = '#68716c';
         ctx.textAlign = 'right';
 
         for (const yv of [-maxDeg, -maxDeg * 0.5, 0, maxDeg * 0.5, maxDeg]) {
           const py = toPxY(yv);
           ctx.beginPath();
-          ctx.strokeStyle = yv === 0 ? '#64748b' : '#f1f5f9';
+          ctx.strokeStyle = yv === 0 ? '#68716c' : '#f1f5f9';
           ctx.lineWidth = yv === 0 ? 1.25 : 1;
           ctx.moveTo(padL, py); ctx.lineTo(padL + plotW, py); ctx.stroke();
           ctx.fillText(`${yv.toFixed(0)}°`, padL - 6, py + 3);
@@ -5669,9 +5674,9 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         ctx.textAlign = 'left';
         ctx.font = '600 11px system-ui, sans-serif';
-        ctx.fillStyle = '#059669';
+        ctx.fillStyle = '#34736c';
         ctx.fillText('— Lean Angle φ(t)', padL, 15);
-        ctx.fillStyle = '#d97706';
+        ctx.fillStyle = '#bd5736';
         ctx.fillText('— Steer Angle δ(t)', padL + 125, 15);
 
         ctx.save();
@@ -5679,7 +5684,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.rect(padL, padT, plotW, plotH);
         ctx.clip();
 
-        ctx.strokeStyle = '#059669';
+        ctx.strokeStyle = '#34736c';
         ctx.lineWidth = 2.2;
         ctx.beginPath();
         traj.forEach((pt, idx) => {
@@ -5688,7 +5693,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         });
         ctx.stroke();
 
-        ctx.strokeStyle = '#d97706';
+        ctx.strokeStyle = '#bd5736';
         ctx.lineWidth = 2;
         ctx.beginPath();
         traj.forEach((pt, idx) => {
@@ -5698,12 +5703,12 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.stroke();
 
         const curX = toPxX(appState.sim.t);
-        ctx.strokeStyle = '#0f172a';
+        ctx.strokeStyle = '#202a2e';
         ctx.lineWidth = 1.25;
         ctx.beginPath(); ctx.moveTo(curX, padT); ctx.lineTo(curX, padT + plotH); ctx.stroke();
 
         ctx.restore();
-        ctx.strokeStyle = '#cbd5e1';
+        ctx.strokeStyle = '#b9b9ae';
         ctx.strokeRect(padL, padT, plotW, plotH);
       }
 
@@ -6246,7 +6251,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
               documentRef: document,
               textArea: jsonTextArea
             });
-            jsonStatusMsg.style.color = '#047857';
+            jsonStatusMsg.style.color = '#34736c';
             jsonStatusMsg.textContent = 'Copied configuration JSON to clipboard.';
           } catch (error) {
             jsonStatusMsg.style.color = '#be123c';
@@ -6263,7 +6268,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             appState.params = Object.assign({}, JSON.parse(JSON.stringify(PRESETS.mulletMX)), parsed);
             window.JBike6AppRegressions.normalizeWheelPitchReference(appState.params, parsed);
             recomputeAll(true);
-            jsonStatusMsg.style.color = '#047857';
+            jsonStatusMsg.style.color = '#34736c';
             jsonStatusMsg.textContent = 'Configuration applied successfully.';
           } catch (err) {
             jsonStatusMsg.style.color = '#be123c';
