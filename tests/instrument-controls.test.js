@@ -2,7 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { tokenizeMeasurements } = require('../instrument-controls.js');
+const { tokenizeMeasurements, precisionForStep, PARAMETER_RANGE_CONTROLS } = require('../instrument-controls.js');
 
 function reconstruct(tokens) {
   return tokens.map(token => token.type === 'text'
@@ -58,4 +58,20 @@ test('text without a recognized measurement remains untouched', () => {
   assert.equal(tokenizeMeasurements('Waiting for model calculation…'), null);
   assert.equal(tokenizeMeasurements(''), null);
   assert.equal(tokenizeMeasurements(null), null);
+});
+
+test('key bicycle parameters expose direct numerical entry with explicit model units', () => {
+  assert.deepEqual(PARAMETER_RANGE_CONTROLS, {
+    sliderDf: 'm', sliderDr: 'm', sliderGyro: '%', sliderHta: '°',
+    sliderWb: 'm', sliderOffset: 'mm', sliderTrail: 'mm',
+    sliderRiderMass: 'kg', sliderRiderX: 'm', sliderRiderY: 'm',
+    sliderFrontMass: 'kg', sliderFrontU: 'm'
+  });
+});
+
+test('direct parameter entry precision follows the existing slider step', () => {
+  assert.equal(precisionForStep('0.002'), 3);
+  assert.equal(precisionForStep('0.1'), 1);
+  assert.equal(precisionForStep('5'), 0);
+  assert.equal(precisionForStep('any'), 3);
 });
