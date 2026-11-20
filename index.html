@@ -1709,7 +1709,7 @@
               <input id="chkSimulatePitch" type="checkbox" checked />
               <span>
                 <span class="check-title">Simulate frame pitch on rear wheel swap</span>
-                <span class="check-desc">Dropping rear axle slackens HTA by arcsin(&Delta;r / w)</span>
+                <span class="check-desc">Relative front/rear axle-height changes adjust HTA by arcsin(&Delta;r / w)</span>
               </span>
             </label>
           </div>
@@ -2470,6 +2470,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
   <script src="eigenmode-lab.js"></script>
   <script src="design-optimization.js"></script>
   <script src="pole-zero-lab.js"></script>
+  <script src="app-regressions.js"></script>
   <script>
     (function () {
       'use strict';
@@ -2525,6 +2526,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           forkOffsetMm: 44.0,
           Df: 0.742,
           Dr: 0.742,
+
+          refDf: 0.742,
           refDr: 0.742,
           autoScaleWheels: true,
           simulatePitch: true,
@@ -2550,6 +2553,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           forkOffsetMm: 44.0,
           Df: 0.742,
           Dr: 0.704,
+
+          refDf: 0.742,
           refDr: 0.704,
           autoScaleWheels: true,
           simulatePitch: true,
@@ -2575,6 +2580,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           forkOffsetMm: 42.0,
           Df: 0.704,
           Dr: 0.704,
+
+          refDf: 0.704,
           refDr: 0.704,
           autoScaleWheels: true,
           simulatePitch: true,
@@ -2600,6 +2607,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           forkOffsetMm: 45.0,
           Df: 0.6858,
           Dr: 0.6858,
+
+          refDf: 0.6858,
           refDr: 0.6858,
           autoScaleWheels: false,
           simulatePitch: false,
@@ -2625,6 +2634,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           forkOffsetMm: 32.071,
           Df: 0.70,
           Dr: 0.60,
+
+          refDf: 0.70,
           refDr: 0.60,
           autoScaleWheels: false,
           simulatePitch: false,
@@ -2650,6 +2661,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           forkOffsetMm: 42.0,
           Df: 0.508,
           Dr: 0.668,
+
+          refDf: 0.508,
           refDr: 0.668,
           autoScaleWheels: false,
           simulatePitch: false,
@@ -2675,6 +2688,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           forkOffsetMm: 40.0,
           Df: 0.508,
           Dr: 0.668,
+
+          refDf: 0.508,
           refDr: 0.668,
           autoScaleWheels: false,
           simulatePitch: false,
@@ -2700,6 +2715,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           forkOffsetMm: 55.0,
           Df: 0.6858,
           Dr: 0.60,
+
+          refDf: 0.6858,
           refDr: 0.60,
           autoScaleWheels: false,
           simulatePitch: false,
@@ -2725,6 +2742,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           forkOffsetMm: 64.705,
           Df: 0.50,
           Dr: 0.50,
+
+          refDf: 0.50,
           refDr: 0.50,
           autoScaleWheels: false,
           simulatePitch: false,
@@ -2750,6 +2769,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           forkOffsetMm: 15.0,
           Df: 0.65,
           Dr: 0.65,
+
+          refDf: 0.65,
           refDr: 0.65,
           autoScaleWheels: false,
           simulatePitch: false,
@@ -3554,15 +3575,12 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         if (Math.abs(ki) < 1e-8) {
           return solvePolynomialRoots([c4, c3, c2, c1, c0]);
         }
-        // Degree-5 characteristic polynomial s * det(P_PD(s)) + Ki * P12(s) = 0
-        return solvePolynomialRoots([
-          c4,
-          c3,
-          c2 + ki * a2_12,
-          c1 + ki * a1_12,
-          c0 + ki * a0_12,
-          0
-        ]);
+        // Degree-5 characteristic polynomial s * det(P_PD(s)) + Ki * P12(s) = 0.
+        // Keep the coefficient order descending from s^5 to the constant term.
+        const integralCoefficients = window.JBike6AppRegressions.integralClosedLoopCoefficients({
+          c4, c3, c2, c1, c0, a2_12, a1_12, a0_12, ki
+        });
+        return solvePolynomialRoots(integralCoefficients);
       }
 
       function updateControlTheoryLab() {
@@ -5717,7 +5735,9 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           p.Df = newDf;
           p.Dr = newDr;
           if (p.simulatePitch) {
-            const dR = (p.refDr - newDr) * 0.5;
+            const dR = window.JBike6AppRegressions.relativeAxleDrop(
+              p.refDf ?? p.Df, p.refDr ?? p.Dr, newDf, newDr
+            );
             const pitchRad = Math.asin(Math.max(-0.25, Math.min(0.25, dR / p.refWheelbase)));
             p.headAngleDeg = Number((p.refHeadAngleDeg - pitchRad * RAD2DEG).toFixed(2));
           }
@@ -5745,6 +5765,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const p = appState.params;
           p.simulatePitch = e.target.checked;
           if (p.simulatePitch) {
+            p.refDf = p.Df;
             p.refDr = p.Dr;
             p.refHeadAngleDeg = p.headAngleDeg;
             p.refWheelbase = p.wheelbase;
@@ -5761,6 +5782,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         document.getElementById('sliderHta').addEventListener('input', (e) => {
           appState.params.headAngleDeg = parseFloat(e.target.value);
           appState.params.refHeadAngleDeg = appState.params.headAngleDeg;
+          appState.params.refDf = appState.params.Df;
           appState.params.refDr = appState.params.Dr;
           recomputeAll(false);
         });
@@ -6033,11 +6055,20 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           jsonModal.classList.add('hidden');
         });
 
-        document.getElementById('btnCopyJson').addEventListener('click', () => {
-          jsonTextArea.select();
-          document.execCommand('copy');
-          jsonStatusMsg.style.color = '#047857';
-          jsonStatusMsg.textContent = 'Copied configuration JSON to clipboard.';
+        document.getElementById('btnCopyJson').addEventListener('click', async () => {
+          try {
+            const clipboard = typeof navigator !== 'undefined' ? navigator.clipboard : null;
+            await window.JBike6AppRegressions.copyTextToClipboard(jsonTextArea.value, {
+              clipboard,
+              documentRef: document,
+              textArea: jsonTextArea
+            });
+            jsonStatusMsg.style.color = '#047857';
+            jsonStatusMsg.textContent = 'Copied configuration JSON to clipboard.';
+          } catch (error) {
+            jsonStatusMsg.style.color = '#be123c';
+            jsonStatusMsg.textContent = 'Copy failed: ' + error.message;
+          }
         });
 
         document.getElementById('btnApplyJson').addEventListener('click', () => {
