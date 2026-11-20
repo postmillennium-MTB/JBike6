@@ -1610,6 +1610,17 @@
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
     }
 
+  
+    /* Interactive visualization workspace */
+    .viz-workspace-nav{position:sticky;top:var(--app-header-height,72px);z-index:35;display:flex;gap:.4rem;overflow-x:auto;padding:.55rem .65rem;margin:-.2rem 0 .1rem;background:rgba(248,250,252,.96);border:1px solid var(--border-light);border-radius:13px;backdrop-filter:blur(12px);scrollbar-width:thin}
+    .viz-workspace-nav button{flex:0 0 auto;border:1px solid #dbe5ec;background:#fff;color:#475569;border-radius:999px;padding:.48rem .78rem;font:600 .72rem var(--font-sans);cursor:pointer;white-space:nowrap}
+    .viz-workspace-nav button[aria-current="location"]{background:#0f766e;color:#fff;border-color:#0f766e}
+    .viz-camera-presets{display:inline-flex;gap:.25rem;align-items:center}.pz-trace-legend{display:flex;flex-wrap:wrap;gap:.35rem}.pz-trace-toggle{border:1px solid #cbd5e1;background:#fff;color:#475569;border-radius:999px;padding:.32rem .58rem;font:600 .68rem var(--font-sans);cursor:pointer}.pz-trace-toggle[aria-pressed="false"]{opacity:.42;text-decoration:line-through}.pz-trace-toggle.active{border-color:#0f766e;background:#f0fdfa}.pz-hover-readout{font:600 .7rem var(--font-mono);color:#0f766e;padding:.35rem .55rem;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:8px;margin:.35rem 0}
+    .viz-camera-presets .btn-action,.landscape-camera-preset{min-height:34px;padding:.3rem .55rem;font-size:.68rem}
+    .landscape-camera-preset{border:1px solid var(--border-mid);border-radius:8px;background:#fff;color:var(--text-body);cursor:pointer}
+    .landscape-camera-preset.hidden{display:none}
+    @media(max-width:700px){.viz-workspace-nav{top:var(--app-header-height,72px);margin:0 -.1rem .1rem;padding:.45rem}.viz-camera-presets{width:100%;order:4}.viz-camera-presets .btn-action{flex:1}}
+
   </style>
 </head>
 <body>
@@ -1672,6 +1683,8 @@
   <!-- MAIN WORKSPACE                                                        -->
   <!-- ===================================================================== -->
   <main class="main-wrap">
+
+    <nav id="vizWorkspaceNav" class="viz-workspace-nav" aria-label="Visualization workspace"></nav>
 
     <!-- KPI SUMMARY STRIP -->
     <section class="kpi-grid">
@@ -1991,7 +2004,7 @@
               </label>
               <button type="button" id="btnZoomGeomOut" class="btn-action hidden" title="Zoom out" aria-label="Zoom out">−</button>
               <button type="button" id="btnZoomGeomIn" class="btn-action hidden" title="Zoom in" aria-label="Zoom in">+</button>
-              <button type="button" id="btnResetGeomCam" class="btn-action hidden">Reset camera</button>
+              <button type="button" id="btnResetGeomCam" class="btn-action hidden">Reset camera</button><div class="viz-camera-presets geom-camera-presets" role="group" aria-label="Geometry camera presets" style="display:none"><button type="button" data-geom-camera="front" class="btn-action">Front</button><button type="button" data-geom-camera="side" class="btn-action">Side</button><button type="button" data-geom-camera="top" class="btn-action">Top</button></div>
               <div class="seg-group light" role="group" aria-label="Geometry View Mode">
                 <button type="button" id="btnGeomMode2D" class="seg-btn active" aria-pressed="true">2D Blueprint</button>
                 <button type="button" id="btnGeomMode3D" class="seg-btn" aria-pressed="false">3D Interactive Ride</button>
@@ -2029,7 +2042,7 @@
                 <span id="pinBtnLabel">Pin Baseline</span>
               </button>
               <button type="button" id="btnClearBaseline" class="btn-action hidden">Clear Pin</button>
-              <button type="button" id="btnResetRootCam" class="btn-action hidden">Reset 3D View</button>
+              <button type="button" id="btnResetRootCam" class="btn-action hidden">Reset 3D View</button><div class="viz-camera-presets root-camera-presets" role="group" aria-label="Root locus camera presets" style="display:none"><button type="button" data-root-camera="front" class="btn-action">Front</button><button type="button" data-root-camera="side" class="btn-action">Side</button><button type="button" data-root-camera="top" class="btn-action">Top</button></div>
               <div class="seg-group light" role="group" aria-label="Root Locus View Mode">
                 <button type="button" id="btnRootMode2D" class="seg-btn active">2D Classic Plot</button>
                 <button type="button" id="btnRootMode3D" class="seg-btn">3D Complex Space</button>
@@ -2217,6 +2230,7 @@
               <button type="button" id="btnPzZoomIn" class="btn-action" aria-label="Zoom in">+</button>
               <button type="button" id="btnPzZoomOut" class="btn-action" aria-label="Zoom out">−</button>
               <button type="button" id="btnPzReset" class="btn-action">Reset view</button>
+              <div class="viz-camera-presets pz-camera-presets" role="group" aria-label="3D camera presets"><button type="button" data-pz-camera="front" class="btn-action">Front</button><button type="button" data-pz-camera="side" class="btn-action">Side</button><button type="button" data-pz-camera="top" class="btn-action">Top</button></div>
             </div>
             <div class="pz-speed-control">
               <label for="pzSpeedScrubber">Speed slice</label>
@@ -2224,16 +2238,16 @@
               <strong id="pzSpeedReadout">6.50 m/s</strong>
             </div>
           </div>
-          <div class="legend-bar" style="margin-bottom:0.4rem;">
-            <span class="leg-item"><strong style="color:#059669;">&times;</strong> Stable poles</span>
-            <span class="leg-item"><strong style="color:#e11d48;">&times;</strong> Unstable poles</span>
-            <span class="leg-item"><strong style="color:#d97706;">&#9675;</strong> Transmission zeros</span>
-            <span class="leg-item"><strong style="color:#4f46e5;">◆</strong> Closed-loop poles</span>
+          <div class="legend-bar pz-trace-legend" style="margin-bottom:0.4rem;" role="group" aria-label="Visible pole-zero traces">
+            <button type="button" class="pz-trace-toggle active" data-pz-trace="poles" aria-pressed="true"><strong style="color:#059669;">×</strong> Open-loop poles</button>
+            <button type="button" class="pz-trace-toggle active" data-pz-trace="zeros" aria-pressed="true"><strong style="color:#d97706;">○</strong> Transmission zeros</button>
+            <button type="button" class="pz-trace-toggle active" data-pz-trace="closed" aria-pressed="true"><strong style="color:#4f46e5;">◆</strong> Closed-loop poles</button>
           </div>
           <div class="pz-canvas-box">
             <canvas id="poleZeroCanvas" role="img" aria-label="Interactive three-dimensional pole-zero map with real and imaginary pole coordinates and bicycle forward speed as the third axis"></canvas>
             <div class="pz-canvas-hint" id="pzCanvasHint">Drag to orbit · Scroll or use +/- to zoom · Select a marker for details</div>
           </div>
+          <div id="pzHoverReadout" class="pz-hover-readout" aria-live="polite">Move over the plot to inspect coordinates; select a marker for modal details.</div>
           <div id="pzSelectionReadout" class="pz-selection-readout" role="status" aria-live="polite">Select a pole or zero in the plot to inspect its location and dynamics.</div>
         </div>
       </div>
@@ -2459,6 +2473,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
                 <button type="button" class="landscape-view-btn active" data-landscape-view="heatmap" aria-pressed="true">2D heatmap</button>
                 <button type="button" class="landscape-view-btn" data-landscape-view="surface3d" aria-pressed="false">3D surface</button>
                 <button type="button" id="btnResetLandscapeCamera" class="landscape-reset hidden" title="Reset 3D camera" aria-label="Reset 3D camera">↺</button>
+                <button type="button" class="landscape-camera-preset hidden" data-landscape-camera="front">Front</button><button type="button" class="landscape-camera-preset hidden" data-landscape-camera="side">Side</button><button type="button" class="landscape-camera-preset hidden" data-landscape-camera="top">Top</button>
               </div>
             </div>
 
@@ -2581,6 +2596,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
   <!-- ===================================================================== -->
   <!-- JAVASCRIPT PHYSICS ENGINE, 3D PROJECTION & INTERACTIVE RENDERERS      -->
   <!-- ===================================================================== -->
+  <script src="viz-workspace.js"></script>
   <script src="stability-landscape.js"></script>
   <script src="eigenmode-lab.js"></script>
   <script src="design-optimization.js"></script>
@@ -6007,6 +6023,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           btnGeom2D.setAttribute('aria-pressed', is3D ? 'false' : 'true');
           btnGeom3D.setAttribute('aria-pressed', is3D ? 'true' : 'false');
           btnGeomReset.classList.toggle('hidden', !is3D);
+          document.querySelector('.geom-camera-presets').style.display = is3D ? 'inline-flex' : 'none';
           btnGeomZoomIn.classList.toggle('hidden', !is3D);
           btnGeomZoomOut.classList.toggle('hidden', !is3D);
           geom3dHint.classList.toggle('hidden', !is3D);
@@ -6022,10 +6039,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         btnGeom2D.addEventListener('click', () => setGeometryViewMode('2d'));
         btnGeom3D.addEventListener('click', () => setGeometryViewMode('3d'));
 
-        btnGeomReset.addEventListener('click', () => {
-          appState.geomCam3D = { yaw: -0.62, pitch: 0.48, zoom: 1.0 };
-          drawGeometryCanvas();
-        });
+        btnGeomReset.addEventListener('click', () => { appState.geomCam3D = { yaw: -0.62, pitch: 0.34, zoom: 1.0 }; drawGeometryCanvas(); });
+        document.querySelectorAll('[data-geom-camera]').forEach(btn => btn.addEventListener('click', () => {
+          const presets = { front: [-0.62, 0.34], side: [0.95, 0.34], top: [-0.62, 1.12] };
+          const view = presets[btn.dataset.geomCamera]; if (view) { appState.geomCam3D = { yaw: view[0], pitch: view[1], zoom: 1.0 }; drawGeometryCanvas(); }
+        }));
         btnGeomZoomIn.addEventListener('click', () => {
           appState.geomCam3D.zoom = Math.min(2.8, appState.geomCam3D.zoom * 1.16);
           drawGeometryCanvas();
@@ -6042,6 +6060,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         // 2D / 3D Toggles for Eigenvalue Root-Locus Plot
         document.getElementById('btnRootMode2D').addEventListener('click', () => {
+          document.querySelector('.root-camera-presets').style.display = 'none';
           appState.rootViewMode = '2d';
           document.getElementById('btnRootMode2D').classList.add('active');
           document.getElementById('btnRootMode3D').classList.remove('active');
@@ -6057,6 +6076,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           document.getElementById('btnRootMode3D').classList.add('active');
           document.getElementById('btnRootMode2D').classList.remove('active');
           document.getElementById('btnResetRootCam').classList.remove('hidden');
+          document.querySelector('.root-camera-presets').style.display = 'inline-flex';
           document.getElementById('root3dHint').classList.remove('hidden');
           document.getElementById('rootHoverCard').classList.add('hidden');
           document.getElementById('rootVizTitle').textContent = '3D Complex Eigenvalue Space (v, Re(λ), Im(λ))';
@@ -6064,10 +6084,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           drawRootLocusCanvas();
         });
 
-        document.getElementById('btnResetRootCam').addEventListener('click', () => {
-          appState.rootCam3D = { yaw: -0.58, pitch: 0.38, zoom: 1.0 };
-          drawRootLocusCanvas();
-        });
+        document.getElementById('btnResetRootCam').addEventListener('click', () => { appState.rootCam3D = { yaw: -0.58, pitch: 0.38, zoom: 1.0 }; drawRootLocusCanvas(); });
+        document.querySelectorAll('[data-root-camera]').forEach(btn => btn.addEventListener('click', () => {
+          const presets = { front: [-0.58, 0.38], side: [0.98, 0.38], top: [-0.58, 1.15] };
+          const view = presets[btn.dataset.rootCamera]; if (view) { appState.rootCam3D = { yaw: view[0], pitch: view[1], zoom: 1.0 }; drawRootLocusCanvas(); }
+        }));
 
         // Pin / Clear Baseline
         document.getElementById('btnPinBaseline').addEventListener('click', () => {
@@ -6269,6 +6290,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
               speedInput: document.getElementById('pzSpeedScrubber'),
               speedReadout: document.getElementById('pzSpeedReadout'),
               selectionReadout: document.getElementById('pzSelectionReadout'),
+              hoverReadout: document.getElementById('pzHoverReadout'),
               btn2D: document.getElementById('btnPz2D'),
               btn3D: document.getElementById('btnPz3D'),
               btnReset: document.getElementById('btnPzReset'),

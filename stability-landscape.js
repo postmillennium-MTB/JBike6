@@ -92,7 +92,7 @@
       dragging: false,
       dragMoved: false,
       pointer: null,
-      lastProjected: []
+      lastProjected: [], hover: null
     };
 
     function getAxis(key) {
@@ -303,6 +303,7 @@
       ctx.clearRect(0, 0, width, height);
       if (model.view === 'surface3d') drawSurface3D(ctx, width, height);
       else drawHeatmap(ctx, width, height);
+      drawHoverCrosshair(ctx,width,height);
     }
 
     function drawHeatmap(ctx, width, height) {
@@ -565,6 +566,18 @@
       }
     }
 
+
+    function drawHoverCrosshair(ctx,width,height){
+      if(!model.hover)return;
+      ctx.save();ctx.strokeStyle='rgba(15,118,110,.72)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+      ctx.beginPath();ctx.moveTo(model.hover.x,0);ctx.lineTo(model.hover.x,height);ctx.moveTo(0,model.hover.y);ctx.lineTo(width,model.hover.y);ctx.stroke();
+      ctx.setLineDash([]);ctx.fillStyle='#0f766e';ctx.beginPath();ctx.arc(model.hover.x,model.hover.y,3,0,Math.PI*2);ctx.fill();ctx.restore();
+    }
+    function setCameraPreset(name){
+      const presets={front:{yaw:0,pitch:.32,zoom:1},side:{yaw:Math.PI/2,pitch:.32,zoom:1},top:{yaw:0,pitch:1.18,zoom:1}};
+      if(presets[name]){model.camera=Object.assign({},presets[name]);draw();}
+    }
+
     function setView(view) {
       model.view = view;
       ui.viewButtons.forEach(button => {
@@ -573,6 +586,7 @@
         button.setAttribute('aria-pressed', active ? 'true' : 'false');
       });
       ui.reset.classList.toggle('hidden', view !== 'surface3d');
+      document.querySelectorAll('.landscape-camera-preset').forEach(button=>button.classList.toggle('hidden',view!=='surface3d'));
       ui.canvas.style.cursor = view === 'surface3d' ? 'grab' : 'crosshair';
       draw();
     }
@@ -625,10 +639,8 @@
       ui.run.addEventListener('click', scan);
       ui.apply.addEventListener('click', applySelected);
       ui.viewButtons.forEach(button => button.addEventListener('click', () => setView(button.dataset.landscapeView)));
-      ui.reset.addEventListener('click', () => {
-        model.camera = { yaw: -0.62, pitch: 0.58, zoom: 1.0 };
-        draw();
-      });
+      ui.reset.addEventListener('click', () => { model.camera = { yaw: -0.62, pitch: 0.58, zoom: 1.0 }; draw(); });
+      document.querySelectorAll('[data-landscape-camera]').forEach(button=>button.addEventListener('click',()=>setCameraPreset(button.dataset.landscapeCamera)));
 
       ui.canvas.addEventListener('pointerdown', event => {
         if (model.view !== 'surface3d') return;
@@ -639,7 +651,7 @@
         ui.canvas.style.cursor = 'grabbing';
       });
       ui.canvas.addEventListener('pointermove', event => {
-        if (!model.dragging || !model.pointer || model.view !== 'surface3d') return;
+        if (!model.dragging || !model.pointer || model.view !== 'surface3d') { const rect=ui.canvas.getBoundingClientRect();model.hover={x:event.clientX-rect.left,y:event.clientY-rect.top};draw();return; }
         const dx = event.clientX - model.pointer.x;
         const dy = event.clientY - model.pointer.y;
         if (Math.abs(dx) + Math.abs(dy) > 2) model.dragMoved = true;
@@ -655,10 +667,8 @@
         if (!model.dragMoved) selectFromCanvas(event.clientX, event.clientY);
       };
       ui.canvas.addEventListener('pointerup', finishPointer);
-      ui.canvas.addEventListener('pointercancel', () => {
-        model.dragging = false;
-        ui.canvas.style.cursor = 'grab';
-      });
+      ui.canvas.addEventListener('pointercancel', () => { model.dragging = false; ui.canvas.style.cursor = 'grab'; });
+      ui.canvas.addEventListener('pointerleave',()=>{model.hover=null;draw();});
       ui.canvas.addEventListener('click', event => {
         if (model.view === 'heatmap') selectFromCanvas(event.clientX, event.clientY);
       });
@@ -679,7 +689,8 @@
       scan,
       draw,
       getResults: () => model.grid,
-      getState: () => ({ xKey: model.xKey, yKey: model.yKey, speed: model.speed, view: model.view })
+      getState: () => ({ xKey: model.xKey, yKey: model.yKey, speed: model.speed, view: model.view }),
+      setCameraPreset
     };
   }
 

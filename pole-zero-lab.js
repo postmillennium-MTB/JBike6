@@ -74,15 +74,15 @@
   function create(options) {
     const opts = options || {};
     const canvas = opts.canvas, speedInput = opts.speedInput, speedReadout = opts.speedReadout;
-    const selectionReadout = opts.selectionReadout, btn2D = opts.btn2D, btn3D = opts.btn3D;
+    const selectionReadout = opts.selectionReadout, hoverReadout=opts.hoverReadout, btn2D = opts.btn2D, btn3D = opts.btn3D;
     const btnReset = opts.btnReset, btnZoomIn = opts.btnZoomIn, btnZoomOut = opts.btnZoomOut;
     if (!canvas || !canvas.getContext) throw new TypeError('Pole-zero canvas is required.');
 
     const state = {
       mode: '3d', camera: { yaw: -0.62, pitch: 0.48, zoom: 1 },
       data: null, extents: { reMin: -8, reMax: 6, imMax: 8 },
-      tracks: { poles: [], zeros: [], closedPoles: [] },
-      pointer: null, dragging: false, moved: false, selected: null, plotArea: null
+      tracks: { poles: [], zeros: [], closedPoles: [] }, visible:{poles:true,zeros:true,closed:true},
+      pointer: null, dragging: false, moved: false, selected: null, plotArea: null, hover: null
     };
 
     function setupCanvas() {
@@ -154,17 +154,17 @@
     function drawCurrentMarkers(ctx, width, height, is3D) {
       const cur = state.data.current;
       const at = p => is3D ? projectRoot({ re:p.re, im:p.im, v:cur.v },width,height) : to2D(p);
-      (cur.poles || []).forEach((p,i) => {
+      if(state.visible.poles)(cur.poles || []).forEach((p,i) => {
         const q = at(p), status = classifyPole(p);
         drawCross(ctx,q,status === 'stable' ? '#059669' : status === 'unstable' ? '#e11d48' : '#d97706',5.5,2.2);
         if (state.selected && state.selected.kind === 'pole' && state.selected.index === i) drawRing(ctx,q);
       });
-      (cur.zeros || []).forEach((p,i) => {
+      if(state.visible.zeros)(cur.zeros || []).forEach((p,i) => {
         const q=at(p); ctx.save(); ctx.strokeStyle='#d97706'; ctx.lineWidth=2;
         ctx.beginPath(); ctx.arc(q.x,q.y,6,0,Math.PI*2); ctx.stroke(); ctx.restore();
         if (state.selected && state.selected.kind==='zero' && state.selected.index===i) drawRing(ctx,q);
       });
-      (cur.closedPoles || []).forEach((p,i) => {
+      if(state.visible.closed)(cur.closedPoles || []).forEach((p,i) => {
         const q=at(p); ctx.save(); ctx.strokeStyle='#4f46e5'; ctx.lineWidth=2;
         ctx.beginPath(); ctx.moveTo(q.x,q.y-5); ctx.lineTo(q.x+5,q.y); ctx.lineTo(q.x,q.y+5); ctx.lineTo(q.x-5,q.y); ctx.closePath(); ctx.stroke(); ctx.restore();
         if (state.selected && state.selected.kind==='closed' && state.selected.index===i) drawRing(ctx,q);
@@ -219,18 +219,18 @@
       ctx.fillText(data.minSpeed.toFixed(1),v0.x+5,v0.y+16);ctx.fillText(data.maxSpeed.toFixed(1),v1.x+5,v1.y+16);
 
       // Continuity-matched pole branches, colored by stable / unstable half-plane.
-      state.tracks.poles.forEach(track=>{
+      if(state.visible.poles)state.tracks.poles.forEach(track=>{
         for(let i=1;i<track.length;i++){
           const a=track[i-1],b=track[i],color=(a.re+b.re)/2 < -EPS?'rgba(5,150,105,.86)':'rgba(225,29,72,.88)';
           drawLine(ctx,projectRoot(a,width,height),projectRoot(b,width,height),color,1.85);
         }
       });
-      state.tracks.zeros.forEach(track=>{
+      if(state.visible.zeros)state.tracks.zeros.forEach(track=>{
         ctx.save();ctx.strokeStyle='rgba(217,119,6,.78)';ctx.lineWidth=1.35;ctx.setLineDash([4,3]);ctx.beginPath();
         track.forEach((p,i)=>{const q=projectRoot(p,width,height);i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y);});
         ctx.stroke();ctx.restore();
       });
-      state.tracks.closedPoles.forEach(track=>{
+      if(state.visible.closed)state.tracks.closedPoles.forEach(track=>{
         for(let i=1;i<track.length;i++)drawLine(ctx,projectRoot(track[i-1],width,height),projectRoot(track[i],width,height),'rgba(79,70,229,.68)',1.3,[4,3]);
       });
       drawCurrentMarkers(ctx,width,height,true);
@@ -289,7 +289,7 @@
     }
     function findHit(x,y) {
       const cur=state.data.current,sets=[
-        {kind:'pole',items:cur.poles||[]},{kind:'zero',items:cur.zeros||[]},{kind:'closed',items:cur.closedPoles||[]}
+        {kind:'pole',items:state.visible.poles?(cur.poles||[]):[]},{kind:'zero',items:state.visible.zeros?(cur.zeros||[]):[]},{kind:'closed',items:state.visible.closed?(cur.closedPoles||[]):[]}
       ];
       let hit=null,best=18*18;
       sets.forEach(set=>set.items.forEach((p,index)=>{
@@ -304,6 +304,7 @@
       if(!state.data)return;
       const surface=setupCanvas();surface.ctx.clearRect(0,0,surface.width,surface.height);
       if(state.mode==='3d')draw3D(surface.ctx,surface.width,surface.height);else draw2D(surface.ctx,surface.width,surface.height);
+      drawHoverCrosshair(surface.ctx,surface.width,surface.height);updateHoverReadout();
       if(speedInput){
         speedInput.min=String(state.data.minSpeed);speedInput.max=String(state.data.maxSpeed);speedInput.step='0.05';
         speedInput.value=String(Math.max(state.data.minSpeed,Math.min(state.data.maxSpeed,state.data.current.v)));
@@ -311,11 +312,25 @@
       if(speedReadout)speedReadout.textContent=state.data.current.v.toFixed(2)+' m/s';
       updateReadout();
     }
+
+    function updateHoverReadout(){if(!hoverReadout||!state.hover||!state.data)return;if(state.mode==='2d'&&state.plotArea){const a=state.plotArea,x=state.hover.x,y=state.hover.y;if(x>=a.left&&x<=a.left+a.width&&y>=a.top&&y<=a.top+a.height){const re=state.extents.reMin+(x-a.left)/a.width*(state.extents.reMax-state.extents.reMin);const im=state.extents.imMax-(y-a.top)/a.height*2*state.extents.imMax;hoverReadout.textContent='Cursor · Re(s) '+re.toFixed(3)+' s⁻¹ · Im(s) '+im.toFixed(3)+' rad/s';return;}}hoverReadout.textContent=state.mode==='3d'?'3D cursor · select a marker to inspect its exact pole/zero and speed.':'Move within the plot to read Re(s) and Im(s).';}
+    function drawHoverCrosshair(ctx,width,height){
+      if(!state.hover)return;
+      const x=state.hover.x,y=state.hover.y;
+      ctx.save();ctx.strokeStyle='rgba(15,118,110,.72)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+      ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,height);ctx.moveTo(0,y);ctx.lineTo(width,y);ctx.stroke();
+      ctx.setLineDash([]);ctx.fillStyle='#0f766e';ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();ctx.restore();
+    }
+    function setCameraPreset(name){
+      const presets={front:{yaw:0,pitch:.12,zoom:1},side:{yaw:Math.PI/2,pitch:.18,zoom:1},top:{yaw:0,pitch:1.18,zoom:1}};
+      if(presets[name]){state.camera=Object.assign({},presets[name]);render();}
+    }
+
     function setMode(mode) {
       state.mode=mode==='2d'?'2d':'3d';
       if(btn2D){btn2D.classList.toggle('active',state.mode==='2d');btn2D.setAttribute('aria-pressed',String(state.mode==='2d'));}
       if(btn3D){btn3D.classList.toggle('active',state.mode==='3d');btn3D.setAttribute('aria-pressed',String(state.mode==='3d'));}
-      canvas.style.cursor=state.mode==='3d'?'grab':'crosshair';render();
+      canvas.style.cursor=state.mode==='3d'?'grab':'crosshair';document.querySelectorAll('.pz-camera-presets').forEach(el=>el.style.display=state.mode==='3d'?'inline-flex':'none');render();
     }
     function zoom(factor){state.camera.zoom=Math.max(.55,Math.min(2.6,state.camera.zoom*factor));render();}
 
@@ -325,6 +340,8 @@
       if(btnReset)btnReset.addEventListener('click',()=>{state.camera={yaw:-.62,pitch:.48,zoom:1};render();});
       if(btnZoomIn)btnZoomIn.addEventListener('click',()=>zoom(1.16));
       if(btnZoomOut)btnZoomOut.addEventListener('click',()=>zoom(1/1.16));
+      document.querySelectorAll('[data-pz-trace]').forEach(button=>button.addEventListener('click',()=>{const key=button.dataset.pzTrace;state.visible[key]=!state.visible[key];button.classList.toggle('active',state.visible[key]);button.setAttribute('aria-pressed',String(state.visible[key]));if(state.selected&&((state.selected.kind==='pole'&&!state.visible.poles)||(state.selected.kind==='zero'&&!state.visible.zeros)||(state.selected.kind==='closed'&&!state.visible.closed)))state.selected=null;render();}));
+      document.querySelectorAll('[data-pz-camera]').forEach(button=>button.addEventListener('click',()=>setCameraPreset(button.dataset.pzCamera)));
       if(speedInput)speedInput.addEventListener('input',()=>{if(typeof opts.onSpeedChange==='function')opts.onSpeedChange(Number(speedInput.value));});
       canvas.addEventListener('pointerdown',event=>{
         state.pointer={id:event.pointerId,x:event.clientX,y:event.clientY,startX:event.clientX,startY:event.clientY};
@@ -332,7 +349,7 @@
         if(canvas.setPointerCapture)canvas.setPointerCapture(event.pointerId);
       });
       canvas.addEventListener('pointermove',event=>{
-        if(!state.pointer||state.pointer.id!==event.pointerId||!state.dragging)return;
+        if(!state.pointer||state.pointer.id!==event.pointerId||!state.dragging){const rect=canvas.getBoundingClientRect();state.hover={x:event.clientX-rect.left,y:event.clientY-rect.top};render();return;}
         const dx=event.clientX-state.pointer.x,dy=event.clientY-state.pointer.y;
         state.pointer.x=event.clientX;state.pointer.y=event.clientY;
         if(Math.abs(event.clientX-state.pointer.startX)+Math.abs(event.clientY-state.pointer.startY)>4)state.moved=true;
@@ -348,6 +365,7 @@
       };
       canvas.addEventListener('pointerup',finish);
       canvas.addEventListener('pointercancel',()=>{state.pointer=null;state.dragging=false;});
+      canvas.addEventListener('pointerleave',()=>{state.hover=null;render();});
       canvas.addEventListener('wheel',event=>{
         if(state.mode!=='3d')return;event.preventDefault();zoom(event.deltaY>0?.92:1.08);
       },{passive:false});
@@ -362,7 +380,7 @@
       state.selected=null;updateExtents();render();
     }
     bind();
-    return {update:update,render:render,setMode:setMode,zoom:zoom};
+    return {update:update,render:render,setMode:setMode,zoom:zoom,setCameraPreset:setCameraPreset,getCamera:()=>Object.assign({},state.camera)};
   }
 
   return {create:create,matchRootsToPrevious:matchRootsToPrevious,buildTracks:buildTracks,classifyPole:classifyPole};
