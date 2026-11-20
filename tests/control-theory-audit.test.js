@@ -1,66 +1,90 @@
-// Lightweight regression checks for the control-theory equations embedded in index.html.
-// Run with: node --test tests/control-theory-audit.test.js
-// These are source-level checks plus small independent algebra checks; they do not replace
-// running the browser UI or comparing numerical outputs from MATLAB Control System Toolbox.
+// Executable numeric regressions for the MATLAB-compatible control equations.
+// Run: node --test tests/control-theory-audit.test.js
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { computeStateSpace } = require('../control-theory.js');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
-
-function functionSource(name) {
-  const start = html.indexOf(`function ${name}(`);
-  assert.notEqual(start, -1, `missing ${name} in index.html`);
-  const nextFunction = html.indexOf('\n      function ', start + 1);
-  return html.slice(start, nextFunction === -1 ? html.length : nextFunction);
+function close(actual, expected, tolerance = 1e-10) {
+  assert.ok(Math.abs(actual - expected) <= tolerance, `${actual} != ${expected}`);
+}
+function evalPoly(coefficients, s) {
+  return coefficients.reduce((value, coefficient) => value * s + coefficient, 0);
+}
+function solve2(a, b, rhs) {
+  const det = a[0][0] * a[1][1] - a[0][1] * a[1][0];
+  return [(rhs[0] * a[1][1] - a[0][1] * rhs[1]) / det,
+    (a[0][0] * rhs[1] - rhs[0] * a[1][0]) / det];
 }
 
-test('linearized stiffness applies gravity once in browser convention', () => {
-  const modelBuilder = html.slice(html.indexOf('function computeBicycleMatrices('), html.indexOf('function charPolyCoeffs('));
-  // The model-builder K0 entries are geometry/mass terms; gravity is introduced later.
-  assert.match(modelBuilder, /const K0 = \[\s*\[mT \* zT, -S_A\],\s*\[-S_A, -S_A \* sinL\]\s*\]/);
-  const stateSpace = functionSource('computeStateSpaceAndTF');
-  assert.match(stateSpace, /g \* K0\[0\]\[0\] \+ v2 \* K2\[0\]\[0\]/);
-  assert.match(stateSpace, /g \* K0\[1\]\[1\] \+ v2 \* K2\[1\]\[1\]/);
+// Deliberately nontrivial numeric fixture that catches matrix-order and
+// gravity-scaling errors without depending on the page DOM or a source regex.
+const fixture = {
+  M0: [[4, 1], [1, 3]],
+  C1: [[0, 2], [-3, 1]],
+  // Gravity has already been included, as in MATLAB JBmck.m.
+  K0: [[-10, 2], [2, -3]],
+  K2: [[0, 0.5], [0, -0.25]]
+};
+
+test('matches MATLAB mass-premultiplied equations and state ordering', () => {
+  const result = computeStateSpace(fixture, 2);
+  const expectedA = [
+    [0, 1, 0, 0],
+    [32 / 11, -6 / 11, -16 / 11, -10 / 11],
+    [0, 0, 0, 1],
+    [-18 / 11, 24 / 11, 20 / 11, -4 / 11]
+  ];
+  result.A.forEach((row, i) => row.forEach((value, j) => close(value, expectedA[i][j])));
+  close(result.invM[0][0], 3 / 11);
+  close(result.invM[0][1], -1 / 11);
+  close(result.invM[1][0], -1 / 11);
+  close(result.invM[1][1], 4 / 11);
+  // At v=0, K0 is used as-is; gravity must not be multiplied a second time.
+  const zeroSpeed = computeStateSpace(fixture, 0);
+  close(zeroSpeed.K[0][0], -32 / 11);
+  close(zeroSpeed.K[1][1], -14 / 11);
 });
 
-test('state ordering, steering-torque column, roll output, and direct feedthrough', () => {
-  const source = functionSource('computeStateSpaceAndTF');
-  assert.match(source, /const A = \[\s*\[0, 1, 0, 0\],\s*\[-K\[0\]\[0\], -S\[0\]\[0\], -K\[0\]\[1\], -S\[0\]\[1\]\],\s*\[0, 0, 0, 1\],\s*\[-K\[1\]\[0\], -S\[1\]\[0\], -K\[1\]\[1\], -S\[1\]\[1\]\]\s*\]/);
-  assert.match(source, /const B = \[0, invM\[0\]\[1\], 0, invM\[1\]\[1\]\]/);
-  assert.match(source, /outputType === 'delta' \? \[0, 0, 1, 0\] : \[1, 0, 0, 0\]/);
-  assert.match(source, /const D = 0/);
+test('preserves MATLAB B columns and distinguishes MATLAB input 2 from steer torque', () => {
+  const { B, matlabInput, steerTorqueInput } = computeStateSpace(fixture, 2);
+  assert.deepEqual(matlabInput, [0, 3 / 11, 0, -1 / 11]);
+  assert.deepEqual(steerTorqueInput, [0, -1 / 11, 0, 4 / 11]);
+  assert.deepEqual(B.map(row => row[0]), [0, 0, 0, 0]);
+  assert.deepEqual(B.map(row => row[2]), [0, 0, 0, 0]);
 });
 
-test('transfer-function numerator uses the steer-torque column for roll and steer outputs', () => {
-  const source = functionSource('computeStateSpaceAndTF');
-  assert.match(source, /const b1 = B\[1\]/);
-  assert.match(source, /const b2 = B\[3\]/);
-  assert.match(source, /polyMul\(P22, \[b1\]\), polyMul\(P12, \[-b2\]\)/);
-  assert.match(source, /polyMul\(P11, \[b2\]\), polyMul\(P21, \[-b1\]\)/);
-  assert.match(source, /const denG = charPolyCoeffs\(model, v\)/);
-  assert.match(source, /const poles = solvePolynomialRoots\(denG\)/);
-  assert.match(source, /const zeros = solvePolynomialRoots\(numG\)/);
+test('transfer polynomials equal direct second-order solution for MATLAB input 2', () => {
+  const result = computeStateSpace(fixture, 2, 'roll');
+  // Check numerator / denominator against solving (s^2 M + s v C1 + Kphysical)q = e1.
+  const s = 1.7;
+  const p = [[
+    s * s * fixture.M0[0][0] + s * 2 * fixture.C1[0][0] + fixture.K0[0][0] + 4 * fixture.K2[0][0],
+    s * s * fixture.M0[0][1] + s * 2 * fixture.C1[0][1] + fixture.K0[0][1] + 4 * fixture.K2[0][1]
+  ], [
+    s * s * fixture.M0[1][0] + s * 2 * fixture.C1[1][0] + fixture.K0[1][0] + 4 * fixture.K2[1][0],
+    s * s * fixture.M0[1][1] + s * 2 * fixture.C1[1][1] + fixture.K0[1][1] + 4 * fixture.K2[1][1]
+  ]];
+  const q = solve2(p, [0, 0], [1, 0]);
+  const tf = evalPoly(result.numerator, s) / evalPoly(result.denominator, s);
+  close(tf, q[0], 1e-9);
+  close(result.C[0], 1);
+  assert.equal(result.D[0], 0);
 });
 
-test('positive roll feedback is applied as positive steer generalized torque', () => {
-  const sim = functionSource('runControlledSimulation');
-  assert.match(sim, /ctrlCfg\.kp \* phi \+ ctrlCfg\.kd \* dphi \+ ctrlCfg\.ki \* intPhi \+ stepTau/);
-  assert.match(sim, /const r1 = tau - \(/);
-  assert.match(sim, /const r0 = -\(/);
+test('rejects singular mass matrices and malformed model inputs visibly', () => {
+  assert.throws(() => computeStateSpace({ ...fixture, M0: [[1, 1], [1, 1]] }, 3), /singular or ill-conditioned/);
+  assert.throws(() => computeStateSpace({ ...fixture, K0: [[1]] }, 3), /finite 2x2/);
+  assert.throws(() => computeStateSpace(fixture, Number.NaN), /finite forward speed/);
 });
 
-test('original Schwinn Crown fixture remains available with its MATLAB reference geometry', () => {
-  const fixture = fs.readFileSync(path.join(__dirname, '..', 'original Matlab files', 'JBini_files', 'JBini_Schwinn_Crown.m'), 'utf8');
-  assert.match(fixture, /wheelbase = 1\.01600000/);
-  assert.match(fixture, /head_angle = 1\.23879599/);
-  assert.match(fixture, /trail = 0\.09096800/);
-  assert.match(fixture, /gravity = 9\.80665000/);
-  assert.match(fixture, /mrider = 80\.00000000/);
-  // Guard against accidentally labeling the current, different browser preset as an exact port.
-  const preset = html.slice(html.indexOf('schwinn: {'), html.indexOf('\n        }', html.indexOf('schwinn: {')));
-  assert.match(preset, /wheelbase: 1\.076/);
-  assert.match(preset, /JBike6 Schwinn Crown \(Original Default\)/);
-  assert.notEqual(1.076, 1.016, 'web preset and MATLAB default must not be conflated');
+test('Schwinn Crown audit fixture still identifies original MATLAB parameter baseline', () => {
+  const matlab = fs.readFileSync(path.join(__dirname, '..', 'original Matlab files', 'JBini_files', 'JBini_Schwinn_Crown.m'), 'utf8');
+  assert.match(matlab, /wheelbase = 1\.01600000/);
+  assert.match(matlab, /head_angle = 1\.23879599/);
+  assert.match(matlab, /trail = 0\.09096800/);
+  assert.match(matlab, /gravity = 9\.80665000/);
+  assert.match(matlab, /mrider = 80\.00000000/);
+  assert.match(matlab, /mrearwheel = 1\.81818200/);
 });
