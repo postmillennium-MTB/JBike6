@@ -4934,14 +4934,16 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
               !appState.analysis || !appState.analysis.model) return null;
           const { toPx } = geomTransform;
           const p = appState.params;
-          const forkXY = appState.analysis.model.forkXY;
-          if (p.rider.m > 0) {
-            const riderPoint = toPx(p.rider.x, p.rider.y);
-            if (Math.hypot(px - riderPoint.x, py - riderPoint.y) <= 23) return 'rider';
-          }
-          if (p.fork.m > 0 && forkXY) {
-            const forkPoint = toPx(forkXY.x, forkXY.y);
-            if (Math.hypot(px - forkPoint.x, py - forkPoint.y) <= 23) return 'fork';
+          const model = appState.analysis.model;
+          const components = [
+            ['rider', p.rider], ['fork', model.forkXY],
+            ['rack', p.rack], ['basket', model.basketXY], ['frame', p.frame]
+          ];
+          for (const [key, component] of components) {
+            if (!component || !(Number(component.m) > 1e-8) ||
+                !Number.isFinite(Number(component.x)) || !Number.isFinite(Number(component.y))) continue;
+            const point = toPx(Number(component.x), Number(component.y));
+            if (Math.hypot(px - point.x, py - point.y) <= 23) return key;
           }
           return null;
         };
@@ -4983,18 +4985,35 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           if (activePointers.size > 1) return;
           const hit = hitTest2D(pos.x, pos.y);
           if (hit) {
-            draggingGeomHandle = hit;
-            dragPointerId = event.pointerId;
-            const component = hit === 'rider' ? appState.params.rider : appState.params.fork;
+            const model = appState.analysis.model;
+            const component = hit === 'rider' ? appState.params.rider
+              : hit === 'fork' ? model.forkXY
+              : hit === 'basket' ? model.basketXY : appState.params[hit];
+            const movable = hit === 'rider' || hit === 'fork';
+            draggingGeomHandle = movable ? hit : null;
+            dragPointerId = movable ? event.pointerId : null;
+            const mass = Number(component && component.m);
+            const i11 = Number(component && component.I11);
+            const i22 = Number(component && component.I22);
+            const radius1 = mass > 0 && i11 >= 0 ? Math.sqrt(i11 / mass) : NaN;
+            const radius2 = mass > 0 && i22 >= 0 ? Math.sqrt(i22 / mass) : NaN;
             if (window.JBike6EngineeringInspector) window.JBike6EngineeringInspector.publish('geometry',
-              hit === 'rider' ? 'Rider center of mass' : 'Front assembly center of mass', [
-                { label: 'Mass', value: Number(component.m).toFixed(2) + ' kg' },
-                { label: 'Longitudinal position', value: Number(component.x ?? component.u).toFixed(3) + ' m' },
-                { label: 'Vertical position', value: Number(component.y ?? component.v).toFixed(3) + ' m' }
-              ], 'Drag this component in the geometry view to change its model parameters; all dependent analyses will recalculate.');
-            canvas.style.cursor = 'grabbing';
-            badge.classList.remove('hidden');
-            event.preventDefault();
+              (hit.charAt(0).toUpperCase() + hit.slice(1)) + ' inertia properties', [
+                { label: 'Mass', value: Number.isFinite(mass) ? mass.toFixed(3) + ' kg' : '—' },
+                { label: 'Center of mass', value: Number(component.x).toFixed(3) + ', ' + Number(component.y).toFixed(3) + ' m' },
+                { label: 'I₁₁', value: Number.isFinite(i11) ? i11.toExponential(3) + ' kg·m²' : '—' },
+                { label: 'I₂₂', value: Number.isFinite(i22) ? i22.toExponential(3) + ' kg·m²' : '—' },
+                { label: 'Principal radius 1', value: Number.isFinite(radius1) ? radius1.toFixed(3) + ' m' : '—' },
+                { label: 'Principal radius 2', value: Number.isFinite(radius2) ? radius2.toFixed(3) + ' m' : '—' },
+                { label: 'Principal-axis angle', value: Number.isFinite(Number(component.alphaDeg)) ? Number(component.alphaDeg).toFixed(2) + '°' : '—' }
+              ], movable
+                ? 'Drag the selected center of mass to edit its position; dependent analyses will recalculate.'
+                : 'Read-only mass and principal-inertia data from the current bicycle configuration.');
+            if (movable) {
+              canvas.style.cursor = 'grabbing';
+              badge.classList.remove('hidden');
+              event.preventDefault();
+            }
           }
         };
 
