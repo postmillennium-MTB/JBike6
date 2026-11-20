@@ -2,7 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { computeModeShape, stateMatrixFor } = require('../eigenmode-lab.js');
+const { computeModeShape, computeEigenpairMetrics, stateMatrixFor } = require('../eigenmode-lab.js');
 
 const model = {
   M: [[1, 0], [0, 2]],
@@ -63,4 +63,20 @@ test('rejects invalid speed and eigenvalue inputs', () => {
 test('reports a singular mass matrix instead of returning invalid mode data', () => {
   const singular = { ...model, M: [[1, 0], [0, 0]] };
   assert.throws(() => stateMatrixFor(singular, speed), /mass matrix is singular/);
+});
+
+
+test('visual eigenpair metrics reproduce the selected complex eigenvalue', () => {
+  const A = stateMatrixFor(model, speed);
+  const mode = computeModeShape(model, speed, leanRoot);
+  const metrics = computeEigenpairMetrics(A, mode.stateVector, leanRoot);
+  assert.ok(Math.abs(metrics.rayleigh.re - leanRoot.re) < 1e-10);
+  assert.ok(Math.abs(metrics.rayleigh.im - leanRoot.im) < 1e-10);
+  assert.ok(metrics.relativeResidual < 1e-10);
+  assert.equal(metrics.Ax.length, 4);
+  assert.equal(metrics.lambdaX.length, 4);
+});
+
+test('eigenpair metrics reject matrices or state vectors with the wrong dimensions', () => {
+  assert.throws(() => computeEigenpairMetrics([[1]], [], leanRoot), /4x4 state matrix/);
 });
