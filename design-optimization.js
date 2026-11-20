@@ -122,6 +122,8 @@
       model.selected=null;model.best=null;model.scale=0.1;model.baseSignature=signature;
       model.scanConfig=config;model.completedCandidates=0;model.validCount=0;model.scanning=true;model.cancelled=false;
       const totalCandidates=config.resolution*config.resolution;
+      ui.detail.textContent='Scanning candidate designs…';
+      ui.ranking.textContent='Candidate ranking will appear when the scan completes.';
       ui.run.disabled=true;ui.cancel.disabled=false;ui.apply.disabled=true;
       ui.run.textContent='Optimizing…';ui.progress.value=0;
       setStatus('Evaluating '+totalCandidates+' candidate designs over '+config.speedSteps+' speed samples each…','working');
