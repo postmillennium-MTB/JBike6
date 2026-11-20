@@ -59,14 +59,6 @@
   };
   const clone = object => JSON.parse(JSON.stringify(object));
 
-  function colorForScore(score, scale) {
-    if (!Number.isFinite(score)) return '#b9b9ae';
-    const t=clamp(score/Math.max(scale,1e-9),-1,1);
-    const low=[52,115,108], mid=[242,240,232], high=[189,87,54];
-    const a=t<0?low:mid, b=t<0?mid:high, f=Math.abs(t);
-    return 'rgb('+a.map((value,index)=>Math.round(value+(b[index]-value)*f)).join(', ')+')';
-  }
-
   function create(options) {
     const {state,assembleWhippleModel,maxRealEigenvalue,axes,onApply}=options||{};
     if(!state||typeof assembleWhippleModel!=='function'||typeof maxRealEigenvalue!=='function'||!axes){
