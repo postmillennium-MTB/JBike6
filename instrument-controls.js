@@ -18,6 +18,27 @@
     const match = select.selectedOptions[0].textContent.match(/\(([^)]+)\)\s*$/);
     return match ? match[1].trim() : '';
   }
+  function tokenizeMeasurements(raw) {
+    if (typeof raw !== 'string' || !raw.trim()) return null;
+    const expression = new RegExp(
+      '([+−-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+-]?\\d+)?)(\\s*)(N·m·s/rad|N·m/\\(rad·s\\)|N·m/rad|N·m|m/s²|km/h|m/s|mph|mm|kg|Hz|rad|m|s|°|%|")',
+      'gi'
+    );
+    const tokens = [];
+    let cursor = 0;
+    let match;
+    let found = false;
+    while ((match = expression.exec(raw)) !== null) {
+      found = true;
+      if (match.index > cursor) tokens.push({ type: 'text', text: raw.slice(cursor, match.index) });
+      tokens.push({ type: 'measurement', value: match[1], spacing: match[2], unit: match[3] });
+      cursor = match.index + match[0].length;
+    }
+    if (!found) return null;
+    if (cursor < raw.length) tokens.push({ type: 'text', text: raw.slice(cursor) });
+    return tokens;
+  }
+
   function decorateNumberInput(input) {
     if (!input || input.dataset.instrumentDecorated === 'true') return;
     const wrapper = document.createElement('span');
@@ -48,34 +69,26 @@
     if (!element) return;
     const raw = element.textContent.trim();
     if (!raw || element.dataset.instrumentReadout === raw) return;
+    const tokens = tokenizeMeasurements(raw);
+    if (!tokens) return;
 
-    const expression = new RegExp(
-      '([+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:e[+-]?\\d+)?)\\s*(N·m·s/rad|N·m/\\(rad·s\\)|N·m/rad|N·m|m/s²|km/h|m/s|mph|mm|kg|Hz|rad|m|s|°|%|")',
-      'gi'
-    );
     const fragments = [];
-    let cursor = 0;
-    let match;
-    let found = false;
-
-    while ((match = expression.exec(raw)) !== null) {
-      found = true;
-      if (match.index > cursor) fragments.push(document.createTextNode(raw.slice(cursor, match.index)));
-
+    tokens.forEach(token => {
+      if (token.type === 'text') {
+        fragments.push(document.createTextNode(token.text));
+        return;
+      }
       const value = document.createElement('span');
       value.className = 'instrument-readout-value';
-      value.textContent = match[1];
-
+      value.textContent = token.value;
+      fragments.push(value);
+      if (token.spacing) fragments.push(document.createTextNode(token.spacing));
       const unit = document.createElement('small');
       unit.className = 'instrument-readout-unit';
-      unit.textContent = match[2] === '"' ? 'in' : match[2];
+      unit.textContent = token.unit;
+      fragments.push(unit);
+    });
 
-      fragments.push(value, unit);
-      cursor = match.index + match[0].length;
-    }
-
-    if (!found) return;
-    if (cursor < raw.length) fragments.push(document.createTextNode(raw.slice(cursor)));
     element.replaceChildren(...fragments);
     element.dataset.instrumentReadout = raw;
   }
@@ -115,6 +128,26 @@
       };
       input.addEventListener('input', update, { passive: true });
       input.addEventListener('change', update, { passive: true });
+
+      // Keep track fill synchronized when presets or linked controls assign .value.
+      if (typeof HTMLInputElement !== 'undefined') {
+        const nativeValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+        if (nativeValue && nativeValue.get && nativeValue.set) {
+          try {
+            Object.defineProperty(input, 'value', {
+              configurable: true,
+              enumerable: nativeValue.enumerable,
+              get() { return nativeValue.get.call(this); },
+              set(nextValue) {
+                nativeValue.set.call(this, nextValue);
+                update();
+              }
+            });
+          } catch (error) {
+            // Input/change listeners remain as a safe fallback in restrictive browsers.
+          }
+        }
+      }
       update();
     });
     document.querySelectorAll('input[type="number"]').forEach(input => {
@@ -129,6 +162,10 @@
       readouts.forEach(element => observer.observe(element, { childList: true, characterData: true, subtree: true }));
     }
   }
+  const api = { tokenizeMeasurements };
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  if (typeof window !== 'undefined') window.JBike6InstrumentControls = api;
+
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', decorate, { once: true });
     else decorate();
