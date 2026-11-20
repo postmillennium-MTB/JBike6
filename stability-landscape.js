@@ -390,7 +390,7 @@
       ctx.fillStyle = grad;
       ctx.fillRect(legendX, legendY, legendW, 8);
       ctx.fillStyle = '#68716c';
-      ctx.font = '10px "IBM Plex Sans", sans-serif';
+      ctx.font = '9px "IBM Plex Mono", monospace';
       ctx.textAlign = 'left';
       ctx.fillText('Stable · −' + format(scale, 2), legendX, legendY + 21);
       ctx.textAlign = 'center';
