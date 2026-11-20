@@ -1170,8 +1170,8 @@
     .pz-toolbar .btn-action { padding:.3rem .52rem; font-size:.68rem; }
     .pz-speed-control { display:flex; flex:1 1 180px; align-items:center; gap:.55rem; min-width:160px; }
     .pz-speed-control label { color:var(--text-muted); font-size:.66rem; font-weight:700; white-space:nowrap; }
-    .pz-speed-control input { width:100%; min-width:75px; accent-color:#7c3aed; }
-    .pz-speed-control strong { color:#5b21b6; font:.68rem var(--font-mono); white-space:nowrap; }
+    .pz-speed-control input { width:100%; min-width:75px; accent-color:#bd5736; }
+    .pz-speed-control strong { color:#bd5736; font:.68rem var(--font-mono); white-space:nowrap; }
     .pz-canvas-box { height:390px; background:linear-gradient(160deg,#fbfdff,#f3f7fb); }
     #poleZeroCanvas { touch-action:none; cursor:grab; }
     .pz-canvas-hint { position:absolute; right:9px; bottom:8px; padding:.24rem .45rem; border-radius:6px; background:rgba(15,23,42,.78); color:#e2e8f0; font-size:.59rem; pointer-events:none; }
@@ -1795,7 +1795,7 @@
         <!-- 1. WHEEL & TIRE SIZING (MULLET LAB) -->
         <div class="panel-card">
           <div class="panel-head">
-            <h2 class="panel-title"><span class="dot" style="background:#059669;"></span>Wheel &amp; Tire Sizing (Mullet Lab)</h2>
+            <h2 class="panel-title"><span class="dot" style="background:#34736c;"></span>Wheel &amp; Tire Sizing (Mullet Lab)</h2>
             <span class="panel-hint">29" / 27.5" / Custom</span>
           </div>
 
@@ -1913,7 +1913,7 @@
         <!-- 3. RIDER & MASS DISTRIBUTION -->
         <div class="panel-card">
           <div class="panel-head">
-            <h2 class="panel-title"><span class="dot" style="background:#d97706;"></span>Rider &amp; Mass Distribution</h2>
+            <h2 class="panel-title"><span class="dot" style="background:#bd5736;"></span>Rider &amp; Mass Distribution</h2>
             <div class="seg-group light">
               <button type="button" id="btnStanceSeated" class="seg-btn active">Seated</button>
               <button type="button" id="btnStanceAttack" class="seg-btn">Attack</button>
@@ -2016,7 +2016,7 @@
             </div>
             <div class="viz-toolbar geometry-viz-toolbar">
               <label id="dumbbellToggleWrap" class="btn-action" style="cursor:pointer;" title="Show component and assembly principal-inertia glyphs in both views">
-                <input id="chkShowDumbbells" type="checkbox" checked style="accent-color:#059669;" />
+                <input id="chkShowDumbbells" type="checkbox" checked style="accent-color:#bd5736;" />
                 <span>Principal inertia glyphs</span>
               </label>
               <button type="button" id="btnZoomGeomOut" class="btn-action hidden" title="Zoom out" aria-label="Zoom out">−</button>
@@ -2035,14 +2035,14 @@
             <div id="geom3dHint" class="camera-hint hidden">Drag to orbit &bull; Pinch or use + / − to zoom &bull; Live roll and steering motion</div>
           </div>
           <div class="geometry-legend" id="geomLegend" aria-label="Geometry and inertia legend">
-            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#475569;"></span>Frame</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#46514f;"></span>Frame</span>
             <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#059669;"></span>Rider</span>
-            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#6366f1;"></span>Rack</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#747a72;"></span>Rack</span>
             <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#d97706;"></span>Fork</span>
-            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#0891b2;"></span>Basket</span>
-            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#0f766e;"></span>Rear assembly axes</span>
-            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#c2410c;"></span>Steering assembly axes</span>
-            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#7c3aed;"></span>Total CoM</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#34736c;"></span>Basket</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#34736c;"></span>Rear assembly axes</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#bd5736;"></span>Steering assembly axes</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#202a2e;"></span>Total CoM</span>
             <span class="geometry-legend-note">Inertia glyphs show scaled radii of gyration, not physical component dimensions.</span>
           </div>
         </section>
@@ -2072,7 +2072,7 @@
             <span class="leg-item"><span class="leg-swatch" style="background:#06b6d4;"></span>Im(&lambda;) Oscillation Freq (rad/s)</span>
             <span class="leg-item"><span class="leg-swatch" style="background:rgba(16,185,129,0.35);height:10px;"></span>Self-Stable Zone (Re(&lambda;) &lt; 0)</span>
             <span class="leg-item"><span class="leg-swatch" style="background:#d946ef;width:3px;height:12px;"></span>Double Root</span>
-            <span id="legendPinnedItem" class="leg-item hidden" style="color:#4f46e5;"><span class="leg-swatch" style="border-top:2px dashed #4f46e5;background:transparent;"></span>Pinned: <strong id="legendPinnedName">Baseline</strong></span>
+            <span id="legendPinnedItem" class="leg-item hidden" style="color:#202a2e;"><span class="leg-swatch" style="border-top:2px dashed #4f46e5;background:transparent;"></span>Pinned: <strong id="legendPinnedName">Baseline</strong></span>
           </div>
 
           <div class="canvas-stage root-h">
@@ -2256,8 +2256,8 @@
             </div>
           </div>
           <div class="legend-bar pz-trace-legend" style="margin-bottom:0.4rem;" role="group" aria-label="Visible pole-zero traces">
-            <button type="button" class="pz-trace-toggle active" data-pz-trace="poles" aria-pressed="true"><strong style="color:#059669;">×</strong> Open-loop poles</button>
-            <button type="button" class="pz-trace-toggle active" data-pz-trace="zeros" aria-pressed="true"><strong style="color:#d97706;">○</strong> Transmission zeros</button>
+            <button type="button" class="pz-trace-toggle active" data-pz-trace="poles" aria-pressed="true"><strong style="color:#34736c;">×</strong> Open-loop poles</button>
+            <button type="button" class="pz-trace-toggle active" data-pz-trace="zeros" aria-pressed="true"><strong style="color:#bd5736;">○</strong> Transmission zeros</button>
             <button type="button" class="pz-trace-toggle active" data-pz-trace="closed" aria-pressed="true"><strong style="color:#4f46e5;">◆</strong> Closed-loop poles</button>
           </div>
           <div class="pz-canvas-box">
