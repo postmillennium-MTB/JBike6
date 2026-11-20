@@ -6,6 +6,7 @@ const {
   sampleResponse,
   findWorstResponse,
   niceStep,
+  precisionForStep,
   responseDomain
 } = require('../design-optimization.js');
 
@@ -63,4 +64,11 @@ test('empty response domain has a finite symmetric fallback', () => {
   const domain = responseDomain([[{ speed: 2, value: null }]]);
   assert.deepEqual([domain.min, domain.max], [-1, 1]);
   assert.ok(domain.ticks.every(Number.isFinite));
+});
+
+test('vertical axis precision preserves small growth-rate increments', () => {
+  assert.equal(precisionForStep(0.2), 1);
+  assert.equal(precisionForStep(0.005), 3);
+  assert.equal(precisionForStep(0.0002), 4);
+  assert.equal(precisionForStep(5), 0);
 });
