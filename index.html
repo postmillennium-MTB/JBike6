@@ -2088,6 +2088,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
   <!-- JAVASCRIPT PHYSICS ENGINE, 3D PROJECTION & INTERACTIVE RENDERERS      -->
   <!-- ===================================================================== -->
   <script src="stability-landscape.js"></script>
+  <script src="matlab-reference.js"></script>
   <script>
     (function () {
       'use strict';
@@ -4069,6 +4070,49 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.lineCap = 'round';
           ctx.beginPath(); ctx.moveTo(a2.x, a2.y); ctx.lineTo(b2.x, b2.y); ctx.stroke();
         };
+        // Principal-inertia glyphs: wireframe radii of gyration, not literal part shapes.
+        // The common scale keeps small components visible while preserving relative axis ratios.
+        const drawPrincipalInertiaGlyph = (comp, transformFn, color, label) => {
+          if (!comp || !(comp.m > 1e-8)) return;
+          const moments = [comp.I11, comp.I22, comp.Izz].map(v => Math.max(0, Number(v) || 0));
+          if (moments.every(v => v <= 1e-12)) return;
+          const radii = moments.map(v => Math.max(0.025, Math.min(0.48, Math.sqrt(v / comp.m) * 0.72)));
+          const alpha = (Number(comp.alphaDeg) || 0) * DEG2RAD;
+          const ca = Math.cos(alpha), sa = Math.sin(alpha);
+          const point = (lx, ly, lz) => transformFn(
+            comp.x + lx * ca - ly * sa,
+            comp.y + lx * sa + ly * ca,
+            lz
+          );
+          const rings = [
+            t => [radii[0] * Math.cos(t), radii[1] * Math.sin(t), 0],
+            t => [radii[0] * Math.cos(t), 0, radii[2] * Math.sin(t)],
+            t => [0, radii[1] * Math.cos(t), radii[2] * Math.sin(t)]
+          ];
+          ctx.save();
+          ctx.strokeStyle = color;
+          ctx.globalAlpha = 0.72;
+          ctx.lineWidth = 1.25;
+          for (const ring of rings) {
+            ctx.beginPath();
+            for (let i = 0; i <= 36; i++) {
+              const v = ring(i / 36 * Math.PI * 2);
+              const q = point(v[0], v[1], v[2]);
+              const screen = proj(q.x, q.y, q.z);
+              if (i === 0) ctx.moveTo(screen.x, screen.y);
+              else ctx.lineTo(screen.x, screen.y);
+            }
+            ctx.stroke();
+          }
+          const center = point(0, 0, 0);
+          const centerPx = proj(center.x, center.y, center.z);
+          ctx.globalAlpha = 0.95;
+          ctx.fillStyle = color;
+          ctx.beginPath(); ctx.arc(centerPx.x, centerPx.y, 2.7, 0, Math.PI * 2); ctx.fill();
+          ctx.font = '600 9px system-ui, sans-serif';
+          ctx.fillText(label, centerPx.x + 5, centerPx.y - 5);
+          ctx.restore();
+        };
 
         // Rear triangles (with slight rear hub spacing +/- 0.07m)
         const rearHubL = leanPoint(0, rR, -0.07);
@@ -4116,6 +4160,14 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.beginPath(); ctx.arc(c2.x, c2.y, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
         }
 
+        // Principal inertia ellipsoids follow the same rigid-body transforms as the bicycle.
+        // Their axes are scaled radii of gyration sqrt(Iprincipal / m).
+        drawPrincipalInertiaGlyph(p.frame, leanPoint, '#475569', 'Frame');
+        drawPrincipalInertiaGlyph(p.rider, leanPoint, '#059669', 'Rider');
+        drawPrincipalInertiaGlyph(p.rack, leanPoint, '#6366f1', 'Rack');
+        if (model.forkXY) drawPrincipalInertiaGlyph(model.forkXY, steerAndLeanPoint, '#d97706', 'Fork');
+        if (model.basketXY) drawPrincipalInertiaGlyph(model.basketXY, steerAndLeanPoint, '#0891b2', 'Basket');
+
         // HUD Telemetry Overlay
         ctx.fillStyle = '#0f172a';
         ctx.font = '700 12px JetBrains Mono, monospace';
@@ -4125,6 +4177,9 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.fillText(`Lean φ(t) = ${(phi * RAD2DEG).toFixed(2)}°`, 14, 40);
         ctx.fillStyle = '#d97706';
         ctx.fillText(`Steer δ(t) = ${(delta * RAD2DEG).toFixed(2)}°`, 14, 58);
+        ctx.fillStyle = '#475569';
+        ctx.font = '10px system-ui, sans-serif';
+        ctx.fillText('Wireframes: principal radii of gyration (scaled)', 14, 75);
       }
 
       function drawGeometryCanvas() {
