@@ -317,7 +317,7 @@
       if(btn3D){btn3D.classList.toggle('active',state.mode==='3d');btn3D.setAttribute('aria-pressed',String(state.mode==='3d'));}
       canvas.style.cursor=state.mode==='3d'?'grab':'crosshair';render();
     }
-    function zoom(factor){state.camera.zoom=Math.max(.55,Math.min(2.6,state.camera.zoom*factor));render();}
+    function zoom(factor){if(state.mode!=='3d')return;state.camera.zoom=Math.max(.55,Math.min(2.6,state.camera.zoom*factor));render();}
 
     function bind() {
       if(btn2D)btn2D.addEventListener('click',()=>setMode('2d'));
