@@ -330,7 +330,7 @@
       ctx.fillStyle = '#f2f0e8';
       ctx.fillRect(0, 0, width, height);
       ctx.fillStyle = '#68716c';
-      ctx.font = '600 11px Inter, system-ui, sans-serif';
+      ctx.font = '600 11px "IBM Plex Sans", sans-serif';
       ctx.fillText('MAXIMUM REAL EIGENVALUE · s⁻¹', left, 17);
 
       for (let iy = 0; iy < ny; iy++) {
@@ -359,7 +359,7 @@
       ctx.lineWidth = 1;
       ctx.strokeRect(left, top, plotW, plotH);
       ctx.fillStyle = '#46514f';
-      ctx.font = '11px Inter, system-ui, sans-serif';
+      ctx.font = '11px "IBM Plex Sans", sans-serif';
       ctx.textAlign = 'center';
       for (let t = 0; t <= 4; t++) {
         const ix = Math.round(t * (nx - 1) / 4);
@@ -374,7 +374,7 @@
       }
       ctx.textAlign = 'center';
       ctx.fillStyle = '#46514f';
-      ctx.font = '600 12px Inter, system-ui, sans-serif';
+      ctx.font = '600 12px "IBM Plex Sans", sans-serif';
       ctx.fillText(getAxis(model.xKey).short + ' (' + getAxis(model.xKey).unit + ')', left + plotW / 2, height - 12);
       ctx.save();
       ctx.translate(18, top + plotH / 2);
@@ -390,7 +390,7 @@
       ctx.fillStyle = grad;
       ctx.fillRect(legendX, legendY, legendW, 8);
       ctx.fillStyle = '#68716c';
-      ctx.font = '10px Inter, system-ui, sans-serif';
+      ctx.font = '10px "IBM Plex Sans", sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText('Stable · −' + format(scale, 2), legendX, legendY + 21);
       ctx.textAlign = 'center';
@@ -427,7 +427,7 @@
       ctx.fillStyle = '#f2f0e8';
       ctx.fillRect(0, 0, width, height);
       ctx.fillStyle = '#68716c';
-      ctx.font = '600 11px Inter, system-ui, sans-serif';
+      ctx.font = '600 11px "IBM Plex Sans", sans-serif';
       ctx.fillText('3D STABILITY SURFACE · Z = MAX Re(λ)', 24, 22);
 
       const zeroPlane = [
@@ -536,14 +536,14 @@
         ctx.stroke();
       });
       ctx.fillStyle = '#46514f';
-      ctx.font = '600 11px Inter, system-ui, sans-serif';
+      ctx.font = '600 11px "IBM Plex Sans", sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(getAxis(model.xKey).short + ' (' + getAxis(model.xKey).unit + ')', xEnd.x + 12, xEnd.y + 17);
       ctx.fillText(getAxis(model.yKey).short + ' (' + getAxis(model.yKey).unit + ')', yEnd.x - 8, yEnd.y + 17);
       ctx.fillText('max Re(λ) · s⁻¹', zEnd.x - 8, zEnd.y - 12);
       ctx.textAlign = 'left';
       ctx.fillStyle = '#68716c';
-      ctx.font = '10px Inter, system-ui, sans-serif';
+      ctx.font = '10px "IBM Plex Sans", sans-serif';
       ctx.fillText('Drag to rotate · Scroll to zoom · Select a surface point', 24, height - 18);
       model.plot = null;
     }
