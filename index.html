@@ -1268,6 +1268,41 @@
       .kpi-card, .panel-card, .lab-nav-bar .seg-btn { transition: none; }
     }
 
+    /* Phone layout: keep the identity compact and put the model controls on a tidy grid. */
+    @media (max-width: 700px) {
+      .app-header { position: relative; }
+      .header-inner {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: .65rem;
+        padding: .7rem .85rem .8rem;
+      }
+      .brand-group { align-items: flex-start; gap: .65rem; min-width: 0; }
+      .brand-icon { width: 36px; height: 36px; border-radius: 11px; }
+      .brand-icon svg { width: 21px; height: 21px; }
+      .brand-title-row { display: block; min-width: 0; }
+      .brand-title { font-size: .98rem; line-height: 1.2; }
+      .brand-badge { display: inline-flex; margin-top: .28rem; font-size: .62rem; }
+      .brand-sub { display: none; }
+      .header-actions {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: .45rem;
+        width: 100%;
+      }
+      .header-actions .seg-group { justify-self: start; }
+      .header-actions .preset-select { grid-column: 1 / -1; width: 100%; min-width: 0; }
+      .header-actions .hdr-btn { min-height: 38px; padding: .42rem .55rem; }
+      .header-actions #btnResetPreset { grid-column: 1; }
+      .header-actions #btnOpenJsonModal { grid-column: 2; }
+      .main-wrap { padding: .65rem .65rem 1.5rem; gap: .75rem; }
+      .panel-card { padding: .85rem; }
+      .viz-title { font-size: .92rem; }
+      .viz-sub { font-size: .7rem; line-height: 1.4; }
+      .canvas-stage.geom-h { height: clamp(280px, 78vw, 350px); min-height: 280px; }
+      #geomCanvas { display: block; width: 100%; height: 100%; min-height: 280px; touch-action: pan-y; }
+    }
   </style>
 </head>
 <body>
@@ -4129,12 +4164,48 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
       function drawGeometryCanvas() {
         const canvas = document.getElementById('geomCanvas');
+        if (!canvas) return;
+        const rect = canvas.getBoundingClientRect();
+        // iOS Safari can report a zero-size canvas during the first layout pass.
+        // Retry after layout rather than permanently clearing an invisible canvas.
+        if (rect.width < 2 || rect.height < 2) {
+          requestAnimationFrame(() => {
+            const next = canvas.getBoundingClientRect();
+            if (next.width >= 2 && next.height >= 2) drawGeometryCanvas();
+          });
+          return;
+        }
         const { ctx, width, height } = setupHiDPICanvas(canvas);
+        if (!ctx || !width || !height) return;
         ctx.clearRect(0, 0, width, height);
-        if (appState.geomViewMode === '3d') {
-          drawGeometryCanvas3D(ctx, width, height);
-        } else {
-          drawGeometryCanvas2D(ctx, width, height);
+        try {
+          if (!appState.analysis || !appState.analysis.model) {
+            throw new Error('Bicycle model is still initializing');
+          }
+          if (appState.geomViewMode === '3d') {
+            drawGeometryCanvas3D(ctx, width, height);
+          } else {
+            drawGeometryCanvas2D(ctx, width, height);
+          }
+          canvas.dataset.renderState = 'ready';
+          canvas.removeAttribute('aria-label');
+        } catch (err) {
+          // Never leave a silent blank plot: show a readable diagnostic on the canvas.
+          canvas.dataset.renderState = 'error';
+          canvas.setAttribute('aria-label', 'Geometry diagram failed to render');
+          ctx.save();
+          ctx.fillStyle = '#f8fafc';
+          ctx.fillRect(0, 0, width, height);
+          ctx.fillStyle = '#b91c1c';
+          ctx.font = '600 14px system-ui, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('Geometry diagram could not render', width / 2, height / 2 - 12);
+          ctx.fillStyle = '#64748b';
+          ctx.font = '12px system-ui, sans-serif';
+          const message = String(err && err.message ? err.message : err).slice(0, 100);
+          ctx.fillText(message, width / 2, height / 2 + 12, Math.max(100, width - 32));
+          ctx.restore();
+          console.error('[JBike6] Geometry canvas render failed:', err);
         }
       }
 
@@ -5409,6 +5480,16 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         initGeometryCanvasInteractions();
         initRootLocusInteractions();
         recomputeAll(true);
+        // Re-render when mobile browser chrome/orientation changes the canvas box.
+        if ('ResizeObserver' in window) {
+          const geometryStage = document.querySelector('.canvas-stage.geom-h');
+          if (geometryStage) {
+            const geometryObserver = new ResizeObserver(() => requestAnimationFrame(drawGeometryCanvas));
+            geometryObserver.observe(geometryStage);
+          }
+        }
+        window.addEventListener('orientationchange', () => requestAnimationFrame(drawGeometryCanvas), { passive: true });
+        requestAnimationFrame(() => requestAnimationFrame(drawGeometryCanvas));
         requestAnimationFrame(animationLoop);
       });
     })();
