@@ -909,3 +909,38 @@ input[type="range"]:not(.sci-slider)::-moz-range-track {
 @media (max-width: 760px) {
   .controls-col > .panel-card > .panel-head::before { margin-top: 1px; }
 }
+
+/* Geometry key is a compact drafting index, not a second panel of UI cards. */
+.geometry-legend {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  align-items: center;
+  gap: 5px 12px;
+  padding-top: 8px;
+  margin-top: 7px;
+  border-top: 1px solid var(--rule);
+}
+.geometry-legend-item {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-soft);
+  font: 500 .57rem var(--font-mono);
+}
+.geometry-legend-swatch { flex: 0 0 10px; width: 10px; height: 4px; }
+.geometry-legend-note {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font: .57rem/1.4 var(--font-body);
+}
+@media (max-width: 1100px) {
+  .geometry-legend { grid-template-columns: repeat(3,minmax(0,1fr)); }
+}
+@media (max-width: 760px) {
+  .geometry-legend { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 5px 8px; }
+}
+@media (max-width: 390px) {
+  .geometry-legend { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .geometry-legend-note { font-size: .54rem; }
+}
