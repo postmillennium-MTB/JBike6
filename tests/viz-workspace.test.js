@@ -1,11 +1,18 @@
 'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const fs=require('node:fs');
-const source=fs.readFileSync(require('node:path').join(__dirname,'..','viz-workspace.js'),'utf8');
+const workspace=require('../viz-workspace.js');
 test('workspace navigator exposes the eight primary analysis destinations',()=>{
-  for(const label of ['Geometry','Stability','Ride test','Control theory','Eigenmodes','Pole-zero','Stability landscape','Optimization']) assert.ok(source.includes(label));
+  assert.deepEqual(workspace.items.map(item=>item[0]),['Geometry','Stability','Ride test','Control theory','Eigenmodes','Pole-zero','Stability landscape','Optimization']);
+});
+test('destinations route to the correct lab tabs',()=>{
+  const routes=Object.fromEntries(workspace.items.map(([label,,tab])=>[label,tab]));
+  assert.equal(routes['Eigenmodes'],'control');
+  assert.equal(routes['Pole-zero'],'control');
+  assert.equal(routes['Stability landscape'],'landscape');
+  assert.equal(routes['Optimization'],'optimization');
+  assert.equal(routes['Geometry'],'overview');
 });
 test('workspace navigation honors reduced-motion preferences',()=>{
-  assert.match(source,/prefers-reduced-motion/);
+  assert.match(workspace.init.toString(),/prefers-reduced-motion/);
 });
