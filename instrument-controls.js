@@ -117,6 +117,22 @@
       };
       input.addEventListener('input', update, { passive: true });
       input.addEventListener('change', update, { passive: true });
+
+      // Keep the track fill synchronized when presets or linked controls assign .value.
+      if (typeof HTMLInputElement !== 'undefined') {
+        const nativeValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+        if (nativeValue && nativeValue.get && nativeValue.set) {
+          Object.defineProperty(input, 'value', {
+            configurable: true,
+            enumerable: nativeValue.enumerable,
+            get() { return nativeValue.get.call(this); },
+            set(nextValue) {
+              nativeValue.set.call(this, nextValue);
+              update();
+            }
+          });
+        }
+      }
       update();
     });
     document.querySelectorAll('input[type="number"]').forEach(input => {
