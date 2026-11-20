@@ -27,9 +27,11 @@
         const index=targets.findIndex(item=>item.target===visible.target);
         if(index>=0)buttons.forEach((button,i)=>{if(i===index)button.setAttribute('aria-current','location');else button.removeAttribute('aria-current');});
       },{rootMargin:'-18% 0px -68% 0px',threshold:[0,.15,.35,.6]});
-      targets.forEach(item=>observer.observe(item.target.closest('section')||item.target));
+      targets.forEach(item=>observer.observe(item.target));
     }
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
-  if(root)root.JBike6VizWorkspace={init:init,items:ITEMS.slice()};
+  if(typeof document!=='undefined'){if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();}
+  const api={init:init,items:ITEMS.slice()};
+  if(root)root.JBike6VizWorkspace=api;
+  if(typeof module==='object'&&module.exports)module.exports=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
