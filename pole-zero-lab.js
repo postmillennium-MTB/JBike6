@@ -235,7 +235,7 @@
       });
       drawCurrentMarkers(ctx,width,height,true);
       ctx.fillStyle='#34736c';ctx.font='700 10px "IBM Plex Sans", sans-serif';ctx.fillText('Re(s) = 0 · stability boundary',12,18);
-      ctx.fillStyle='#bd5736';ctx.fillText('Dashed amber plane · selected operating speed',12,33);
+      ctx.fillStyle='#bd5736';ctx.fillText('Dashed orange plane · selected operating speed',12,33);
     }
 
     function to2D(p) {
