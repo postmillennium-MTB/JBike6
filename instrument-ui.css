@@ -631,3 +631,18 @@ button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px s
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+/* Physical unit rails on number fields. The native numeric input remains editable. */
+.instrument-input-wrap { position: relative; display: block; width: 100%; min-width: 0; }
+.instrument-input-wrap > input[type="number"] { display: block; width: 100%; padding-right: 3.5rem; }
+.instrument-unit {
+  position: absolute;
+  right: 7px;
+  bottom: 7px;
+  color: var(--muted);
+  font: 500 .53rem var(--font-mono);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.instrument-unit.is-empty { display: none; }
