@@ -237,7 +237,7 @@
         ctx.fillStyle=candidate?colorForScore(candidate.score,model.scale):'#dedcd2';
         ctx.fillRect(x,y,cellW+0.5,cellH+0.5);
       }
-      ctx.strokeStyle='rgba(71,85,105,.5)';ctx.lineWidth=1;ctx.strokeRect(pad.left,pad.top,plotW,plotH);
+      ctx.strokeStyle='rgba(104,113,108,.48)';ctx.lineWidth=1;ctx.strokeRect(pad.left,pad.top,plotW,plotH);
       const xAxis=getAxis(model.scanConfig.xKey),yAxis=getAxis(model.scanConfig.yKey);
       ctx.fillStyle='#46514f';ctx.font='11px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
       ctx.fillText(xAxis.short+' ('+xAxis.unit+')',pad.left+plotW/2,height-14);
