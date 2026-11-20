@@ -3866,7 +3866,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         // Grid & axes
-        ctx.font = '500 10px monospace';
+        ctx.font = '500 10px "IBM Plex Mono", monospace';
         ctx.fillStyle = '#68716c';
         ctx.textAlign = 'center';
         for (let r = reMin; r <= reMax; r += 2) {
@@ -3966,7 +3966,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const toX = (t) => padL + (t / duration) * plotW;
         const toY = (deg) => padT + ((maxDeg - deg) / (2 * maxDeg)) * plotH;
 
-        ctx.font = '500 10px monospace';
+        ctx.font = '500 10px "IBM Plex Mono", monospace';
         ctx.fillStyle = '#68716c';
         ctx.textAlign = 'right';
         for (const yv of [-maxDeg, -maxDeg * 0.5, 0, maxDeg * 0.5, maxDeg]) {
@@ -5155,7 +5155,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         // Horizontal Y grid
-        ctx.font = '500 11px monospace';
+        ctx.font = '500 11px "IBM Plex Mono", monospace';
         ctx.fillStyle = '#68716c';
         ctx.textAlign = 'right';
         for (let yv = yMin; yv <= yMax; yv += 2) {
@@ -5624,7 +5624,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.restore();
 
         ctx.fillStyle = '#202a2e';
-        ctx.font = '600 11px monospace';
+        ctx.font = '600 11px "IBM Plex Mono", monospace';
         ctx.textAlign = 'left';
         ctx.fillText(`t = ${sample.t.toFixed(2)}s / ${appState.sim.duration}s`, 10, 18);
         ctx.fillStyle = '#34736c';
@@ -5656,7 +5656,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const toPxX = (t) => padL + (t / duration) * plotW;
         const toPxY = (deg) => padT + ((maxDeg - deg) / (2 * maxDeg)) * plotH;
 
-        ctx.font = '500 10px monospace';
+        ctx.font = '500 10px "IBM Plex Mono", monospace';
         ctx.fillStyle = '#68716c';
         ctx.textAlign = 'right';
 
