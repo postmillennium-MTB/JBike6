@@ -1,19 +1,23 @@
 (function(root){
   'use strict';
   const ITEMS=[
-    ['Geometry','geomVizTitle'],['Stability','rootVizTitle'],['Ride test','btnNudgeBike'],
-    ['Control theory','controlTheorySection'],['Eigenmodes','eigenMathTitle'],
-    ['Pole-zero','poleZeroCanvas'],['Stability landscape','stabilityLandscapeCanvas'],
-    ['Optimization','optimizationTitle']
+    ['Geometry','geomVizTitle','overview'],['Stability','rootVizTitle','overview'],['Ride test','btnNudgeBike','overview'],
+    ['Control theory','controlTheorySection','control'],['Eigenmodes','eigenMathTitle','control'],
+    ['Pole-zero','poleZeroCanvas','control'],['Stability landscape','stabilityLandscapeCanvas','landscape'],
+    ['Optimization','optimizationTitle','optimization']
   ];
   function init(){
     const nav=document.getElementById('vizWorkspaceNav');if(!nav)return;
-    const targets=ITEMS.map(([label,id])=>({label,target:document.getElementById(id)})).filter(item=>item.target);
+    const syncHeader=()=>{const header=document.querySelector('.app-header');if(header)document.documentElement.style.setProperty('--app-header-height',header.getBoundingClientRect().height+'px');};syncHeader();window.addEventListener('resize',syncHeader,{passive:true});
+    const targets=ITEMS.map(([label,id,tab])=>({label,target:document.getElementById(id),tab})).filter(item=>item.target);
     nav.innerHTML=targets.map((item,index)=>'<button type="button" data-workspace-index="'+index+'">'+item.label+'</button>').join('');
     const buttons=Array.from(nav.querySelectorAll('button'));
     buttons.forEach((button,index)=>button.addEventListener('click',()=>{
       const target=targets[index].target;
-      target.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+      const activeTab=document.querySelector('.lab-tab-btn.active')?.dataset.tab;
+      if(targets[index].tab&&targets[index].tab!==activeTab){const tabButton=document.querySelector('.lab-tab-btn[data-tab="'+targets[index].tab+'"]');if(tabButton)tabButton.click();}
+      const header=document.querySelector('.app-header');if(header)document.documentElement.style.setProperty('--app-header-height',header.getBoundingClientRect().height+'px');
+      window.setTimeout(()=>target.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'}),40);
       buttons.forEach((b,i)=>{if(i===index)b.setAttribute('aria-current','location');else b.removeAttribute('aria-current');});
     }));
     if('IntersectionObserver' in window){
