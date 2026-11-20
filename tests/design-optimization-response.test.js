@@ -13,11 +13,11 @@ const {
 test('speed response samples retain speed coordinates and finite values', () => {
   const speeds = [2, 4, 6];
   const series = sampleResponse(speeds, speed => -0.2 + speed / 100);
-  assert.deepEqual(series, [
-    { speed: 2, value: -0.18 },
-    { speed: 4, value: -0.16 },
-    { speed: 6, value: -0.14 }
-  ]);
+  assert.deepEqual(series.map(point => point.speed), speeds);
+  const expected = [-0.18, -0.16, -0.14];
+  series.forEach((point, index) => {
+    assert.ok(Math.abs(point.value - expected[index]) < 1e-12);
+  });
 });
 
 test('invalid speed samples become gaps rather than fabricated values', () => {
