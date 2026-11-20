@@ -2012,7 +2012,7 @@
           <div class="viz-header">
             <div>
               <h2 class="viz-title" id="geomVizTitle">Bicycle Geometry &amp; Principal Inertia Diagram</h2>
-              <p class="viz-sub" id="geomVizSub">Drag the green Rider CoM or amber Front CoM handles directly on the blueprint</p>
+              <p class="viz-sub" id="geomVizSub">Select component inertia data or drag the teal Rider CoM and orange Front CoM handles</p>
             </div>
             <div class="viz-toolbar geometry-viz-toolbar">
               <label id="dumbbellToggleWrap" class="btn-action" style="cursor:pointer;" title="Show component and assembly principal-inertia glyphs in both views">
@@ -2566,7 +2566,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         </aside>
         <div class="optimization-results">
           <section class="panel-card optimization-map-card">
-            <div class="panel-head"><div><h3 class="panel-title">Worst-case stability response</h3><p class="viz-sub">Each cell evaluates every speed sample in the chosen interval. Teal is better; red is worse.</p></div><span class="pill-badge pill-slate">Sampled search</span></div>
+            <div class="panel-head"><div><h3 class="panel-title">Worst-case stability response</h3><p class="viz-sub">Each cell evaluates every speed sample in the chosen interval. Teal indicates decay; orange indicates growth.</p></div><span class="pill-badge pill-slate">Sampled search</span></div>
             <div class="optimization-canvas-stage"><canvas id="optimizationCanvas" aria-label="Heatmap of worst-case bicycle eigenvalue growth rate over two design parameters"></canvas></div>
             <div class="optimization-legend"><span><i class="optimization-swatch better"></i>More negative · better</span><span><i class="optimization-swatch neutral"></i>Near neutral</span><span><i class="optimization-swatch worse"></i>Positive · unstable</span></div>
           </section>
