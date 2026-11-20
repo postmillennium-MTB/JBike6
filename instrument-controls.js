@@ -133,15 +133,19 @@
       if (typeof HTMLInputElement !== 'undefined') {
         const nativeValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
         if (nativeValue && nativeValue.get && nativeValue.set) {
-          Object.defineProperty(input, 'value', {
-            configurable: true,
-            enumerable: nativeValue.enumerable,
-            get() { return nativeValue.get.call(this); },
-            set(nextValue) {
-              nativeValue.set.call(this, nextValue);
-              update();
-            }
-          });
+          try {
+            Object.defineProperty(input, 'value', {
+              configurable: true,
+              enumerable: nativeValue.enumerable,
+              get() { return nativeValue.get.call(this); },
+              set(nextValue) {
+                nativeValue.set.call(this, nextValue);
+                update();
+              }
+            });
+          } catch (error) {
+            // Input/change listeners remain as a safe fallback in restrictive browsers.
+          }
         }
       }
       update();
