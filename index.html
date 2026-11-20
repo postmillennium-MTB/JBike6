@@ -1619,7 +1619,7 @@
     .viz-camera-presets .btn-action,.landscape-camera-preset{min-height:34px;padding:.3rem .55rem;font-size:.68rem}
     .landscape-camera-preset{border:1px solid var(--border-mid);border-radius:8px;background:#fff;color:var(--text-body);cursor:pointer}
     .landscape-camera-preset.hidden{display:none}
-    @media(max-width:700px){.viz-workspace-nav{top:0;margin:0 -.1rem .1rem;padding:.45rem}.viz-camera-presets{width:100%;order:4}.viz-camera-presets .btn-action{flex:1}}
+    @media(max-width:700px){.viz-workspace-nav{top:var(--app-header-height,72px);margin:0 -.1rem .1rem;padding:.45rem}.viz-camera-presets{width:100%;order:4}.viz-camera-presets .btn-action{flex:1}}
 
   </style>
 </head>
@@ -2230,7 +2230,7 @@
               <button type="button" id="btnPzZoomIn" class="btn-action" aria-label="Zoom in">+</button>
               <button type="button" id="btnPzZoomOut" class="btn-action" aria-label="Zoom out">−</button>
               <button type="button" id="btnPzReset" class="btn-action">Reset view</button>
-              <div class="viz-camera-presets" role="group" aria-label="3D camera presets"><button type="button" data-pz-camera="front" class="btn-action">Front</button><button type="button" data-pz-camera="side" class="btn-action">Side</button><button type="button" data-pz-camera="top" class="btn-action">Top</button></div>
+              <div class="viz-camera-presets pz-camera-presets" role="group" aria-label="3D camera presets"><button type="button" data-pz-camera="front" class="btn-action">Front</button><button type="button" data-pz-camera="side" class="btn-action">Side</button><button type="button" data-pz-camera="top" class="btn-action">Top</button></div>
             </div>
             <div class="pz-speed-control">
               <label for="pzSpeedScrubber">Speed slice</label>
