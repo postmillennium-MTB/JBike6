@@ -84,6 +84,9 @@
       const label = field && field.querySelector('span');
       if (label) label.textContent = label.textContent.replace(/\s*\([^)]*\)\s*$/, '');
     });
+    const gravityInput = document.getElementById('inputGravity');
+    const gravityLabel = gravityInput && gravityInput.closest('.ctrl-group')?.querySelector('.ctrl-label');
+    if (gravityLabel) gravityLabel.textContent = 'Gravity g';
     Object.entries(RANGE_AXIS_MAP).forEach(([selectId, inputIds]) => {
       const select = document.getElementById(selectId);
       if (!select) return;
