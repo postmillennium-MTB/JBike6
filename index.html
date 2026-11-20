@@ -1632,7 +1632,7 @@
     .engineering-inspector-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(135px,1fr)); gap:.45rem; }
     .engineering-inspector-value { display:grid; gap:.12rem; min-width:0; padding:.4rem .5rem; border-radius:7px; background:#f8fafc; }
     .engineering-inspector-value span { color:#64748b; font-size:.65rem; }
-    .engineering-inspector-value strong { color:#0f172a; font:600 .78rem ui-monospace,monospace; overflow-wrap:anywhere; }
+    .engineering-inspector-value strong { color:#0f172a; font:600 .78rem "IBM Plex Mono", monospace; overflow-wrap:anywhere; }
     .engineering-inspector-note,.engineering-inspector-empty { margin:0; color:#64748b; font-size:.7rem; line-height:1.45; }
   </style>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -3885,7 +3885,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         ctx.fillStyle = '#46514f';
-        ctx.font = '600 10px system-ui, sans-serif';
+        ctx.font = '600 10px "IBM Plex Sans", sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('Re(s) [1/s]  ← LHP Stable | RHP Unstable →', padL + plotW * 0.5, height - 4);
 
@@ -3985,7 +3985,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         ctx.textAlign = 'left';
-        ctx.font = '600 11px system-ui, sans-serif';
+        ctx.font = '600 11px "IBM Plex Sans", sans-serif';
         ctx.fillStyle = '#b9b9ae';
         ctx.fillText('--- Uncontrolled Lean φ_open(t)', padL, 15);
         ctx.fillStyle = '#34736c';
@@ -4363,7 +4363,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.arc(center.x, center.y, 5, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
-        ctx.font = '600 10px system-ui, sans-serif';
+        ctx.font = '600 10px "IBM Plex Sans", sans-serif';
         ctx.textAlign = 'left';
         ctx.fillStyle = color;
         ctx.fillText(label, center.x + 8, center.y - 7);
@@ -4385,7 +4385,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.moveTo(point.x - 11, point.y); ctx.lineTo(point.x + 11, point.y);
         ctx.moveTo(point.x, point.y - 11); ctx.lineTo(point.x, point.y + 11);
         ctx.stroke();
-        ctx.font = '700 10px system-ui, sans-serif';
+        ctx.font = '700 10px "IBM Plex Sans", sans-serif';
         ctx.fillStyle = '#bd5736';
         ctx.textAlign = 'left';
         ctx.fillText('Total CoM', point.x + 12, point.y + 4);
@@ -4442,7 +4442,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.moveTo(orig.x, orig.y); ctx.lineTo(orig.x, orig.y - 36);
         ctx.stroke();
         ctx.fillStyle = '#68716c';
-        ctx.font = '700 10px JetBrains Mono, monospace';
+        ctx.font = '700 10px "IBM Plex Mono", monospace';
         ctx.fillText('X', orig.x + 40, orig.y + 3);
         ctx.fillText('Y', orig.x - 4, orig.y - 40);
 
@@ -4478,7 +4478,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.beginPath(); ctx.arc(center.x, center.y, 4, 0, Math.PI * 2); ctx.fill();
 
           ctx.fillStyle = '#46514f';
-          ctx.font = '600 11px system-ui, sans-serif';
+          ctx.font = '600 11px "IBM Plex Sans", sans-serif';
           ctx.textAlign = 'center';
           ctx.fillText(labelText, center.x, center.y - rPx - 8);
           ctx.restore();
@@ -4512,7 +4512,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.moveTo(pSteerBot.x, pSteerBot.y); ctx.lineTo(vAxisEnd.x, vAxisEnd.y);
         ctx.stroke();
         ctx.fillStyle = '#bd5736';
-        ctx.font = '700 10px JetBrains Mono, monospace';
+        ctx.font = '700 10px "IBM Plex Mono", monospace';
         ctx.fillText('U', uAxisEnd.x + 4, uAxisEnd.y);
         ctx.fillText('V', vAxisEnd.x - 10, vAxisEnd.y);
 
@@ -4554,7 +4554,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.beginPath(); ctx.moveTo(pFrontGround.x, pFrontGround.y); ctx.lineTo(pSteerBot.x, pSteerBot.y); ctx.stroke();
 
         ctx.fillStyle = '#bd5736';
-        ctx.font = '600 11px JetBrains Mono, monospace';
+        ctx.font = '600 11px "IBM Plex Mono", monospace';
         ctx.textAlign = 'center';
         ctx.fillText(`Trail ${(c * 1000).toFixed(1)}mm`, (pFrontGround.x + pSteerBot.x) * 0.5, pFrontGround.y + 16);
 
@@ -4606,7 +4606,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.lineWidth = 2;
           ctx.beginPath(); ctx.arc(pt.x, pt.y, 7, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
 
-          ctx.font = '600 11px system-ui, sans-serif';
+          ctx.font = '600 11px "IBM Plex Sans", sans-serif';
           const tw = ctx.measureText(label).width + 10;
           ctx.fillStyle = 'rgba(32, 42, 46, 0.86)';
           ctx.beginPath();
@@ -4858,7 +4858,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         // HUD Telemetry Overlay
         ctx.fillStyle = '#202a2e';
-        ctx.font = '700 12px JetBrains Mono, monospace';
+        ctx.font = '700 12px "IBM Plex Mono", monospace';
         ctx.textAlign = 'left';
         ctx.fillText(`3D Ride View | v = ${formatSpeed(appState.sim.speedMs, appState.unit)}`, 14, 22);
         ctx.fillStyle = '#34736c';
@@ -4866,7 +4866,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.fillStyle = '#bd5736';
         ctx.fillText(`Steer δ(t) = ${(delta * RAD2DEG).toFixed(2)}°`, 14, 58);
         ctx.fillStyle = '#68716c';
-        ctx.font = '10px system-ui, sans-serif';
+        ctx.font = '10px "IBM Plex Sans", sans-serif';
         ctx.fillText(appState.showDumbbells
           ? 'Wireframes: 0.75x principal radii of gyration (not part dimensions)'
           : 'Principal inertia overlays hidden', 14, 76);
@@ -4907,11 +4907,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.fillStyle = '#f2f0e8';
           ctx.fillRect(0, 0, width, height);
           ctx.fillStyle = '#b91c1c';
-          ctx.font = '600 14px system-ui, sans-serif';
+          ctx.font = '600 14px "IBM Plex Sans", sans-serif';
           ctx.textAlign = 'center';
           ctx.fillText('Geometry diagram could not render', width / 2, height / 2 - 12);
           ctx.fillStyle = '#68716c';
-          ctx.font = '12px system-ui, sans-serif';
+          ctx.font = '12px "IBM Plex Sans", sans-serif';
           const message = String(err && err.message ? err.message : err).slice(0, 100);
           ctx.fillText(message, width / 2, height / 2 + 12, Math.max(100, width - 32));
           ctx.restore();
@@ -5180,7 +5180,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         // Axis labels
         ctx.fillStyle = '#46514f';
-        ctx.font = '600 11px system-ui, sans-serif';
+        ctx.font = '600 11px "IBM Plex Sans", sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(`Forward Speed (${UNIT_CONFIG[unit].label})`, padL + plotW * 0.5, height - 7);
 
@@ -5257,7 +5257,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.lineWidth = 2;
           ctx.beginPath(); ctx.moveTo(px, toPxY(0)); ctx.lineTo(px, padT + plotH); ctx.stroke();
           ctx.fillStyle = '#34736c';
-          ctx.font = '700 10px system-ui, sans-serif';
+          ctx.font = '700 10px "IBM Plex Sans", sans-serif';
           ctx.textAlign = 'left';
           ctx.fillText(`vw = ${formatSpeed(vw, unit)}`, px + 5, padT + plotH - 8);
         }
@@ -5268,7 +5268,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.lineWidth = 2;
           ctx.beginPath(); ctx.moveTo(px, toPxY(0)); ctx.lineTo(px, padT + plotH); ctx.stroke();
           ctx.fillStyle = '#be123c';
-          ctx.font = '700 10px system-ui, sans-serif';
+          ctx.font = '700 10px "IBM Plex Sans", sans-serif';
           ctx.textAlign = 'left';
           ctx.fillText(`vc = ${formatSpeed(vc, unit)}`, px + 5, padT + plotH - 22);
         }
@@ -5368,7 +5368,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.lineWidth = 1.6;
           ctx.beginPath(); ctx.moveTo(pA.x, pA.y); ctx.lineTo(pB.x, pB.y); ctx.stroke();
           ctx.fillStyle = color;
-          ctx.font = '700 10px system-ui, sans-serif';
+          ctx.font = '700 10px "IBM Plex Sans", sans-serif';
           ctx.fillText(label, pB.x + 5, pB.y + 3);
         };
 
@@ -5376,7 +5376,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         drawAxisLine(axReNeg, axRePos, '#bd5736', '+Re(λ) Unstable');
         drawAxisLine(axOrigin, axImPos, '#68716c', 'Im(λ) Freq');
         ctx.fillStyle = '#34736c';
-        ctx.font = '700 10px system-ui, sans-serif';
+        ctx.font = '700 10px "IBM Plex Sans", sans-serif';
         ctx.fillText('-Re(λ) Stable', axReNeg.x - 10, axReNeg.y + 12);
 
         // 3. Plot the 4 Eigenvalue Trajectories through 3D (v, Re, Im) Space
@@ -5404,14 +5404,14 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const pVw = proj(vw, 0, 0);
           ctx.fillStyle = '#34736c';
           ctx.beginPath(); ctx.arc(pVw.x, pVw.y, 5, 0, Math.PI * 2); ctx.fill();
-          ctx.font = '700 11px system-ui, sans-serif';
+          ctx.font = '700 11px "IBM Plex Sans", sans-serif';
           ctx.fillText(`vw = ${formatSpeed(vw, unit)}`, pVw.x + 8, pVw.y - 6);
         }
         if (vc !== null && vc >= minVelPlot && vc <= maxVelPlot) {
           const pVc = proj(vc, 0, 0);
           ctx.fillStyle = '#bd5736';
           ctx.beginPath(); ctx.arc(pVc.x, pVc.y, 5, 0, Math.PI * 2); ctx.fill();
-          ctx.font = '700 11px system-ui, sans-serif';
+          ctx.font = '700 11px "IBM Plex Sans", sans-serif';
           ctx.fillText(`vc = ${formatSpeed(vc, unit)}`, pVc.x + 8, pVc.y + 12);
         }
       }
@@ -5673,7 +5673,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         ctx.textAlign = 'left';
-        ctx.font = '600 11px system-ui, sans-serif';
+        ctx.font = '600 11px "IBM Plex Sans", sans-serif';
         ctx.fillStyle = '#34736c';
         ctx.fillText('— Lean Angle φ(t)', padL, 15);
         ctx.fillStyle = '#bd5736';
