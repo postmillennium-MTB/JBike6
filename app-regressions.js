@@ -22,6 +22,20 @@
     ];
   }
 
+  function normalizeWheelPitchReference(params, imported) {
+    if (!params || typeof params !== 'object') {
+      throw new TypeError('Bicycle parameters are required to normalize wheel-pitch references.');
+    }
+    const source = imported || {};
+    if (!Number.isFinite(source.refDf)) {
+      params.refDf = Number.isFinite(source.Df) ? source.Df : params.Df;
+    }
+    if (!Number.isFinite(source.refDr)) {
+      params.refDr = Number.isFinite(source.Dr) ? source.Dr : params.Dr;
+    }
+    return params;
+  }
+
   function relativeAxleDrop(refDf, refDr, newDf, newDr) {
     const values = [refDf, refDr, newDf, newDr];
     if (values.some(value => !Number.isFinite(value) || value <= 0)) {
@@ -80,6 +94,7 @@
   return {
     integralClosedLoopCoefficients,
     relativeAxleDrop,
+    normalizeWheelPitchReference,
     copyTextToClipboard
   };
 });
