@@ -42,7 +42,8 @@ test('legacy imported JSON uses its own wheel diameters as pitch reference', () 
   assert.equal(normalized.refDr, 0.66);
 
   const importedWithReference = { Df: 0.70, Dr: 0.66, refDf: 0.71, refDr: 0.65 };
-  const preserved = normalizeWheelPitchReference({ ...mergedWithDefaults }, importedWithReference);
+  const mergedWithExplicitReference = { ...mergedWithDefaults, refDf: 0.71, refDr: 0.65 };
+  const preserved = normalizeWheelPitchReference(mergedWithExplicitReference, importedWithReference);
   assert.equal(preserved.refDf, 0.71);
   assert.equal(preserved.refDr, 0.65);
 });
