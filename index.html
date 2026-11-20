@@ -1621,6 +1621,19 @@
     .landscape-camera-preset.hidden{display:none}
     @media(max-width:700px){.viz-workspace-nav{top:var(--app-header-height,72px);margin:0 -.1rem .1rem;padding:.45rem}.viz-camera-presets{width:100%;order:4}.viz-camera-presets .btn-action{flex:1}}
 
+    .engineering-inspector {
+      display: grid; gap: .55rem; padding: .75rem .9rem; margin: .65rem 0 .2rem;
+      border: 1px solid #cbd5e1; border-left: 3px solid #0d9488; border-radius: 11px;
+      background: #fff; box-shadow: 0 1px 3px rgba(15,23,42,.05); min-width: 0;
+    }
+    .engineering-inspector-heading { display:flex; align-items:center; justify-content:space-between; gap:.5rem; color:#64748b; font-size:.66rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+    .engineering-inspector-clear { border:0; background:transparent; color:#0f766e; font:inherit; text-transform:none; letter-spacing:0; cursor:pointer; padding:.2rem .35rem; }
+    .engineering-inspector-title { color:#0f172a; font-size:.9rem; }
+    .engineering-inspector-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(135px,1fr)); gap:.45rem; }
+    .engineering-inspector-value { display:grid; gap:.12rem; min-width:0; padding:.4rem .5rem; border-radius:7px; background:#f8fafc; }
+    .engineering-inspector-value span { color:#64748b; font-size:.65rem; }
+    .engineering-inspector-value strong { color:#0f172a; font:600 .78rem ui-monospace,monospace; overflow-wrap:anywhere; }
+    .engineering-inspector-note,.engineering-inspector-empty { margin:0; color:#64748b; font-size:.7rem; line-height:1.45; }
   </style>
 </head>
 <body>
@@ -1684,7 +1697,7 @@
   <!-- ===================================================================== -->
   <main class="main-wrap">
 
-    <nav id="vizWorkspaceNav" class="viz-workspace-nav" aria-label="Visualization workspace"></nav>
+    <nav id="vizWorkspaceNav" class="viz-workspace-nav" aria-label="Visualization workspace"></nav>\n    <section id="engineeringInspector" class="engineering-inspector" aria-label="Linked engineering inspector"><div class="engineering-inspector-empty">Select a point, mode, or component in any visualization to inspect it here.</div></section>
 
     <!-- KPI SUMMARY STRIP -->
     <section class="kpi-grid">
@@ -2596,7 +2609,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
   <!-- ===================================================================== -->
   <!-- JAVASCRIPT PHYSICS ENGINE, 3D PROJECTION & INTERACTIVE RENDERERS      -->
   <!-- ===================================================================== -->
-  <script src="viz-workspace.js"></script>
+  <script src="engineering-inspector.js"></script>\n  <script src="viz-workspace.js"></script>
   <script src="stability-landscape.js"></script>
   <script src="eigenmode-lab.js"></script>
   <script src="design-optimization.js"></script>
@@ -4972,6 +4985,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           if (hit) {
             draggingGeomHandle = hit;
             dragPointerId = event.pointerId;
+            const component = hit === 'rider' ? appState.params.rider : appState.params.fork;
+            if (window.JBike6EngineeringInspector) window.JBike6EngineeringInspector.publish('geometry',
+              hit === 'rider' ? 'Rider center of mass' : 'Front assembly center of mass', [
+                { label: 'Mass', value: Number(component.m).toFixed(2) + ' kg' },
+                { label: 'Longitudinal position', value: Number(component.x ?? component.u).toFixed(3) + ' m' },
+                { label: 'Vertical position', value: Number(component.y ?? component.v).toFixed(3) + ' m' }
+              ], 'Drag this component in the geometry view to change its model parameters; all dependent analyses will recalculate.');
             canvas.style.cursor = 'grabbing';
             badge.classList.remove('hidden');
             event.preventDefault();
@@ -5482,6 +5502,14 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           if (px >= padL && px <= padL + plotW) {
             const v = Math.max(0.2, Number(toSpeed(px).toFixed(2)));
             setTestSpeedAndRun(v);
+            const result = maxRealEigenvalue(appState.analysis.model, v);
+            if (window.JBike6EngineeringInspector) window.JBike6EngineeringInspector.publish('speed',
+              'Selected forward speed', [
+                { label: 'Speed', value: v.toFixed(3) + ' m/s' },
+                { label: 'Maximum Re(λ)', value: Number(result.maxRe).toFixed(5) + ' s⁻¹' },
+                { label: 'Regime', value: result.maxRe < -1e-6 ? 'Decaying' : result.maxRe > 1e-6 ? 'Growing' : 'Near boundary' }
+              ], 'The operating speed is applied to the simulator and downstream control/eigenmode analyses.');
+
           }
         });
       }

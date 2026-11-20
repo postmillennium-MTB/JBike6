@@ -281,6 +281,20 @@
         '<div class="landscape-detail-status">' + stability + '</div>' +
         '<div class="landscape-roots">' + roots + '</div>';
       ui.apply.disabled = !Number.isFinite(sample.z);
+      if (typeof window !== 'undefined' && window.JBike6EngineeringInspector) {
+        const rootRows = sample.roots.slice(0, 4).map((root, index) => ({
+          label: 'λ' + (index + 1),
+          value: format(root.re, 4) + (root.im >= 0 ? ' + ' : ' − ') + format(Math.abs(root.im), 4) + 'i'
+        }));
+        window.JBike6EngineeringInspector.publish('landscape',
+          'Scanned design configuration', [
+            { label: x.short, value: format(sample.x, x.digits) + ' ' + x.unit },
+            { label: y.short, value: format(sample.y, y.digits) + ' ' + y.unit },
+            { label: 'Forward speed', value: format(model.speed, 3) + ' m/s' },
+            { label: 'Maximum Re(λ)', value: format(sample.z, 5) + ' s⁻¹' },
+            { label: 'Stability', value: stability }
+          ].concat(rootRows), 'This point is a sampled configuration. Use “Apply selected point” to transfer its design parameters to the active bicycle model.');
+      }
     }
 
     function setupCanvas() {
