@@ -225,7 +225,7 @@
       ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width,height);
       ctx.fillStyle='#f2f0e8';ctx.fillRect(0,0,width,height);
       if(!model.rows.length){
-        ctx.fillStyle='#68716c';ctx.font='13px system-ui,sans-serif';ctx.textAlign='center';
+        ctx.fillStyle='#68716c';ctx.font='13px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
         ctx.fillText('Run an optimization to map the design space.',width/2,height/2);return;
       }
       const pad={left:68,right:24,top:28,bottom:54};
@@ -239,7 +239,7 @@
       }
       ctx.strokeStyle='rgba(71,85,105,.5)';ctx.lineWidth=1;ctx.strokeRect(pad.left,pad.top,plotW,plotH);
       const xAxis=getAxis(model.scanConfig.xKey),yAxis=getAxis(model.scanConfig.yKey);
-      ctx.fillStyle='#46514f';ctx.font='11px system-ui,sans-serif';ctx.textAlign='center';
+      ctx.fillStyle='#46514f';ctx.font='11px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
       ctx.fillText(xAxis.short+' ('+xAxis.unit+')',pad.left+plotW/2,height-14);
       ctx.save();ctx.translate(17,pad.top+plotH/2);ctx.rotate(-Math.PI/2);
       ctx.fillText(yAxis.short+' ('+yAxis.unit+')',0,0);ctx.restore();
@@ -258,7 +258,7 @@
           ctx.beginPath();ctx.arc(x+cellW/2,y+cellH/2,4,0,Math.PI*2);ctx.fillStyle='#f2f0e8';ctx.fill();ctx.strokeStyle='#202a2e';ctx.stroke();
         }
       }
-      ctx.fillStyle='#68716c';ctx.font='10px system-ui,sans-serif';ctx.textAlign='left';
+      ctx.fillStyle='#68716c';ctx.font='10px "IBM Plex Sans", sans-serif';ctx.textAlign='left';
       ctx.fillText('Color = worst-case max Re(λ) across speed interval · teal is better; red is worse',pad.left,pad.top-10);
     }
     function selectFromCanvas(event){
