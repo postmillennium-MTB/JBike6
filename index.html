@@ -969,6 +969,10 @@
     .eigen-stat span { display:block; min-height:2em; color:#718394; font-size:.59rem; line-height:1.35; }
     .eigen-stat strong { display:block; margin-top:.2rem; color:#183448; font:700 .78rem var(--font-mono); overflow-wrap:anywhere; }
     .eigen-mode-visual { display:grid; grid-template-columns:minmax(0,1.6fr) minmax(220px,.7fr); gap:.7rem; }
+    .eigen-state-vector { display:flex; flex-wrap:wrap; align-items:center; gap:.45rem .8rem; margin:.7rem 0; padding:.6rem .7rem; border:1px solid #dce6ed; border-radius:9px; background:#f3f7fa; }
+    .eigen-state-vector strong { color:#334e60; font-size:.67rem; }
+    .eigen-state-vector code { color:#0f766e; font:.7rem var(--font-mono); overflow-wrap:anywhere; }
+    .eigen-state-vector span { color:#718394; font-size:.61rem; }
     .eigen-mode-canvas-box { min-width:0; min-height:300px; border:1px solid #dce6ed; border-radius:11px; overflow:hidden; background:#f8fafc; }
     #eigenmodeCanvas { display:block; width:100%; height:300px; }
     .eigen-mode-side { display:flex; flex-direction:column; align-items:stretch; gap:.65rem; }
@@ -2125,6 +2129,7 @@
           <div class="eigen-stat"><span>Growth / decay time constant</span><strong id="eigenmodeTimeConstant">—</strong></div>
           <div class="eigen-stat"><span>Eigenvector residual</span><strong id="eigenmodeResidual">—</strong></div>
         </div>
+                <div class="eigen-state-vector"><strong>Normalized state eigenvector</strong><code id="eigenmodeStateVector">x = [—]ᵀ</code><span>State order: [φ, φ̇, δ, δ̇] · phase-normalized; largest displacement component = 1</span></div>
         <div class="eigen-mode-visual">
           <div class="eigen-mode-canvas-box"><canvas id="eigenmodeCanvas" aria-label="Complex lean and steer eigenvector phasors and normalized modal time response"></canvas></div>
           <div class="eigen-mode-side">
