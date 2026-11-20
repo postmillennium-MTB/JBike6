@@ -5,6 +5,7 @@ const assert = require('node:assert/strict');
 const {
   integralClosedLoopCoefficients,
   relativeAxleDrop,
+  normalizeWheelPitchReference,
   copyTextToClipboard
 } = require('../app-regressions.js');
 
@@ -24,13 +25,27 @@ test('relative axle drop accounts for both front and rear wheel changes', () => 
   const refFront = 0.742, refRear = 0.704;
   assert.ok(Math.abs(relativeAxleDrop(refFront, refRear, refFront, 0.684) - 0.010) < 1e-12);
   assert.ok(Math.abs(relativeAxleDrop(refFront, refRear, 0.722, refRear) + 0.010) < 1e-12);
-  assert.equal(relativeAxleDrop(refFront, refRear, 0.722, 0.684), 0);
+  assert.ok(Math.abs(relativeAxleDrop(refFront, refRear, 0.722, 0.684)) < 1e-12);
   assert.equal(relativeAxleDrop(refFront, refRear, refFront, refRear), 0);
 });
 
 test('relative axle drop rejects invalid or missing wheel diameters', () => {
   assert.throws(() => relativeAxleDrop(0.7, 0.7, NaN, 0.7), /positive finite/);
   assert.throws(() => relativeAxleDrop(0, 0.7, 0.7, 0.7), /positive finite/);
+});
+
+test('legacy imported JSON uses its own wheel diameters as pitch reference', () => {
+  const imported = { Df: 0.70, Dr: 0.66, headAngleDeg: 64 };
+  const mergedWithDefaults = { Df: 0.70, Dr: 0.66, refDf: 0.742, refDr: 0.704 };
+  const normalized = normalizeWheelPitchReference(mergedWithDefaults, imported);
+  assert.equal(normalized.refDf, 0.70);
+  assert.equal(normalized.refDr, 0.66);
+
+  const importedWithReference = { Df: 0.70, Dr: 0.66, refDf: 0.71, refDr: 0.65 };
+  const mergedWithExplicitReference = { ...mergedWithDefaults, refDf: 0.71, refDr: 0.65 };
+  const preserved = normalizeWheelPitchReference(mergedWithExplicitReference, importedWithReference);
+  assert.equal(preserved.refDf, 0.71);
+  assert.equal(preserved.refDr, 0.65);
 });
 
 test('clipboard helper prefers the modern API', async () => {
