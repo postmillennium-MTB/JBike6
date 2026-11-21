@@ -14,6 +14,7 @@ node --test tests/*.test.js
 ## What is in the bench
 - **Stability**: root locus of the eigenvalues against forward speed. Weave speed, capsize speed and the self-stable window are read out above the plot and dimensioned on it.
 - **Geometry**: 2D blueprint and 3D views with principal-inertia glyphs and draggable centers of mass.
+- **Time to react**: how long a small lean or wobble takes to double at the test speed, plus a sweep across speeds, with nobody steering. It is a property of the bike, not a rider model.
 - **Ride test**: roll-perturbation time response at a chosen speed.
 - **Wheel lab**: wheel sizes, mullet setups, frame pitch and gyroscopic contribution.
 - **Control lab**: state-space matrices, eigenmodes, transfer functions and pole-zero maps.
@@ -30,6 +31,7 @@ The model is the linearized Whipple–Carvallo bicycle: rigid bodies, knife-edge
 | `instrument-ui.css` | Visual system, loaded after the inline styles in `index.html` and overriding them |
 | `viz-workspace.js`, `instrument-controls.js`, `engineering-inspector.js` | Navigation, parameter inputs, linked inspector |
 | `eigenmode-lab.js`, `pole-zero-lab.js`, `stability-landscape.js`, `design-optimization.js` | Feature modules |
+| `plain-language.js`, `reaction-time.js` | Plain-English reading and doubling-time math, unit tested in Node |
 | `control-theory.js`, `app-regressions.js` | Math helpers that are unit tested in Node |
 | `tests/` | Node tests |
 | `CONTROL_THEORY_AUDIT.md` | How the control math was checked against the MATLAB source |

@@ -2090,6 +2090,15 @@
                   <details class="plain-reading" id="plainReadingPanel" open>
             <summary>What am I looking at?</summary>
             <div id="plainReading" aria-live="polite"></div>
+            <div class="reaction" id="reactionBudget">
+              <div class="reaction-head">
+                <span class="reaction-value" id="reactionValue">—</span>
+                <span class="reaction-label">time to react at the test speed</span>
+              </div>
+              <p id="reactionText"></p>
+              <canvas id="reactionCanvas" class="reaction-canvas" role="img" aria-label="Time for a small lean to double, by forward speed. Gaps mark speeds where the bike steadies itself."></canvas>
+              <p class="reaction-note">The lower the line, the faster the bike falls. Gaps are speeds where the bike steadies itself. This describes the bike with nobody steering, not a rider.</p>
+            </div>
             <ul class="plain-guide" id="plainGuide"></ul>
           </details>
         </section>
@@ -2673,6 +2682,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
   <script src="engineering-inspector.js"></script>
   <script src="instrument-controls.js"></script>
   <script src="plain-language.js"></script>
+  <script src="reaction-time.js"></script>
   <script src="viz-workspace.js"></script>
   <script src="stability-landscape.js"></script>
   <script src="eigenmode-lab.js"></script>
@@ -5545,6 +5555,75 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           drawRootLocusCanvas2D(ctx, width, height);
         }
         updatePlainReading();
+        drawReactionBudget();
+      }
+
+      function drawReactionBudget() {
+        const rt = window.JBike6ReactionTime;
+        const canvas = document.getElementById('reactionCanvas');
+        const valueEl = document.getElementById('reactionValue');
+        const textEl = document.getElementById('reactionText');
+        if (!rt || !canvas || !appState.analysis) return;
+        const a = appState.analysis;
+        const at = rt.describe(maxRealEigenvalue(a.model, appState.sim.speedMs).maxRe);
+        valueEl.textContent = at.value;
+        valueEl.classList.toggle('is-steady', !at.growing);
+        textEl.textContent = at.text;
+        if (canvas.offsetParent === null) return;
+        const { ctx, width, height } = setupHiDPICanvas(canvas);
+        ctx.clearRect(0, 0, width, height);
+        const padL = 54, padR = 20, padT = 10, padB = 38;
+        const plotW = width - padL - padR, plotH = height - padT - padB;
+        const span = Math.max(0.5, a.maxVelPlot - a.minVelPlot);
+        const toX = v => padL + ((v - a.minVelPlot) / span) * plotW;
+        const pts = rt.sweep(a.sweepData).filter(p => p.v >= a.minVelPlot && p.v <= a.maxVelPlot);
+        const finite = pts.filter(p => p.t !== null).map(p => p.t);
+        const yMax = Math.min(10, Math.max(1, finite.length ? Math.max(...finite) * 1.1 : 1));
+        const toY = t => padT + plotH - (Math.min(t, yMax) / yMax) * plotH;
+        ctx.font = '11px "Archivo", sans-serif';
+        // Self-stable speeds: shade the run of speeds with no growth.
+        ctx.fillStyle = 'rgba(22, 138, 74, 0.10)';
+        let runStart = null;
+        pts.forEach((p, i) => {
+          if (p.t === null && runStart === null) runStart = p.v;
+          const last = i === pts.length - 1;
+          if (runStart !== null && (p.t !== null || last)) {
+            const end = p.t !== null ? pts[i - 1].v : p.v;
+            if (end > runStart) ctx.fillRect(toX(runStart), padT, toX(end) - toX(runStart), plotH);
+            runStart = null;
+          }
+        });
+        // Axes
+        ctx.strokeStyle = '#c3c8d4'; ctx.lineWidth = 1; ctx.fillStyle = '#586079';
+        ctx.textAlign = 'right';
+        [0, yMax / 2, yMax].forEach(t => {
+          ctx.beginPath(); ctx.moveTo(padL, toY(t)); ctx.lineTo(padL + plotW, toY(t)); ctx.stroke();
+          ctx.fillText(t.toFixed(t === 0 ? 0 : 1) + ' s', padL - 8, toY(t) + 4);
+        });
+        ctx.textAlign = 'center';
+        const unit = appState.unit;
+        const step = (a.maxVelPlot - a.minVelPlot) * UNIT_CONFIG[unit].factor <= 18 ? 2 : 5;
+        for (let d = Math.ceil(a.minVelPlot * UNIT_CONFIG[unit].factor / step) * step; d <= a.maxVelPlot * UNIT_CONFIG[unit].factor + 1e-6; d += step) {
+          ctx.fillText(d.toFixed(0), toX(d / UNIT_CONFIG[unit].factor), padT + plotH + 15);
+        }
+        // Doubling time: red, because this is growth, with gaps where the bike is stable.
+        ctx.strokeStyle = '#e0301e'; ctx.lineWidth = 2;
+        ctx.beginPath();
+        let pen = false;
+        pts.forEach(p => {
+          if (p.t === null) { pen = false; return; }
+          if (!pen) { ctx.moveTo(toX(p.v), toY(p.t)); pen = true; } else ctx.lineTo(toX(p.v), toY(p.t));
+        });
+        ctx.stroke();
+        // Test speed
+        const sv = appState.sim.speedMs;
+        if (sv >= a.minVelPlot && sv <= a.maxVelPlot) {
+          ctx.strokeStyle = '#1747e6'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+          ctx.beginPath(); ctx.moveTo(toX(sv), padT); ctx.lineTo(toX(sv), padT + plotH); ctx.stroke();
+          ctx.setLineDash([]);
+        }
+        ctx.fillStyle = '#586079'; ctx.textAlign = 'center';
+        ctx.fillText('Forward speed (' + UNIT_CONFIG[unit].label + ')', padL + plotW / 2, height - 5);
       }
 
       function updatePlainReading() {
@@ -5677,6 +5756,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
               'Selected forward speed', [
                 { label: 'Speed', value: v.toFixed(3) + ' m/s' },
                 { label: 'Maximum Re(λ)', value: Number(result.maxRe).toFixed(5) + ' s⁻¹' },
+                { label: 'Time to double', value: window.JBike6ReactionTime ? window.JBike6ReactionTime.describe(result.maxRe).value : '—' },
                 { label: 'Regime', value: result.maxRe < -1e-6 ? 'Decaying' : result.maxRe > 1e-6 ? 'Growing' : 'Near boundary' }
               ], 'The operating speed is applied to the simulator and downstream control/eigenmode analyses.');
 

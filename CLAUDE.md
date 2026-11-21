@@ -23,6 +23,9 @@ Browser app that computes bicycle stability from the linearized Whipple–Carval
 ## Plain language
 - `plain-language.js` turns the stability analysis into sentences shown under the root-locus plot ("What am I looking at?"). Keep wording non-technical and update `tests/plain-language.test.js` with any change.
 
+## Reaction time
+- `reaction-time.js` turns the largest real eigenvalue into a doubling time (ln 2 / Re λ) shown under the stability plot and in the inspector. It describes the bike with nobody steering. Do not present it as a rider model or add a pass/fail threshold without a source.
+
 ## Math
 - The MATLAB files in `original Matlab files/` are the source of truth. Do not edit them.
 - The MATLAB `K0` already includes gravity. Use `K0 + v²K2` directly and never multiply `K0` by g again (see `CONTROL_THEORY_AUDIT.md`).
