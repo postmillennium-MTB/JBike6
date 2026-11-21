@@ -5,6 +5,7 @@ Browser app that computes bicycle stability from the linearized Whipple–Carval
 ## Commands
 - Run: open `index.html` directly. No build, no server.
 - Test: `node --test tests/*.test.js` (all must pass before a commit).
+- `tests/matlab-model.test.js` and `tests/control-lab-transfer.test.js` pull the model code out of `index.html` and check it against the original MATLAB. Any change to `assembleWhippleModel`, `combineJBikeBodies`, `charPolyCoeffs` or `computeStateSpaceAndTF` must keep them passing. Regenerate the reference with `python3 tests/fixtures/make_matlab_reference.py tests/fixtures/matlab-reference.json` (needs numpy).
 - Screenshot check: Chromium and Playwright are preinstalled in cloud sessions. Load `file:///.../index.html`. The old tab buttons (`.lab-tab-btn`) are hidden, so switch tabs with `document.querySelector('.lab-tab-btn[data-tab="control"]').click()` through `page.evaluate`.
 
 ## Architecture
@@ -33,7 +34,9 @@ Browser app that computes bicycle stability from the linearized Whipple–Carval
 ## Math
 - The MATLAB files in `original Matlab files/` are the source of truth. Do not edit them.
 - The MATLAB `K0` already includes gravity. Use `K0 + v²K2` directly and never multiply `K0` by g again (see `CONTROL_THEORY_AUDIT.md`).
-- State order is interleaved: `x = [q1, q̇1, q2, q̇2]`, with lean right positive and steer left positive.
+- State order is interleaved: `x = [q1, q̇1, q2, q̇2]`.
+- Sign conventions differ. MATLAB and `control-theory.js` take steer to the left as positive. The app (`assembleWhippleModel`, the ride test, the Control lab) follows Meijaard et al. (2007), where steer to the right is positive, so a lean to the right is met by a positive steer. The off-diagonal terms of M0, C1, K0 and K2 flip sign between the two, and the eigenvalues are identical.
+- `MODEL_AUDIT.md` records how the app's model was checked against the MATLAB, what was found, and what has not been checked.
 
 ## Git and license
 - Develop on the branch the session names, push there, and open a pull request only when asked.
