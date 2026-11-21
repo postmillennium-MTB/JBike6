@@ -3,8 +3,8 @@
   // One navigation item per major destination; eigenmodes and pole-zero remain
   // grouped inside Control Lab instead of occupying separate top-level slots.
   const ITEMS=[
-    ['Geometry','geomVizTitle','overview'],
     ['Stability','rootVizTitle','overview'],
+    ['Geometry','geomVizTitle','overview'],
     ['Ride test','btnNudgeBike','overview'],
     ['Wheel lab','wheelQuickPills','mullet'],
     ['Control lab','controlTheorySection','control'],

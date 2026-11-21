@@ -5,7 +5,7 @@ const workspace=require('../viz-workspace.js');
 
 test('primary navigation exposes one concise item per major workspace',()=>{
   assert.deepEqual(workspace.items.map(item=>item[0]),[
-    'Geometry','Stability','Ride test','Wheel lab','Control lab','Stability landscape','Design optimization'
+    'Stability','Geometry','Ride test','Wheel lab','Control lab','Stability landscape','Design optimization'
   ]);
 });
 
