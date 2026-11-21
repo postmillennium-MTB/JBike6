@@ -239,9 +239,9 @@
       if (!ctx) return;
       ctx.setTransform(dpr,0,0,dpr,0,0);
       ctx.clearRect(0,0,width,height);
-      ctx.fillStyle='#f2f0e8';ctx.fillRect(0,0,width,height);
+      ctx.fillStyle='#eef1f3';ctx.fillRect(0,0,width,height);
       if (!model.mode) {
-        ctx.fillStyle='#68716c';ctx.font='13px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
+        ctx.fillStyle='#5f6e7b';ctx.font='13px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
         ctx.fillText('Select a valid operating speed to inspect a mode shape.',width/2,height/2);
         return;
       }
@@ -250,11 +250,11 @@
       const topH = compact ? 190 : Math.min(146,height*0.46);
       const center = compact ? {x:width/2,y:58} : {x:Math.min(width*0.29,205),y:topH*0.58};
       const radius=Math.min(52,topH*0.37,width*0.11);
-      ctx.strokeStyle='#b9b9ae';ctx.lineWidth=1;ctx.beginPath();ctx.arc(center.x,center.y,radius,0,Math.PI*2);ctx.stroke();
+      ctx.strokeStyle='#b4bec6';ctx.lineWidth=1;ctx.beginPath();ctx.arc(center.x,center.y,radius,0,Math.PI*2);ctx.stroke();
       ctx.setLineDash([3,4]);ctx.beginPath();
       ctx.moveTo(center.x-radius-10,center.y);ctx.lineTo(center.x+radius+10,center.y);
       ctx.moveTo(center.x,center.y-radius-10);ctx.lineTo(center.x,center.y+radius+10);ctx.stroke();ctx.setLineDash([]);
-      ctx.fillStyle='#68716c';ctx.font='10px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
+      ctx.fillStyle='#5f6e7b';ctx.font='10px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
       ctx.fillText('Im(q)',center.x,12);ctx.fillText('Re(q)',center.x+radius+22,center.y+3);
       const drawPhasor=(value,color,label)=>{
         const point={x:center.x+value.re*radius,y:center.y-value.im*radius};
@@ -263,19 +263,19 @@
         ctx.beginPath();ctx.arc(point.x,point.y,4,0,Math.PI*2);ctx.fill();
         ctx.font='700 11px "IBM Plex Sans", sans-serif';ctx.textAlign='left';ctx.fillText(label,point.x+6,point.y-5);
       };
-      drawPhasor(lean,'#34736c','Lean');drawPhasor(steer,'#bd5736','Steer');
+      drawPhasor(lean,'#2f7d4a','Lean');drawPhasor(steer,'#c8321e','Steer');
       const sx = compact ? 16 : Math.max(width*0.48,300);
       const sw = compact ? width-32 : Math.max(150,width-sx-22);
-      ctx.fillStyle='#202a2e';ctx.font='700 11px "IBM Plex Sans", sans-serif';ctx.textAlign='left';ctx.fillText('GENERALIZED COORDINATES',sx,20);
+      ctx.fillStyle='#15283c';ctx.font='700 11px "IBM Plex Sans", sans-serif';ctx.textAlign='left';ctx.fillText('Generalized coordinates',sx,20);
       const drawBar=(y,label,value,color)=>{
-        ctx.fillStyle='#46514f';ctx.font='600 11px "IBM Plex Sans", sans-serif';ctx.fillText(label,sx,y);
-        ctx.fillStyle='#dedcd2';ctx.fillRect(sx,y+8,sw,9);ctx.fillStyle=color;
-        ctx.fillRect(sx,y+8,sw*clamp(value,0,1),9);ctx.fillStyle='#46514f';
+        ctx.fillStyle='#3a4b5c';ctx.font='600 11px "IBM Plex Sans", sans-serif';ctx.fillText(label,sx,y);
+        ctx.fillStyle='#d5dce0';ctx.fillRect(sx,y+8,sw,9);ctx.fillStyle=color;
+        ctx.fillRect(sx,y+8,sw*clamp(value,0,1),9);ctx.fillStyle='#3a4b5c';
         ctx.textAlign='right';ctx.fillText((value*100).toFixed(1)+'%',sx+sw,y);ctx.textAlign='left';
       };
-      drawBar(45,'Lean amplitude |φ|',mode.leanAmplitude,'#34736c');
-      drawBar(83,'Steer amplitude |δ|',mode.steerAmplitude,'#bd5736');
-      ctx.fillStyle='#46514f';ctx.font='10px "IBM Plex Mono", monospace';
+      drawBar(45,'Lean amplitude |φ|',mode.leanAmplitude,'#2f7d4a');
+      drawBar(83,'Steer amplitude |δ|',mode.steerAmplitude,'#c8321e');
+      ctx.fillStyle='#3a4b5c';ctx.font='10px "IBM Plex Mono", monospace';
       ctx.fillText('Steer / lean amplitude: '+fmt(mode.steerToLeanRatio,3),sx,124);
       ctx.fillText('Steer phase relative to lean: '+fmt(mode.phaseDifferenceDeg,1)+'°',sx,compact?170:140);
 
@@ -298,22 +298,22 @@
           traceMax=Math.max(traceMax,Math.abs(traceValue(lean,degrees)),Math.abs(traceValue(steer,degrees)));
         }
       }
-      ctx.strokeStyle='#b9b9ae';ctx.lineWidth=1;
+      ctx.strokeStyle='#b4bec6';ctx.lineWidth=1;
       for(const level of [-1,0,1]){const y=toY(level);ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(padL+plotW,y);ctx.stroke();}
-      ctx.fillStyle='#68716c';ctx.font='10px "IBM Plex Mono", monospace';ctx.textAlign='right';
+      ctx.fillStyle='#5f6e7b';ctx.font='10px "IBM Plex Mono", monospace';ctx.textAlign='right';
       ctx.fillText('+1',padL-7,toY(1)+3);ctx.fillText('0',padL-7,toY(0)+3);ctx.fillText('−1',padL-7,toY(-1)+3);
       const trace=(value,color)=>{
         ctx.strokeStyle=color;ctx.lineWidth=2.1;ctx.beginPath();
         for(let i=0;i<=120;i++){const degrees=i*3,y=toY(traceValue(value,degrees)/traceMax),x=toX(degrees);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
         ctx.stroke();
       };
-      trace(lean,'#34736c');trace(steer,'#bd5736');
-      const cursorX=toX(model.phaseDeg);ctx.strokeStyle='#202a2e';ctx.setLineDash([4,3]);
+      trace(lean,'#2f7d4a');trace(steer,'#c8321e');
+      const cursorX=toX(model.phaseDeg);ctx.strokeStyle='#15283c';ctx.setLineDash([4,3]);
       ctx.beginPath();ctx.moveTo(cursorX,padT);ctx.lineTo(cursorX,padT+plotH);ctx.stroke();ctx.setLineDash([]);
-      ctx.fillStyle='#202a2e';ctx.font='9px "IBM Plex Mono", monospace';ctx.textAlign='center';
+      ctx.fillStyle='#15283c';ctx.font='9px "IBM Plex Mono", monospace';ctx.textAlign='center';
       ctx.fillText('0°',padL,height-6);ctx.fillText('180°',padL+plotW/2,height-6);ctx.fillText('360° phase',padL+plotW,height-6);
-      ctx.textAlign='left';ctx.fillStyle='#34736c';ctx.fillText('— Lean',padL+5,padT-7);
-      ctx.fillStyle='#bd5736';ctx.fillText('— Steer',padL+75,padT-7);
+      ctx.textAlign='left';ctx.fillStyle='#2f7d4a';ctx.fillText('— Lean',padL+5,padT-7);
+      ctx.fillStyle='#c8321e';ctx.fillText('— Steer',padL+75,padT-7);
     }
 
     function drawEigenpair(metrics) {
@@ -327,9 +327,9 @@
       if (!ctx) return;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = '#f2f0e8'; ctx.fillRect(0, 0, width, height);
+      ctx.fillStyle = '#eef1f3'; ctx.fillRect(0, 0, width, height);
       if (!metrics) {
-        ctx.fillStyle = '#68716c'; ctx.font = '12px "IBM Plex Sans", sans-serif';
+        ctx.fillStyle = '#5f6e7b'; ctx.font = '12px "IBM Plex Sans", sans-serif';
         ctx.fillText('Select a valid eigenvalue to evaluate A x = λ x.', 12, 28);
         return;
       }
@@ -339,18 +339,18 @@
       ctx.font = '10px "IBM Plex Sans", sans-serif'; ctx.textBaseline = 'middle';
       names.forEach((name, i) => {
         const y = 24 + i * 38;
-        ctx.fillStyle = '#46514f'; ctx.textAlign = 'left'; ctx.fillText(name, 8, y + 4);
+        ctx.fillStyle = '#3a4b5c'; ctx.textAlign = 'left'; ctx.fillText(name, 8, y + 4);
         const axW = barW * abs(metrics.Ax[i]) / maxValue;
         const lxW = barW * abs(metrics.lambdaX[i]) / maxValue;
-        ctx.fillStyle = '#dedcd2'; ctx.fillRect(labelW, y - 8, barW, 8);
-        ctx.fillStyle = '#34736c'; ctx.fillRect(labelW, y - 8, axW, 8);
-        ctx.fillStyle = '#dedcd2'; ctx.fillRect(labelW, y + 3, barW, 8);
-        ctx.fillStyle = '#bd5736'; ctx.fillRect(labelW, y + 3, lxW, 8);
-        ctx.fillStyle = '#68716c'; ctx.font = '9px "IBM Plex Mono", monospace'; ctx.textAlign = 'right';
+        ctx.fillStyle = '#d5dce0'; ctx.fillRect(labelW, y - 8, barW, 8);
+        ctx.fillStyle = '#2f7d4a'; ctx.fillRect(labelW, y - 8, axW, 8);
+        ctx.fillStyle = '#d5dce0'; ctx.fillRect(labelW, y + 3, barW, 8);
+        ctx.fillStyle = '#c8321e'; ctx.fillRect(labelW, y + 3, lxW, 8);
+        ctx.fillStyle = '#5f6e7b'; ctx.font = '9px "IBM Plex Mono", monospace'; ctx.textAlign = 'right';
         ctx.fillText('Δ ' + fmt(abs(metrics.residual[i]), 3), width - 8, y + 4);
         ctx.font = '10px "IBM Plex Sans", sans-serif';
       });
-      ctx.fillStyle = '#68716c'; ctx.font = '9px "IBM Plex Sans", sans-serif'; ctx.textAlign = 'left';
+      ctx.fillStyle = '#5f6e7b'; ctx.font = '9px "IBM Plex Sans", sans-serif'; ctx.textAlign = 'left';
       ctx.fillText('Bar lengths are normalized to the largest component across A x and λ x; Δ is the component residual.', 8, height - 7);
     }
 
