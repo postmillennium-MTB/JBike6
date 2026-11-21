@@ -8,18 +8,18 @@
     :root {
       --bg-app: #f1f5f9;
       --bg-card: #ffffff;
-      --bg-subtle: #f8fafc;
-      --bg-header: #0f172a;
-      --bg-header-ctrl: #1e293b;
-      --border-light: #e2e8f0;
-      --border-mid: #cbd5e1;
-      --text-main: #0f172a;
-      --text-body: #334155;
-      --text-muted: #64748b;
+      --bg-subtle: #eef1f3;
+      --bg-header: #15283c;
+      --bg-header-ctrl: #233a52;
+      --border-light: #d5dce0;
+      --border-mid: #b4bec6;
+      --text-main: #15283c;
+      --text-body: #3a4b5c;
+      --text-muted: #5f6e7b;
       --accent-emerald: #059669;
       --accent-emerald-dark: #047857;
       --accent-emerald-bg: #ecfdf5;
-      --accent-indigo: #4f46e5;
+      --accent-indigo: #1f5a9e;
       --accent-indigo-bg: #eef2ff;
       --accent-amber: #d97706;
       --accent-amber-bg: #fffbeb;
@@ -55,8 +55,8 @@
       top: 0;
       z-index: 40;
       background: var(--bg-header);
-      color: #f8fafc;
-      border-bottom: 1px solid #1e293b;
+      color: #eef1f3;
+      border-bottom: 1px solid #233a52;
       box-shadow: 0 2px 10px rgba(2, 6, 23, 0.25);
     }
 
@@ -110,7 +110,7 @@
       padding: 0.15rem 0.55rem;
       border-radius: 999px;
       background: rgba(16, 185, 129, 0.2);
-      color: #6ee7b7;
+      color: #8fd0a5;
       border: 1px solid rgba(52, 211, 153, 0.35);
     }
 
@@ -133,18 +133,18 @@
       background: var(--bg-header-ctrl);
       padding: 3px;
       border-radius: 10px;
-      border: 1px solid #334155;
+      border: 1px solid #3a4b5c;
     }
 
     .seg-group.light {
-      background: #dedcd2;
+      background: #d5dce0;
       border-color: var(--border-light);
     }
 
     .seg-btn {
       border: none;
       background: transparent;
-      color: #cbd5e1;
+      color: #b4bec6;
       font-size: 0.75rem;
       font-weight: 600;
       padding: 0.3rem 0.65rem;
@@ -181,7 +181,7 @@
     .preset-select {
       background: var(--bg-header-ctrl);
       color: #ffffff;
-      border: 1px solid #334155;
+      border: 1px solid #3a4b5c;
       border-radius: 10px;
       padding: 0.42rem 0.75rem;
       font-size: 0.8rem;
@@ -198,8 +198,8 @@
 
     .hdr-btn {
       background: var(--bg-header-ctrl);
-      color: #e2e8f0;
-      border: 1px solid #334155;
+      color: #d5dce0;
+      border: 1px solid #3a4b5c;
       border-radius: 10px;
       padding: 0.4rem 0.7rem;
       font-size: 0.75rem;
@@ -209,7 +209,7 @@
     }
 
     .hdr-btn:hover {
-      background: #334155;
+      background: #3a4b5c;
       color: #ffffff;
     }
 
@@ -277,10 +277,10 @@
     }
 
     .pill-emerald { background: var(--accent-emerald-bg); color: var(--accent-emerald-dark); border: 1px solid #a7f3d0; }
-    .pill-rose { background: var(--accent-rose-bg); color: #bd5736; border: 1px solid #fecdd3; }
+    .pill-rose { background: var(--accent-rose-bg); color: #c8321e; border: 1px solid #fecdd3; }
     .pill-indigo { background: var(--accent-indigo-bg); color: #3730a3; border: 1px solid #c7d2fe; }
     .pill-amber { background: var(--accent-amber-bg); color: #b45309; border: 1px solid #fde68a; }
-    .pill-slate { background: #dedcd2; color: #334155; border: 1px solid #cbd5e1; }
+    .pill-slate { background: #d5dce0; color: #3a4b5c; border: 1px solid #b4bec6; }
 
     .kpi-val-row {
       margin-top: 0.45rem;
@@ -313,11 +313,11 @@
 
     /* Insight Banner */
     .insight-banner {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: #dedcd2;
+      background: linear-gradient(135deg, #15283c 0%, #233a52 100%);
+      color: #d5dce0;
       border-radius: 14px;
       padding: 0.75rem 1rem;
-      border: 1px solid #334155;
+      border: 1px solid #3a4b5c;
       display: flex;
       align-items: flex-start;
       gap: 0.75rem;
@@ -341,7 +341,7 @@
     .insight-text {
       font-size: 0.82rem;
       line-height: 1.5;
-      color: #e2e8f0;
+      color: #d5dce0;
     }
 
     .insight-tag {
@@ -388,7 +388,7 @@
       gap: 0.5rem;
       padding-bottom: 0.65rem;
       margin-bottom: 0.85rem;
-      border-bottom: 1px solid #dedcd2;
+      border-bottom: 1px solid #d5dce0;
       flex-wrap: wrap;
     }
 
@@ -434,7 +434,7 @@
     }
 
     .wheel-pill:hover {
-      border-color: #6ee7b7;
+      border-color: #8fd0a5;
       background: var(--accent-emerald-bg);
     }
 
@@ -452,7 +452,7 @@
     }
 
     .wheel-pill.active .wheel-pill-title {
-      color: #34736c;
+      color: #2f7d4a;
     }
 
     .wheel-pill-sub {
@@ -502,14 +502,14 @@
       appearance: none;
       width: 100%;
       height: 6px;
-      background: #e2e8f0;
+      background: #d5dce0;
       border-radius: 999px;
       outline: none;
       cursor: pointer;
     }
 
     input[type="range"].sci-slider:hover {
-      background: #cbd5e1;
+      background: #b4bec6;
     }
 
     input[type="range"].sci-slider::-webkit-slider-thumb {
@@ -647,7 +647,7 @@
     }
 
     .mini-chip:hover {
-      background: #e2e8f0;
+      background: #d5dce0;
       color: var(--text-main);
     }
 
@@ -703,7 +703,7 @@
     }
 
     .btn-action:hover {
-      background: #dedcd2;
+      background: #d5dce0;
     }
 
     .btn-action.primary {
@@ -749,7 +749,7 @@
       top: 10px;
       left: 10px;
       background: rgba(15, 23, 42, 0.88);
-      color: #f8fafc;
+      color: #eef1f3;
       font-size: 0.72rem;
       font-family: var(--font-mono);
       padding: 0.3rem 0.6rem;
@@ -762,7 +762,7 @@
       bottom: 10px;
       right: 10px;
       background: rgba(15, 23, 42, 0.78);
-      color: #e2e8f0;
+      color: #d5dce0;
       font-size: 0.69rem;
       padding: 0.25rem 0.55rem;
       border-radius: 7px;
@@ -774,8 +774,8 @@
       top: 10px;
       right: 10px;
       background: rgba(15, 23, 42, 0.94);
-      color: #f8fafc;
-      border: 1px solid #334155;
+      color: #eef1f3;
+      border: 1px solid #3a4b5c;
       border-radius: 10px;
       padding: 0.6rem 0.75rem;
       font-size: 0.72rem;
@@ -788,7 +788,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #334155;
+      border-bottom: 1px solid #3a4b5c;
       padding-bottom: 0.3rem;
       margin-bottom: 0.35rem;
       font-family: var(--font-mono);
@@ -865,9 +865,9 @@
 
     /* Footer Attribution */
     .app-footer {
-      background: #0f172a;
-      color: #cbd5e1;
-      border-top: 1px solid #1e293b;
+      background: #15283c;
+      color: #b4bec6;
+      border-top: 1px solid #233a52;
       padding: 1.25rem 1.25rem;
       margin-top: 1.5rem;
       text-align: center;
@@ -882,7 +882,7 @@
     }
 
     .app-footer a:hover {
-      color: #6ee7b7;
+      color: #8fd0a5;
     }
 
     /* Modal Dialog for JSON Import/Export */
@@ -915,8 +915,8 @@
       padding: 0.65rem;
       border-radius: 10px;
       border: 1px solid var(--border-mid);
-      background: #f8fafc;
-      color: #0f172a;
+      background: #eef1f3;
+      color: #15283c;
       resize: vertical;
       margin: 0.65rem 0;
     }
@@ -924,74 +924,74 @@
     /* Eigenvalue Math Explorer and modal analysis */
     .eigen-lab-panel { margin-top: 1rem; padding: 1rem; border: 1px solid var(--border-light); border-radius: 15px; background: linear-gradient(180deg,#fbfdff,#f6fafc); }
     .eigen-lab-heading, .eigen-mode-heading, .optimization-inspector-head { display:flex; align-items:flex-start; justify-content:space-between; gap:.9rem; flex-wrap:wrap; }
-    .eigen-kicker, .optimization-kicker { color:#087c70; font:750 .65rem/1.2 var(--font-mono); letter-spacing:.13em; }
+    .eigen-kicker, .optimization-kicker { color:#1f5a9e; font:750 .65rem/1.2 var(--font-mono); letter-spacing:.13em; }
     .eigen-lab-heading h3 { margin:.3rem 0; color:var(--text-main); font-size:1.08rem; }
     .eigen-lab-heading p, .eigen-mode-heading p { margin:0; max-width:760px; color:var(--text-muted); font-size:.76rem; line-height:1.5; }
     .eigen-equation-banner { margin:.85rem 0; padding:.9rem 1rem; border-radius:12px; background:#0e2736; color:#effcf9; text-align:center; }
     .eigen-equation-main { font:700 clamp(.94rem,2vw,1.18rem)/1.5 var(--font-mono); letter-spacing:-.025em; }
     .eigen-equation-sub { margin-top:.25rem; color:#a9c6d0; font:.69rem/1.5 var(--font-mono); }
     .eigen-math-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.7rem; }
-    .eigen-math-card { min-width:0; padding:.85rem; border:1px solid #dce6ed; border-radius:12px; background:#fff; }
+    .eigen-math-card { min-width:0; padding:.85rem; border:1px solid #d5dce0; border-radius:12px; background:#fff; }
     .eigen-step-heading { display:flex; align-items:flex-start; gap:.55rem; margin-bottom:.65rem; }
-    .eigen-step-heading > span { display:grid; place-items:center; width:25px; height:25px; flex:0 0 auto; border-radius:8px; background:#e0f2f1; color:#087c70; font:750 .72rem var(--font-mono); }
-    .eigen-step-heading strong { display:block; color:#183448; font-size:.76rem; }
-    .eigen-step-heading small { display:block; margin-top:.1rem; color:#718394; font-size:.65rem; line-height:1.4; }
+    .eigen-step-heading > span { display:grid; place-items:center; width:25px; height:25px; flex:0 0 auto; border-radius:8px; background:#e0f2f1; color:#1f5a9e; font:750 .72rem var(--font-mono); }
+    .eigen-step-heading strong { display:block; color:#15283c; font-size:.76rem; }
+    .eigen-step-heading small { display:block; margin-top:.1rem; color:#6b7a87; font-size:.65rem; line-height:1.4; }
     .eigen-matrix-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.45rem; }
-    .eigen-matrix-card { min-width:0; padding:.5rem; border-radius:8px; background:#f3f7fa; }
+    .eigen-matrix-card { min-width:0; padding:.5rem; border-radius:8px; background:#eef1f3; }
     .eigen-matrix-name { display:flex; flex-wrap:wrap; justify-content:space-between; gap:.2rem; margin-bottom:.35rem; color:#33495b; font:700 .69rem var(--font-mono); }
     .eigen-matrix-name span { color:#8293a2; font:500 .57rem var(--font-sans); }
     .eigen-matrix-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.22rem; color:#263b4c; font:.62rem var(--font-mono); font-variant-numeric:tabular-nums; }
     .eigen-matrix-grid span { min-width:0; padding:.22rem .14rem; border-radius:4px; background:#fff; text-align:right; overflow:hidden; }
     .eigen-matrix-grid.four { grid-template-columns:repeat(4,minmax(0,1fr)); }
     .eigen-matrix-grid.four span { font-size:.59rem; }
-    .eigen-state-matrix .eigen-matrix-card { background:#f3f7fa; }
+    .eigen-state-matrix .eigen-matrix-card { background:#eef1f3; }
     .eigen-matrix-card.wide { width:100%; }
-    .eigen-math-explain, .eigen-poly-note, .eigen-footnote { margin-top:.5rem; color:#718394; font-size:.65rem; line-height:1.5; }
-    .eigen-poly-equation { color:#0f766e; font:750 .85rem var(--font-mono); }
+    .eigen-math-explain, .eigen-poly-note, .eigen-footnote { margin-top:.5rem; color:#6b7a87; font-size:.65rem; line-height:1.5; }
+    .eigen-poly-equation { color:#1f5a9e; font:750 .85rem var(--font-mono); }
     .eigen-poly-expanded { margin-top:.45rem; color:#172f42; font:650 .77rem/1.7 var(--font-mono); overflow-wrap:anywhere; }
     .eigen-root-list { display:flex; flex-wrap:wrap; gap:.4rem; }
     .eigen-root-chip { display:flex; flex-direction:column; gap:.12rem; padding:.42rem .55rem; border:1px solid #d8e2ea; border-radius:8px; background:#f7fafc; color:#34495a; cursor:pointer; text-align:left; }
     .eigen-root-chip span { font:.64rem var(--font-mono); }
-    .eigen-root-chip.stable { border-left:3px solid #0d9488; }
+    .eigen-root-chip.stable { border-left:3px solid #1f5a9e; }
     .eigen-root-chip.unstable { border-left:3px solid #e05252; }
     .eigen-root-chip.neutral { border-left:3px solid #d69b38; }
     .eigen-root-chip.selected { outline:2px solid #2563eb; outline-offset:1px; background:#eff6ff; }
     .eigen-math-status { margin-top:.5rem; color:#65798a; font-size:.65rem; line-height:1.45; }
-    .eigen-math-status[data-kind="error"] { color:#bd5736; }
-    .eigen-math-status[data-kind="success"] { color:#087c70; }
+    .eigen-math-status[data-kind="error"] { color:#c8321e; }
+    .eigen-math-status[data-kind="success"] { color:#1f5a9e; }
     .eigen-mode-heading { margin-top:1rem; padding-top:.9rem; border-top:1px solid #e5edf2; }
-    .eigen-mode-heading h4 { margin:0 0 .25rem; color:#183448; font-size:.88rem; }
+    .eigen-mode-heading h4 { margin:0 0 .25rem; color:#15283c; font-size:.88rem; }
     .eigen-mode-controls { display:flex; flex-direction:column; gap:.25rem; min-width:180px; }
     .eigen-mode-controls label { color:#64798a; font-size:.65rem; font-weight:700; }
     .eigen-mode-select { min-width:180px; }
     .eigen-mode-stats { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:.45rem; margin:.75rem 0; }
     .eigen-stat { min-width:0; padding:.55rem .6rem; border:1px solid #e0e8ee; border-radius:9px; background:#fff; }
-    .eigen-stat span { display:block; min-height:2em; color:#718394; font-size:.59rem; line-height:1.35; }
-    .eigen-stat strong { display:block; margin-top:.2rem; color:#183448; font:700 .78rem var(--font-mono); overflow-wrap:anywhere; }
+    .eigen-stat span { display:block; min-height:2em; color:#6b7a87; font-size:.59rem; line-height:1.35; }
+    .eigen-stat strong { display:block; margin-top:.2rem; color:#15283c; font:700 .78rem var(--font-mono); overflow-wrap:anywhere; }
     .eigen-mode-visual { display:grid; grid-template-columns:minmax(0,1.6fr) minmax(220px,.7fr); gap:.7rem; }
-    .eigen-state-vector { display:flex; flex-wrap:wrap; align-items:center; gap:.45rem .8rem; margin:.7rem 0; padding:.6rem .7rem; border:1px solid #dce6ed; border-radius:9px; background:#f3f7fa; }
+    .eigen-state-vector { display:flex; flex-wrap:wrap; align-items:center; gap:.45rem .8rem; margin:.7rem 0; padding:.6rem .7rem; border:1px solid #d5dce0; border-radius:9px; background:#eef1f3; }
     .eigen-state-vector strong { color:#334e60; font-size:.67rem; }
-    .eigen-state-vector code { color:#0f766e; font:.7rem var(--font-mono); overflow-wrap:anywhere; }
-    .eigen-state-vector span { color:#718394; font-size:.61rem; }
-    .eigen-verification-panel { margin:.65rem 0 .8rem; padding:.75rem; border:1px solid #dce6ed; border-radius:11px; background:#fff; }
+    .eigen-state-vector code { color:#1f5a9e; font:.7rem var(--font-mono); overflow-wrap:anywhere; }
+    .eigen-state-vector span { color:#6b7a87; font-size:.61rem; }
+    .eigen-verification-panel { margin:.65rem 0 .8rem; padding:.75rem; border:1px solid #d5dce0; border-radius:11px; background:#fff; }
     .eigen-verification-head { display:flex; justify-content:space-between; align-items:flex-start; gap:.6rem; flex-wrap:wrap; }
-    .eigen-verification-head strong { display:block; color:#183448; font-size:.72rem; }
-    .eigen-verification-head span { display:block; margin-top:.15rem; color:#718394; font-size:.62rem; }
-    .eigenpair-readout { color:#0f766e; font:650 .65rem/1.5 var(--font-mono); text-align:right; }
+    .eigen-verification-head strong { display:block; color:#15283c; font-size:.72rem; }
+    .eigen-verification-head span { display:block; margin-top:.15rem; color:#6b7a87; font-size:.62rem; }
+    .eigenpair-readout { color:#1f5a9e; font:650 .65rem/1.5 var(--font-mono); text-align:right; }
     #eigenpairCanvas { display:block; width:100%; height:176px; margin-top:.35rem; }
-    .eigenpair-legend { display:flex; flex-wrap:wrap; gap:.8rem; color:#718394; font-size:.6rem; }
+    .eigenpair-legend { display:flex; flex-wrap:wrap; gap:.8rem; color:#6b7a87; font-size:.6rem; }
     .eigenpair-legend span { display:flex; align-items:center; gap:.3rem; }
     .eigenpair-swatch { display:inline-block; width:9px; height:9px; border-radius:2px; }
-    .eigenpair-swatch.ax { background:#0d9488; }
-    .eigenpair-swatch.lx { background:#d97706; }
-    .eigen-mode-canvas-box { min-width:0; min-height:300px; border:1px solid #dce6ed; border-radius:11px; overflow:hidden; background:#f8fafc; }
+    .eigenpair-swatch.ax { background:#1f5a9e; }
+    .eigenpair-swatch.lx { background:#1f5a9e; }
+    .eigen-mode-canvas-box { min-width:0; min-height:300px; border:1px solid #d5dce0; border-radius:11px; overflow:hidden; background:#eef1f3; }
     #eigenmodeCanvas { display:block; width:100%; height:300px; }
     .eigen-mode-side { display:flex; flex-direction:column; align-items:stretch; gap:.65rem; }
     .eigen-mode-callout { padding:.75rem; border-radius:10px; background:#f0f6f8; color:#3e5568; }
     .eigen-mode-callout strong { font-size:.72rem; }
     .eigen-mode-callout p { margin:.3rem 0 0; font-size:.66rem; line-height:1.5; }
     .eigen-phase-control { display:grid; grid-template-columns:1fr auto; gap:.4rem; align-items:center; color:#52697b; font-size:.68rem; font-weight:650; }
-    .eigen-phase-control input { grid-column:1/-1; width:100%; accent-color:#087c70; }
+    .eigen-phase-control input { grid-column:1/-1; width:100%; accent-color:#1f5a9e; }
     .eigen-footnote { padding-top:.65rem; border-top:1px solid #e4edf2; }
 
     /* Speed-interval design optimization laboratory */
@@ -1011,32 +1011,32 @@
     .optimization-progress { width:100%; height:7px; accent-color:#079b79; }
     .optimization-results { display:flex; flex-direction:column; gap:.8rem; min-width:0; }
     .optimization-map-card, .optimization-inspector { min-width:0; padding:.9rem; }
-    .optimization-canvas-stage { height:clamp(340px,44vw,520px); min-height:320px; border:1px solid #dce6ed; border-radius:11px; overflow:hidden; background:#f8fafc; }
+    .optimization-canvas-stage { height:clamp(340px,44vw,520px); min-height:320px; border:1px solid #d5dce0; border-radius:11px; overflow:hidden; background:#eef1f3; }
     #optimizationCanvas { display:block; width:100%; height:100%; }
     .optimization-legend { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:.55rem; color:#687d8d; font-size:.64rem; }
     .optimization-legend span { display:inline-flex; align-items:center; gap:.32rem; }
     .optimization-swatch { width:10px; height:10px; border-radius:3px; display:inline-block; }
-    .optimization-swatch.better { background:#0d9488; }
-    .optimization-swatch.neutral { background:#dedcd2; border:1px solid #cbd5e1; }
+    .optimization-swatch.better { background:#1f5a9e; }
+    .optimization-swatch.neutral { background:#d5dce0; border:1px solid #b4bec6; }
     .optimization-swatch.worse { background:#e14b4b; }
     .optimization-inspector-head { align-items:center; }
     .optimization-selection-detail { margin-top:.65rem; }
     .opt-detail-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.45rem; }
-    .opt-detail-grid > div { min-width:0; padding:.55rem; border-radius:8px; background:#f3f7fa; }
-    .opt-detail-grid span { display:block; color:#718394; font-size:.61rem; }
-    .opt-detail-grid strong { display:block; margin-top:.22rem; color:#183448; font:700 .72rem var(--font-mono); overflow-wrap:anywhere; }
+    .opt-detail-grid > div { min-width:0; padding:.55rem; border-radius:8px; background:#eef1f3; }
+    .opt-detail-grid span { display:block; color:#6b7a87; font-size:.61rem; }
+    .opt-detail-grid strong { display:block; margin-top:.22rem; color:#15283c; font:700 .72rem var(--font-mono); overflow-wrap:anywhere; }
     .opt-detail-status { margin-top:.55rem; padding:.55rem .65rem; border-radius:8px; background:#fff7ed; color:#9a3412; font-size:.7rem; }
     .opt-detail-status.stable { background:#ecfdf5; color:#047857; }
-    .opt-detail-foot { margin-top:.45rem; color:#718394; font-size:.64rem; line-height:1.5; }
+    .opt-detail-foot { margin-top:.45rem; color:#6b7a87; font-size:.64rem; line-height:1.5; }
     .optimization-ranking-wrap { margin-top:.85rem; padding-top:.75rem; border-top:1px solid #e4edf2; }
     .optimization-ranking-wrap h4 { margin:0 0 .45rem; color:#20384b; font-size:.75rem; }
     .optimization-ranking { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:.45rem; }
     .opt-ranking-row { display:flex; align-items:center; gap:.45rem; min-width:0; padding:.48rem; border:1px solid #e0e8ee; border-radius:8px; background:#fafcfd; color:#34495a; cursor:pointer; text-align:left; }
-    .opt-rank-number { display:grid; place-items:center; width:20px; height:20px; flex:0 0 auto; border-radius:6px; background:#e0f2f1; color:#087c70; font:750 .65rem var(--font-mono); }
+    .opt-rank-number { display:grid; place-items:center; width:20px; height:20px; flex:0 0 auto; border-radius:6px; background:#e0f2f1; color:#1f5a9e; font:750 .65rem var(--font-mono); }
     .opt-ranking-row span:nth-child(2) { display:flex; flex-direction:column; min-width:0; font-size:.62rem; }
-    .opt-ranking-row small { color:#718394; font-size:.58rem; }
+    .opt-ranking-row small { color:#6b7a87; font-size:.58rem; }
     .opt-rank-score { margin-left:auto; font:700 .61rem var(--font-mono); overflow-wrap:anywhere; }
-    .optimization-method-note { padding:.75rem .9rem; border:1px solid #dce6ed; border-radius:10px; background:#f8fbfd; color:#65798a; font-size:.68rem; line-height:1.55; }
+    .optimization-method-note { padding:.75rem .9rem; border:1px solid #d5dce0; border-radius:10px; background:#f8fbfd; color:#65798a; font-size:.68rem; line-height:1.55; }
     .optimization-method-note strong { color:#334e60; }
     @media (max-width:1050px) {
       .eigen-mode-stats { grid-template-columns:repeat(3,minmax(0,1fr)); }
@@ -1078,14 +1078,14 @@
     }
 
     .eq-banner {
-      background: #0f172a;
-      color: #f8fafc;
+      background: #15283c;
+      color: #eef1f3;
       border-radius: 12px;
       padding: 0.75rem 1rem;
       font-family: var(--font-mono);
       font-size: 0.78rem;
       line-height: 1.55;
-      border: 1px solid #1e293b;
+      border: 1px solid #233a52;
       overflow-x: auto;
     }
 
@@ -1170,12 +1170,12 @@
     .pz-toolbar .btn-action { padding:.3rem .52rem; font-size:.68rem; }
     .pz-speed-control { display:flex; flex:1 1 180px; align-items:center; gap:.55rem; min-width:160px; }
     .pz-speed-control label { color:var(--text-muted); font-size:.66rem; font-weight:700; white-space:nowrap; }
-    .pz-speed-control input { width:100%; min-width:75px; accent-color:#bd5736; }
-    .pz-speed-control strong { color:#bd5736; font:.68rem var(--font-mono); white-space:nowrap; }
+    .pz-speed-control input { width:100%; min-width:75px; accent-color:#1f5a9e; }
+    .pz-speed-control strong { color:#c8321e; font:.68rem var(--font-mono); white-space:nowrap; }
     .pz-canvas-box { height:390px; background:linear-gradient(160deg,#fbfdff,#f3f7fb); }
     #poleZeroCanvas { touch-action:none; cursor:grab; }
-    .pz-canvas-hint { position:absolute; right:9px; bottom:8px; padding:.24rem .45rem; border-radius:6px; background:rgba(15,23,42,.78); color:#e2e8f0; font-size:.59rem; pointer-events:none; }
-    .pz-selection-readout { min-height:2.6em; margin-top:.45rem; padding:.48rem .58rem; border:1px solid var(--border-light); border-radius:8px; background:#f8fafc; color:#526477; font:.64rem/1.5 var(--font-mono); overflow-wrap:anywhere; }
+    .pz-canvas-hint { position:absolute; right:9px; bottom:8px; padding:.24rem .45rem; border-radius:6px; background:rgba(15,23,42,.78); color:#d5dce0; font-size:.59rem; pointer-events:none; }
+    .pz-selection-readout { min-height:2.6em; margin-top:.45rem; padding:.48rem .58rem; border:1px solid var(--border-light); border-radius:8px; background:#eef1f3; color:#526477; font:.64rem/1.5 var(--font-mono); overflow-wrap:anywhere; }
     @media (max-width:600px) { .pz-canvas-box { height:340px; } .pz-speed-control { flex:1 1 100%; } .pz-toolbar-actions { width:100%; } }
 
     .ctrl-lab-split {
@@ -1209,8 +1209,8 @@
     }
 
     .code-mini {
-      background: #0f172a;
-      color: #e2e8f0;
+      background: #15283c;
+      color: #d5dce0;
       border-radius: 10px;
       padding: 0.65rem 0.8rem;
       font-family: var(--font-mono);
@@ -1232,7 +1232,7 @@
       --text-body: #34495a;
       --text-muted: #66798a;
       --accent-emerald: #079b79;
-      --accent-emerald-dark: #08745f;
+      --accent-emerald-dark: #1f5a9e;
       --shadow-sm: 0 8px 24px rgba(18, 35, 52, 0.055);
     }
 
@@ -1300,11 +1300,11 @@
     .panel-head { border-bottom-color: #eaf0f4; }
     .canvas-stage { border-radius: 14px; border-color: #dbe5ec; background: #f7fafc; }
     .btn-action { border-radius: 10px; padding: .48rem .78rem; }
-    .btn-action.primary { background: linear-gradient(135deg, #079b79, #087c70); border-color: #087c70; box-shadow: 0 3px 9px rgba(8,124,112,.16); }
+    .btn-action.primary { background: linear-gradient(135deg, #079b79, #1f5a9e); border-color: #1f5a9e; box-shadow: 0 3px 9px rgba(8,124,112,.16); }
     .btn-action.primary:hover { background: linear-gradient(135deg, #07866c, #07675e); }
     .sci-slider { accent-color: #079b79; }
     .preset-select { border-radius: 10px; }
-    .app-footer { color: #718394; }
+    .app-footer { color: #6b7a87; }
 
     .landscape-workspace { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
     .landscape-hero {
@@ -1345,14 +1345,14 @@
     .landscape-section-heading.compact { align-items: center; }
     .landscape-step {
       display: inline-grid; place-items: center; flex: 0 0 27px; height: 27px; border-radius: 9px;
-      color: #08745f; background: #e3f7f1; border: 1px solid #c7eee2;
+      color: #1f5a9e; background: #e3f7f1; border: 1px solid #c7eee2;
       font: 700 .68rem var(--font-mono);
     }
     .landscape-section-heading h3 { margin: 0; font-size: .9rem; color: #142b3b; letter-spacing: -.015em; }
-    .landscape-section-heading p { margin: .12rem 0 0; color: #718394; font-size: .7rem; }
+    .landscape-section-heading p { margin: .12rem 0 0; color: #6b7a87; font-size: .7rem; }
     .landscape-field { display: flex; flex-direction: column; gap: .32rem; color: #3b5060; font-size: .7rem; font-weight: 650; }
     .landscape-field > span { display: flex; align-items: center; justify-content: space-between; gap: .45rem; }
-    .landscape-field > span strong { color: #08745f; font: 700 .7rem var(--font-mono); }
+    .landscape-field > span strong { color: #1f5a9e; font: 700 .7rem var(--font-mono); }
     .landscape-field input[type="number"], .landscape-field select {
       width: 100%; min-width: 0; padding: .52rem .6rem; border: 1px solid #d5e0e7; border-radius: 9px;
       background: #fbfdfe; color: #1e3444; font: 500 .75rem var(--font-mono); outline: none;
@@ -1382,18 +1382,18 @@
     .landscape-legend > span { display: inline-flex; align-items: center; gap: .35rem; }
     .legend-dot { width: 9px; height: 9px; display: inline-block; border-radius: 50%; }
     .legend-dot.stable { background: #0e7490; }
-    .legend-dot.boundary { background: #e2e8f0; border: 1px solid #94a3b8; }
+    .legend-dot.boundary { background: #d5dce0; border: 1px solid #94a3b8; }
     .legend-dot.unstable { background: #dc4841; }
     .landscape-zero-key { color: #526879; }
     .landscape-status { margin-top: .55rem; padding: .5rem .7rem; border-radius: 9px; background: #f1f5f8; color: #637888; font-size: .68rem; }
-    .landscape-status[data-kind="success"] { background: #e8f8f2; color: #08745f; }
-    .landscape-status[data-kind="error"] { background: #fff1f2; color: #bd5736; }
+    .landscape-status[data-kind="success"] { background: #e8f8f2; color: #1f5a9e; }
+    .landscape-status[data-kind="error"] { background: #fff1f2; color: #c8321e; }
     .landscape-status[data-kind="working"] { background: #eff6ff; color: #1d4ed8; }
     .landscape-inspector { padding: 1.05rem 1.25rem; }
     .landscape-selection-detail { margin-top: .85rem; padding: .8rem .9rem; border: 1px solid #e3ebef; border-radius: 11px; background: #f8fbfc; color: #627888; font-size: .7rem; line-height: 1.65; }
     .landscape-detail-top { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem 1.2rem; color: #5f7483; }
     .landscape-detail-top strong { color: #162f40; font: 700 .72rem var(--font-mono); }
-    .landscape-detail-status { display: inline-flex; margin-top: .5rem; padding: .22rem .5rem; border-radius: 6px; background: #e4f5ef; color: #08745f; font-weight: 700; }
+    .landscape-detail-status { display: inline-flex; margin-top: .5rem; padding: .22rem .5rem; border-radius: 6px; background: #e4f5ef; color: #1f5a9e; font-weight: 700; }
     .landscape-roots { margin-top: .5rem; color: #395366; font: .66rem/1.8 var(--font-mono); overflow-wrap: anywhere; }
     .landscape-method-note { padding: .85rem 1rem; border-left: 3px solid #0d9a7e; border-radius: 0 10px 10px 0; background: rgba(255,255,255,.7); color: #657a89; font-size: .68rem; line-height: 1.6; }
     .landscape-method-note strong { color: #294657; }
@@ -1447,7 +1447,7 @@
     }
     .geometry-legend-note {
       flex-basis: 100%;
-      color: #64748b;
+      color: #5f6e7b;
       font-size: .65rem;
       line-height: 1.4;
     }
@@ -1516,9 +1516,9 @@
     /* UI refresh: compact phone header, denser KPI strip, and consistent chart affordances. */
     :root {
       --ui-ink: #142b3b;
-      --ui-muted: #718394;
+      --ui-muted: #6b7a87;
       --ui-line: #dbe5ec;
-      --ui-accent: #087c70;
+      --ui-accent: #1f5a9e;
     }
     button, select, input { -webkit-tap-highlight-color: transparent; }
     button:focus-visible, select:focus-visible, input:focus-visible, canvas:focus-visible {
@@ -1631,8 +1631,8 @@
     /* Interactive visualization workspace */
     .viz-workspace-nav{position:sticky;top:var(--app-header-height,72px);z-index:35;display:flex;gap:.4rem;overflow-x:auto;padding:.55rem .65rem;margin:-.2rem 0 .1rem;background:rgba(248,250,252,.96);border:1px solid var(--border-light);border-radius:13px;backdrop-filter:blur(12px);scrollbar-width:thin}
     .viz-workspace-nav button{flex:0 0 auto;border:1px solid #dbe5ec;background:#fff;color:#475569;border-radius:999px;padding:.48rem .78rem;font:600 .72rem var(--font-sans);cursor:pointer;white-space:nowrap}
-    .viz-workspace-nav button[aria-current="location"]{background:#0f766e;color:#fff;border-color:#0f766e}
-    .viz-camera-presets{display:inline-flex;gap:.25rem;align-items:center}.pz-trace-legend{display:flex;flex-wrap:wrap;gap:.35rem}.pz-trace-toggle{border:1px solid #cbd5e1;background:#fff;color:#475569;border-radius:999px;padding:.32rem .58rem;font:600 .68rem var(--font-sans);cursor:pointer}.pz-trace-toggle[aria-pressed="false"]{opacity:.42;text-decoration:line-through}.pz-trace-toggle.active{border-color:#0f766e;background:#f0fdfa}.pz-hover-readout{font:600 .7rem var(--font-mono);color:#0f766e;padding:.35rem .55rem;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:8px;margin:.35rem 0}
+    .viz-workspace-nav button[aria-current="location"]{background:#1f5a9e;color:#fff;border-color:#1f5a9e}
+    .viz-camera-presets{display:inline-flex;gap:.25rem;align-items:center}.pz-trace-legend{display:flex;flex-wrap:wrap;gap:.35rem}.pz-trace-toggle{border:1px solid #b4bec6;background:#fff;color:#475569;border-radius:999px;padding:.32rem .58rem;font:600 .68rem var(--font-sans);cursor:pointer}.pz-trace-toggle[aria-pressed="false"]{opacity:.42;text-decoration:line-through}.pz-trace-toggle.active{border-color:#1f5a9e;background:#f0fdfa}.pz-hover-readout{font:600 .7rem var(--font-mono);color:#1f5a9e;padding:.35rem .55rem;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:8px;margin:.35rem 0}
     .viz-camera-presets .btn-action,.landscape-camera-preset{min-height:34px;padding:.3rem .55rem;font-size:.68rem}
     .landscape-camera-preset{border:1px solid var(--border-mid);border-radius:8px;background:#fff;color:var(--text-body);cursor:pointer}
     .landscape-camera-preset.hidden{display:none}
@@ -1640,17 +1640,17 @@
 
     .engineering-inspector {
       display: grid; gap: .55rem; padding: .75rem .9rem; margin: .65rem 0 .2rem;
-      border: 1px solid #cbd5e1; border-left: 3px solid #0d9488; border-radius: 11px;
+      border: 1px solid #b4bec6; border-left: 3px solid #1f5a9e; border-radius: 11px;
       background: #fff; box-shadow: 0 1px 3px rgba(15,23,42,.05); min-width: 0;
     }
-    .engineering-inspector-heading { display:flex; align-items:center; justify-content:space-between; gap:.5rem; color:#64748b; font-size:.66rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
-    .engineering-inspector-clear { border:0; background:transparent; color:#0f766e; font:inherit; text-transform:none; letter-spacing:0; cursor:pointer; padding:.2rem .35rem; }
-    .engineering-inspector-title { color:#0f172a; font-size:.9rem; }
+    .engineering-inspector-heading { display:flex; align-items:center; justify-content:space-between; gap:.5rem; color:#5f6e7b; font-size:.66rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+    .engineering-inspector-clear { border:0; background:transparent; color:#1f5a9e; font:inherit; text-transform:none; letter-spacing:0; cursor:pointer; padding:.2rem .35rem; }
+    .engineering-inspector-title { color:#15283c; font-size:.9rem; }
     .engineering-inspector-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(135px,1fr)); gap:.45rem; }
-    .engineering-inspector-value { display:grid; gap:.12rem; min-width:0; padding:.4rem .5rem; border-radius:7px; background:#f8fafc; }
-    .engineering-inspector-value span { color:#64748b; font-size:.65rem; }
-    .engineering-inspector-value strong { color:#0f172a; font:600 .78rem "IBM Plex Mono", monospace; overflow-wrap:anywhere; }
-    .engineering-inspector-note,.engineering-inspector-empty { margin:0; color:#64748b; font-size:.7rem; line-height:1.45; }
+    .engineering-inspector-value { display:grid; gap:.12rem; min-width:0; padding:.4rem .5rem; border-radius:7px; background:#eef1f3; }
+    .engineering-inspector-value span { color:#5f6e7b; font-size:.65rem; }
+    .engineering-inspector-value strong { color:#15283c; font:600 .78rem "IBM Plex Mono", monospace; overflow-wrap:anywhere; }
+    .engineering-inspector-note,.engineering-inspector-empty { margin:0; color:#5f6e7b; font-size:.7rem; line-height:1.45; }
   
     /* Single primary navigation: keep the old tab buttons only as hidden JS routing state. */
     .lab-nav-bar { display: none !important; }
@@ -1665,13 +1665,13 @@
     .viz-workspace-nav button {
       flex: 0 0 auto; border: 0; border-bottom: 2px solid transparent;
       background: transparent; color: var(--text-muted); border-radius: 0;
-      padding: .62rem .78rem .55rem; font: 600 .72rem var(--font-mono);
-      letter-spacing: .025em; text-transform: uppercase; cursor: pointer;
+      padding: .62rem .78rem .55rem; font: 550 .86rem var(--font-body);
+      letter-spacing: 0; cursor: pointer;
       white-space: nowrap; transition: color .15s ease, border-color .15s ease;
     }
     .viz-workspace-nav button:hover { color: var(--text-main); background: transparent; }
     .viz-workspace-nav button[aria-current="location"] {
-      color: var(--text-main); background: transparent; border-bottom-color: var(--accent-amber, #bd5736);
+      color: var(--text-main); background: transparent; border-bottom-color: var(--select, #1f5a9e);
     }
     @media (max-width: 700px) {
       .viz-workspace-nav { top: 0; margin: 0 -.1rem .25rem; padding: .05rem 0 0; }
@@ -1681,7 +1681,7 @@
 </style>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@90..110,400..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="instrument-ui.css" />
 </head>
 <body>
@@ -1691,16 +1691,18 @@
   <!-- ===================================================================== -->
   <header class="app-header">
     <div class="header-inner">
-      <div class="brand-group">
-        <div class="brand-icon brand-mark" aria-hidden="true">
-          <span>J6</span><small>04</small>
+      <div class="title-block" role="group" aria-label="Instrument title block">
+        <div class="tb-cell tb-name">
+          <h1 class="brand-title">JBike6</h1>
+          <p class="tb-sub">Bicycle dynamics test bench</p>
         </div>
-        <div class="brand-copy">
-          <div class="brand-title-row">
-            <h1 class="brand-title">JBike6</h1>
-            <span class="brand-badge">Bicycle dynamics instrument</span>
-          </div>
-          <p class="brand-sub">WHIPPLE–CARVALLO MODEL / FOUR-BODY FORMULATION</p>
+        <div class="tb-cell">
+          <span class="tb-label">Model</span>
+          <span class="tb-value" id="tbModelName">Modern Enduro Mullet</span>
+        </div>
+        <div class="tb-cell">
+          <span class="tb-label">Formulation</span>
+          <span class="tb-value">Whipple–Carvallo, four bodies</span>
         </div>
       </div>
 
@@ -1737,19 +1739,20 @@
       </div>
     </div>
   </header>
+  <script>
+    (function(){var sel=document.getElementById('presetSelect'),out=document.getElementById('tbModelName');
+      if(!sel||!out)return;
+      function sync(){var t=sel.options[sel.selectedIndex].text;out.textContent=t.replace(/\s*\(.*$/,'').replace(/\s+[\u2014-]\s+.*$/,'');}
+      sel.addEventListener('change',sync);sync();})();
+  </script>
 
   <!-- ===================================================================== -->
   <!-- MAIN WORKSPACE                                                        -->
   <!-- ===================================================================== -->
   <main class="main-wrap">
 
-    <nav id="vizWorkspaceNav" class="viz-workspace-nav" aria-label="Primary workspace navigation"></nav>\n    <section id="engineeringInspector" class="engineering-inspector is-empty" aria-label="Linked engineering inspector"><div class="engineering-inspector-empty">Select a point, mode, or component in any visualization to inspect it here.</div></section>
-
-    <div class="output-strip-heading" aria-label="Calculated model outputs">
-      <span class="output-strip-index">MODEL OUTPUT /</span>
-      <span class="output-strip-title">Current model response</span>
-      <span class="output-strip-note">Calculated from the active bicycle configuration and speed sweep</span>
-    </div>
+    <nav id="vizWorkspaceNav" class="viz-workspace-nav" aria-label="Primary workspace navigation"></nav>
+    <section id="engineeringInspector" class="engineering-inspector is-empty" aria-label="Linked engineering inspector"><div class="engineering-inspector-empty">Select a point, mode, or component in any visualization to inspect it here.</div></section>
     <section class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-top">
@@ -1795,7 +1798,7 @@
         <div class="kpi-val-row">
           <span id="kpiTrailVal" class="kpi-val tabular-nums">--</span>
           <span class="kpi-sec">trail</span>
-          <span style="color:#cbd5e1;">|</span>
+          <span style="color:#b4bec6;">|</span>
           <span id="kpiHtaVal" class="kpi-val tabular-nums" style="font-size:1.15rem;">--</span>
           <span class="kpi-sec">HTA</span>
         </div>
@@ -1804,7 +1807,7 @@
     </section>
 
     <section class="insight-banner" aria-label="Model interpretation">
-      <span class="insight-tag">MODEL NOTE /</span>
+      
       <span class="insight-text" id="physicsInsightText">Initializing linearized Whipple–Carvallo eigenvalue solver...</span>
     </section>
 
@@ -1833,7 +1836,7 @@
         <!-- 1. WHEEL & TIRE SIZING (MULLET LAB) -->
         <div class="panel-card">
           <div class="panel-head">
-            <h2 class="panel-title"><span class="dot" style="background:#34736c;"></span>Wheel &amp; Tire Geometry</h2>
+            <h2 class="panel-title">Wheel &amp; Tire Geometry</h2>
             <span class="panel-hint">29" / 27.5" / Custom</span>
           </div>
 
@@ -1910,7 +1913,7 @@
         <!-- 2. FRAME & STEERING GEOMETRY -->
         <div class="panel-card">
           <div class="panel-head">
-            <h2 class="panel-title"><span class="dot" style="background:#4f46e5;"></span>Frame &amp; Steering Geometry</h2>
+            <h2 class="panel-title">Frame &amp; Steering Geometry</h2>
             <span class="panel-hint">Coupled Trail</span>
           </div>
 
@@ -1951,7 +1954,7 @@
         <!-- 3. RIDER & MASS DISTRIBUTION -->
         <div class="panel-card">
           <div class="panel-head">
-            <h2 class="panel-title"><span class="dot" style="background:#bd5736;"></span>Rider &amp; Mass Properties</h2>
+            <h2 class="panel-title">Rider &amp; Mass Properties</h2>
             <div class="seg-group light">
               <button type="button" id="btnStanceSeated" class="seg-btn active">Seated</button>
               <button type="button" id="btnStanceAttack" class="seg-btn">Attack</button>
@@ -2004,7 +2007,7 @@
         <!-- 4. SPEED SWEEP & ENVIRONMENT DEFAULTS -->
         <div class="panel-card">
           <div class="panel-head">
-            <h2 class="panel-title"><span class="dot" style="background:#0284c7;"></span>Analysis Envelope &amp; Environment</h2>
+            <h2 class="panel-title">Analysis Envelope &amp; Environment</h2>
             <span class="panel-hint">Solver Bounds</span>
           </div>
 
@@ -2045,59 +2048,8 @@
       <!-- ================================================================= -->
       <div class="viz-col">
 
-        <!-- VIZ 1: BICYCLE GEOMETRY & 3D INTERACTIVE PERSPECTIVE VIEW -->
-        <section class="panel-card">
-          <div class="viz-header">
-            <div>
-              <h2 class="viz-title" id="geomVizTitle">Bicycle Geometry &amp; Principal Inertia Diagram</h2>
-              <p class="viz-sub" id="geomVizSub">Select component inertia data or drag the teal Rider CoM and orange Front CoM handles</p>
-            </div>
-            <div class="viz-toolbar geometry-viz-toolbar">
-              <label id="dumbbellToggleWrap" class="btn-action" style="cursor:pointer;" title="Show component and assembly principal-inertia glyphs in both views">
-                <input id="chkShowDumbbells" type="checkbox" checked style="accent-color:#bd5736;" />
-                <span>Principal inertia glyphs</span>
-              </label>
-              <button type="button" id="btnZoomGeomOut" class="btn-action hidden" title="Zoom out" aria-label="Zoom out">−</button>
-              <button type="button" id="btnZoomGeomIn" class="btn-action hidden" title="Zoom in" aria-label="Zoom in">+</button>
-              <button type="button" id="btnResetGeomCam" class="btn-action hidden">Reset camera</button><div class="viz-camera-presets geom-camera-presets" role="group" aria-label="Geometry camera presets" style="display:none"><button type="button" data-geom-camera="front" class="btn-action">Front</button><button type="button" data-geom-camera="side" class="btn-action">Side</button><button type="button" data-geom-camera="top" class="btn-action">Top</button></div>
-              <div class="seg-group light" role="group" aria-label="Geometry View Mode">
-                <button type="button" id="btnGeomMode2D" class="seg-btn active" aria-pressed="true">2D Blueprint</button>
-                <button type="button" id="btnGeomMode3D" class="seg-btn" aria-pressed="false">3D Interactive Ride</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="canvas-stage geom-h">
-            <canvas id="geomCanvas" aria-label="Interactive bicycle geometry and principal inertia visualization"></canvas>
-            <div id="geomDragBadge" class="overlay-badge hidden">Dragging CoM...</div>
-            <div id="geom3dHint" class="camera-hint hidden">Drag to orbit &bull; Pinch or use + / − to zoom &bull; Live roll and steering motion</div>
-          </div>
-          <div id="geomRideControls" class="geom-ride-controls hidden" aria-label="3D ride simulation controls">
-            <div class="geom-ride-copy">
-              <span class="geom-ride-kicker">RIDE MOTION</span>
-              <span id="geomRideStatus" role="status" aria-live="polite">Ready to run the selected perturbation test.</span>
-              <span class="geom-ride-note">The bike follows the Ride Test settings below. Stand upright pauses at zero roll and steer.</span>
-            </div>
-            <div class="geom-ride-actions">
-              <button type="button" id="btnGeomUpright" class="btn-action" title="Pause and place the bike at zero roll and steer">Stand upright</button>
-              <button type="button" id="btnGeomReplay" class="btn-action primary" title="Replay the selected roll perturbation from the beginning">Replay test</button>
-            </div>
-          </div>
-          <div class="geometry-legend" id="geomLegend" aria-label="Geometry and inertia legend">
-            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#46514f;"></span>Frame</span>
-            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#059669;"></span>Rider</span>
-            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#747a72;"></span>Rack</span>
-            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#d97706;"></span>Fork</span>
-            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#34736c;"></span>Basket</span>
-            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#34736c;"></span>Rear assembly axes</span>
-            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#bd5736;"></span>Steering assembly axes</span>
-            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#202a2e;"></span>Total CoM</span>
-            <span class="geometry-legend-note">Inertia glyphs show scaled radii of gyration, not physical component dimensions.</span>
-          </div>
-        </section>
-
         <!-- VIZ 2: EIGENVALUE ROOT-LOCUS PLOT (2D CLASSIC & 3D COMPLEX SPACE) -->
-        <section class="panel-card">
+        <section class="panel-card stability-hero">
           <div class="viz-header">
             <div>
               <h2 class="viz-title" id="rootVizTitle">Eigenvalue Root-Locus Stability Plot (&lambda; vs. Forward Speed)</h2>
@@ -2134,6 +2086,57 @@
               <div id="hoverModesList" class="tabular-nums" style="font-size:0.7rem;line-height:1.45;"></div>
             </div>
             <div id="root3dHint" class="camera-hint hidden">3D Complex Space (v, Re(&lambda;), Im(&lambda;)) &bull; Drag to rotate &bull; Scroll to zoom</div>
+          </div>
+        </section>
+
+        <!-- VIZ 1: BICYCLE GEOMETRY & 3D INTERACTIVE PERSPECTIVE VIEW -->
+        <section class="panel-card">
+          <div class="viz-header">
+            <div>
+              <h2 class="viz-title" id="geomVizTitle">Bicycle Geometry &amp; Principal Inertia Diagram</h2>
+              <p class="viz-sub" id="geomVizSub">Select component inertia data or drag the ochre Rider CoM and blue Front CoM handles</p>
+            </div>
+            <div class="viz-toolbar geometry-viz-toolbar">
+              <label id="dumbbellToggleWrap" class="btn-action" style="cursor:pointer;" title="Show component and assembly principal-inertia glyphs in both views">
+                <input id="chkShowDumbbells" type="checkbox" checked style="accent-color:#1f5a9e;" />
+                <span>Principal inertia glyphs</span>
+              </label>
+              <button type="button" id="btnZoomGeomOut" class="btn-action hidden" title="Zoom out" aria-label="Zoom out">−</button>
+              <button type="button" id="btnZoomGeomIn" class="btn-action hidden" title="Zoom in" aria-label="Zoom in">+</button>
+              <button type="button" id="btnResetGeomCam" class="btn-action hidden">Reset camera</button><div class="viz-camera-presets geom-camera-presets" role="group" aria-label="Geometry camera presets" style="display:none"><button type="button" data-geom-camera="front" class="btn-action">Front</button><button type="button" data-geom-camera="side" class="btn-action">Side</button><button type="button" data-geom-camera="top" class="btn-action">Top</button></div>
+              <div class="seg-group light" role="group" aria-label="Geometry View Mode">
+                <button type="button" id="btnGeomMode2D" class="seg-btn active" aria-pressed="true">2D Blueprint</button>
+                <button type="button" id="btnGeomMode3D" class="seg-btn" aria-pressed="false">3D Interactive Ride</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="canvas-stage geom-h">
+            <canvas id="geomCanvas" aria-label="Interactive bicycle geometry and principal inertia visualization"></canvas>
+            <div id="geomDragBadge" class="overlay-badge hidden">Dragging CoM...</div>
+            <div id="geom3dHint" class="camera-hint hidden">Drag to orbit &bull; Pinch or use + / − to zoom &bull; Live roll and steering motion</div>
+          </div>
+          <div id="geomRideControls" class="geom-ride-controls hidden" aria-label="3D ride simulation controls">
+            <div class="geom-ride-copy">
+              
+              <span id="geomRideStatus" role="status" aria-live="polite">Ready to run the selected perturbation test.</span>
+              <span class="geom-ride-note">The bike follows the Ride Test settings below. Stand upright pauses at zero roll and steer.</span>
+            </div>
+            <div class="geom-ride-actions">
+              <button type="button" id="btnGeomUpright" class="btn-action" title="Pause and place the bike at zero roll and steer">Stand upright</button>
+              <button type="button" id="btnGeomReplay" class="btn-action primary" title="Replay the selected roll perturbation from the beginning">Replay test</button>
+            </div>
+          </div>
+          <div class="geometry-legend" id="geomLegend" aria-label="Geometry and inertia legend">
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#3a4b5c;"></span>Frame</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#9a6a12;"></span>Rider</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#6b7a87;"></span>Rack</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#1f5a9e;"></span>Fork</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#9a6a12;"></span>Basket</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#9a6a12;"></span>Rear assembly axes</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#1f5a9e;"></span>Steering assembly axes</span>
+            <span class="geometry-legend-item"><span class="geometry-legend-swatch" style="background:#15283c;"></span>Total CoM</span>
+            <span class="geometry-legend-note">Inertia glyphs show scaled radii of gyration, not physical component dimensions.</span>
           </div>
         </section>
 
@@ -2305,9 +2308,9 @@
             </div>
           </div>
           <div class="legend-bar pz-trace-legend" style="margin-bottom:0.4rem;" role="group" aria-label="Visible pole-zero traces">
-            <button type="button" class="pz-trace-toggle active" data-pz-trace="poles" aria-pressed="true"><strong style="color:#34736c;">×</strong> Open-loop poles</button>
-            <button type="button" class="pz-trace-toggle active" data-pz-trace="zeros" aria-pressed="true"><strong style="color:#bd5736;">○</strong> Transmission zeros</button>
-            <button type="button" class="pz-trace-toggle active" data-pz-trace="closed" aria-pressed="true"><strong style="color:#4f46e5;">◆</strong> Closed-loop poles</button>
+            <button type="button" class="pz-trace-toggle active" data-pz-trace="poles" aria-pressed="true"><strong style="color:#2f7d4a;">×</strong> Open-loop poles</button>
+            <button type="button" class="pz-trace-toggle active" data-pz-trace="zeros" aria-pressed="true"><strong style="color:#c8321e;">○</strong> Transmission zeros</button>
+            <button type="button" class="pz-trace-toggle active" data-pz-trace="closed" aria-pressed="true"><strong style="color:#1f5a9e;">◆</strong> Closed-loop poles</button>
           </div>
           <div class="pz-canvas-box">
             <canvas id="poleZeroCanvas" role="img" aria-label="Interactive three-dimensional pole-zero map with real and imaginary pole coordinates and bicycle forward speed as the third axis"></canvas>
@@ -2322,7 +2325,7 @@
       <section class="eigen-lab-panel" aria-labelledby="eigenMathTitle">
         <div class="eigen-lab-heading">
           <div>
-            <span class="eigen-kicker">OPEN-LOOP BICYCLE MODES</span>
+            
             <h3 id="eigenMathTitle">Eigenvalue Math Explorer &amp; Mode Shapes</h3>
             <p>Follow the current bicycle model from its equations of motion to the four eigenvalues and the lean/steer motion associated with a selected root.</p>
           </div>
@@ -2471,7 +2474,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           <p>Explore how two design parameters reshape the bicycle's dynamic stability at a chosen forward speed.</p>
         </div>
         <div class="landscape-hero-equation" aria-label="Maximum real part of the eigenvalues">
-          <span class="equation-kicker">STABILITY METRIC</span>
+          
           <strong>max Re(λ)</strong>
           <small>Negative = decaying · Positive = growing</small>
         </div>
@@ -2585,7 +2588,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
     <!-- ================================================================ -->
     <section id="designOptimizationSection" class="optimization-workspace hidden" aria-labelledby="optimizationTitle">
       <div class="optimization-hero">
-        <div><span class="optimization-kicker">DESIGN SPACE SEARCH</span><h2 id="optimizationTitle">Bicycle Parameter Optimization Laboratory</h2><p>Search two design variables while evaluating the open-loop eigenvalues across a selected forward-speed interval.</p></div>
+        <div><h2 id="optimizationTitle">Bicycle Parameter Optimization Laboratory</h2><p>Search two design variables while evaluating the open-loop eigenvalues across a selected forward-speed interval.</p></div>
         <div class="optimization-objective"><span>OPTIMIZATION OBJECTIVE</span><strong>Minimize max Re(λ)</strong><small>Worst sampled growth rate over the speed interval</small></div>
       </div>
       <div class="optimization-layout">
@@ -3917,11 +3920,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         // Grid & axes
         ctx.font = '500 10px "IBM Plex Mono", monospace';
-        ctx.fillStyle = '#68716c';
+        ctx.fillStyle = '#5f6e7b';
         ctx.textAlign = 'center';
         for (let r = reMin; r <= reMax; r += 2) {
           const px = toX(r);
-          ctx.strokeStyle = r === 0 ? '#68716c' : '#dedcd2';
+          ctx.strokeStyle = r === 0 ? '#5f6e7b' : '#d5dce0';
           ctx.lineWidth = r === 0 ? 1.5 : 1;
           ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, padT + plotH); ctx.stroke();
           ctx.fillText(String(r), px, padT + plotH + 14);
@@ -3929,13 +3932,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.textAlign = 'right';
         for (let im = imMin; im <= imMax; im += 4) {
           const py = toY(im);
-          ctx.strokeStyle = im === 0 ? '#68716c' : '#dedcd2';
+          ctx.strokeStyle = im === 0 ? '#5f6e7b' : '#d5dce0';
           ctx.lineWidth = im === 0 ? 1.5 : 1;
           ctx.beginPath(); ctx.moveTo(padL, py); ctx.lineTo(padL + plotW, py); ctx.stroke();
           ctx.fillText(String(im), padL - 6, py + 3);
         }
 
-        ctx.fillStyle = '#46514f';
+        ctx.fillStyle = '#3a4b5c';
         ctx.font = '600 10px "IBM Plex Sans", sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('Re(s) [1/s]  ← LHP Stable | RHP Unstable →', padL + plotW * 0.5, height - 4);
@@ -3946,7 +3949,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.beginPath(); ctx.rect(padL, padT, plotW, plotH); ctx.clip();
 
         // Open-loop poles (blue 'x')
-        ctx.strokeStyle = '#bd5736';
+        ctx.strokeStyle = '#c8321e';
         ctx.lineWidth = 2.2;
         for (const p of ss.poles) {
           const px = toX(Math.max(reMin, Math.min(reMax, p.re)));
@@ -3958,7 +3961,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         // Transmission zeros (amber 'o')
-        ctx.strokeStyle = '#bd5736';
+        ctx.strokeStyle = '#c8321e';
         ctx.lineWidth = 2;
         for (const z of ss.zeros) {
           if (Math.abs(z.re) > 25 || Math.abs(z.im) > 25) continue;
@@ -3976,7 +3979,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             appState.control.kd,
             appState.control.ki
           );
-          ctx.strokeStyle = '#34736c';
+          ctx.strokeStyle = '#2f7d4a';
           ctx.lineWidth = 2;
           for (const cp of clPoles) {
             const cxp = toX(Math.max(reMin, Math.min(reMax, cp.re)));
@@ -3989,7 +3992,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         ctx.restore();
-        ctx.strokeStyle = '#b9b9ae';
+        ctx.strokeStyle = '#b4bec6';
         ctx.lineWidth = 1;
         ctx.strokeRect(padL, padT, plotW, plotH);
       }
@@ -4017,11 +4020,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const toY = (deg) => padT + ((maxDeg - deg) / (2 * maxDeg)) * plotH;
 
         ctx.font = '500 10px "IBM Plex Mono", monospace';
-        ctx.fillStyle = '#68716c';
+        ctx.fillStyle = '#5f6e7b';
         ctx.textAlign = 'right';
         for (const yv of [-maxDeg, -maxDeg * 0.5, 0, maxDeg * 0.5, maxDeg]) {
           const py = toY(yv);
-          ctx.strokeStyle = yv === 0 ? '#68716c' : '#dedcd2';
+          ctx.strokeStyle = yv === 0 ? '#5f6e7b' : '#d5dce0';
           ctx.lineWidth = yv === 0 ? 1.25 : 1;
           ctx.beginPath(); ctx.moveTo(padL, py); ctx.lineTo(padL + plotW, py); ctx.stroke();
           ctx.fillText(`${yv.toFixed(0)}°`, padL - 6, py + 3);
@@ -4030,25 +4033,25 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.textAlign = 'center';
         for (let ts = 0; ts <= duration; ts += duration <= 6 ? 1 : 2) {
           const px = toX(ts);
-          ctx.strokeStyle = '#dedcd2';
+          ctx.strokeStyle = '#d5dce0';
           ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, padT + plotH); ctx.stroke();
           ctx.fillText(`${ts}s`, px, padT + plotH + 15);
         }
 
         ctx.textAlign = 'left';
         ctx.font = '600 11px "IBM Plex Sans", sans-serif';
-        ctx.fillStyle = '#b9b9ae';
+        ctx.fillStyle = '#b4bec6';
         ctx.fillText('--- Uncontrolled Lean φ_open(t)', padL, 15);
-        ctx.fillStyle = '#34736c';
+        ctx.fillStyle = '#2f7d4a';
         ctx.fillText('— Controlled Lean φ_ctrl(t)', padL + 175, 15);
-        ctx.fillStyle = '#bd5736';
+        ctx.fillStyle = '#c8321e';
         ctx.fillText('— Steer δ_ctrl(t)', padL + 335, 15);
 
         ctx.save();
         ctx.beginPath(); ctx.rect(padL, padT, plotW, plotH); ctx.clip();
 
         // Open-loop dashed reference
-        ctx.strokeStyle = '#b9b9ae';
+        ctx.strokeStyle = '#b4bec6';
         ctx.lineWidth = 1.75;
         ctx.setLineDash([5, 4]);
         ctx.beginPath();
@@ -4060,7 +4063,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.setLineDash([]);
 
         // Controlled lean angle
-        ctx.strokeStyle = '#34736c';
+        ctx.strokeStyle = '#2f7d4a';
         ctx.lineWidth = 2.2;
         ctx.beginPath();
         ctrlTraj.forEach((pt, i) => {
@@ -4070,7 +4073,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.stroke();
 
         // Controlled steer angle
-        ctx.strokeStyle = '#bd5736';
+        ctx.strokeStyle = '#c8321e';
         ctx.lineWidth = 1.8;
         ctx.beginPath();
         ctrlTraj.forEach((pt, i) => {
@@ -4080,7 +4083,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.stroke();
 
         ctx.restore();
-        ctx.strokeStyle = '#b9b9ae';
+        ctx.strokeStyle = '#b4bec6';
         ctx.strokeRect(padL, padT, plotW, plotH);
       }
 
@@ -4370,7 +4373,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         for (const pt of [alongA, alongB, acrossA, acrossB]) {
           ctx.beginPath();
           ctx.arc(pt.x, pt.y, 2.7, 0, Math.PI * 2);
-          ctx.fillStyle = '#f2f0e8';
+          ctx.fillStyle = '#eef1f3';
           ctx.fill();
           ctx.strokeStyle = color;
           ctx.lineWidth = 1.3;
@@ -4411,7 +4414,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.moveTo(b1.x, b1.y); ctx.lineTo(b2.x, b2.y);
         ctx.stroke();
         ctx.setLineDash([]);
-        ctx.fillStyle = '#f2f0e8';
+        ctx.fillStyle = '#eef1f3';
         ctx.strokeStyle = color;
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -4429,8 +4432,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         if (!model || !(model.mT > 1e-8)) return;
         const point = toPx(model.xT, -model.zT);
         ctx.save();
-        ctx.strokeStyle = '#bd5736';
-        ctx.fillStyle = '#f2f0e8';
+        ctx.strokeStyle = '#1f5a9e';
+        ctx.fillStyle = '#eef1f3';
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.arc(point.x, point.y, 7, 0, Math.PI * 2);
@@ -4441,7 +4444,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.moveTo(point.x, point.y - 11); ctx.lineTo(point.x, point.y + 11);
         ctx.stroke();
         ctx.font = '700 10px "IBM Plex Sans", sans-serif';
-        ctx.fillStyle = '#bd5736';
+        ctx.fillStyle = '#1f5a9e';
         ctx.textAlign = 'left';
         ctx.fillText('Total CoM', point.x + 12, point.y + 4);
         ctx.restore();
@@ -4484,19 +4487,19 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         // Ground line
         const gLeft = toPx(minX, 0), gRight = toPx(maxX, 0);
-        ctx.strokeStyle = '#68716c';
+        ctx.strokeStyle = '#5f6e7b';
         ctx.lineWidth = 2;
         ctx.beginPath(); ctx.moveTo(gLeft.x, gLeft.y); ctx.lineTo(gRight.x, gRight.y); ctx.stroke();
 
         // X-Y Origin Axes at Rear Contact
         const orig = toPx(0, 0);
-        ctx.strokeStyle = '#68716c';
+        ctx.strokeStyle = '#5f6e7b';
         ctx.lineWidth = 1.8;
         ctx.beginPath();
         ctx.moveTo(orig.x, orig.y); ctx.lineTo(orig.x + 36, orig.y);
         ctx.moveTo(orig.x, orig.y); ctx.lineTo(orig.x, orig.y - 36);
         ctx.stroke();
-        ctx.fillStyle = '#68716c';
+        ctx.fillStyle = '#5f6e7b';
         ctx.font = '700 10px "IBM Plex Mono", monospace';
         ctx.fillText('X', orig.x + 40, orig.y + 3);
         ctx.fillText('Y', orig.x - 4, orig.y - 40);
@@ -4507,19 +4510,19 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const rPx = radius * scale;
           if (rPx < 2) return;
           ctx.save();
-          ctx.strokeStyle = '#202a2e';
+          ctx.strokeStyle = '#15283c';
           ctx.lineWidth = Math.max(3, rPx * 0.11);
           ctx.beginPath();
           ctx.arc(center.x, center.y, Math.max(2, rPx - ctx.lineWidth * 0.5), 0, Math.PI * 2);
           ctx.stroke();
 
-          ctx.strokeStyle = '#68716c';
+          ctx.strokeStyle = '#5f6e7b';
           ctx.lineWidth = 1.5;
           ctx.beginPath();
           ctx.arc(center.x, center.y, Math.max(1, rPx * 0.84), 0, Math.PI * 2);
           ctx.stroke();
 
-          ctx.strokeStyle = '#b9b9ae';
+          ctx.strokeStyle = '#b4bec6';
           ctx.lineWidth = 1;
           for (let i = 0; i < 12; i++) {
             const ang = (i * Math.PI) / 6;
@@ -4529,10 +4532,10 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             ctx.stroke();
           }
 
-          ctx.fillStyle = '#202a2e';
+          ctx.fillStyle = '#15283c';
           ctx.beginPath(); ctx.arc(center.x, center.y, 4, 0, Math.PI * 2); ctx.fill();
 
-          ctx.fillStyle = '#46514f';
+          ctx.fillStyle = '#3a4b5c';
           ctx.font = '600 11px "IBM Plex Sans", sans-serif';
           ctx.textAlign = 'center';
           ctx.fillText(labelText, center.x, center.y - rPx - 8);
@@ -4551,7 +4554,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const pSteerTop = toPx(steerTopX, steerTopY);
 
         ctx.save();
-        ctx.strokeStyle = '#bd5736';
+        ctx.strokeStyle = '#1f5a9e';
         ctx.lineWidth = 1.75;
         ctx.setLineDash([6, 4]);
         ctx.beginPath(); ctx.moveTo(pSteerBot.x, pSteerBot.y); ctx.lineTo(pSteerTop.x, pSteerTop.y); ctx.stroke();
@@ -4560,13 +4563,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // U-V basis vectors at steer ground intersection
         const uAxisEnd = toPx(xSteerGround + 0.16 * Math.sin(htaRad), 0.16 * Math.cos(htaRad));
         const vAxisEnd = toPx(xSteerGround - 0.16 * Math.cos(htaRad), 0.16 * Math.sin(htaRad));
-        ctx.strokeStyle = '#bd5736';
+        ctx.strokeStyle = '#1f5a9e';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(pSteerBot.x, pSteerBot.y); ctx.lineTo(uAxisEnd.x, uAxisEnd.y);
         ctx.moveTo(pSteerBot.x, pSteerBot.y); ctx.lineTo(vAxisEnd.x, vAxisEnd.y);
         ctx.stroke();
-        ctx.fillStyle = '#bd5736';
+        ctx.fillStyle = '#1f5a9e';
         ctx.font = '700 10px "IBM Plex Mono", monospace';
         ctx.fillText('U', uAxisEnd.x + 4, uAxisEnd.y);
         ctx.fillText('V', vAxisEnd.x - 10, vAxisEnd.y);
@@ -4583,7 +4586,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const pHeadBot = toPx(headBot.x, headBot.y), pHeadTop = toPx(headTop.x, headTop.y), pSeatTop = toPx(seatTop.x, seatTop.y);
 
         ctx.save();
-        ctx.strokeStyle = '#202a2e';
+        ctx.strokeStyle = '#15283c';
         ctx.lineWidth = 3.5;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
@@ -4592,7 +4595,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.moveTo(pSeatTop.x, pSeatTop.y); ctx.lineTo(pHeadTop.x, pHeadTop.y); ctx.lineTo(pHeadBot.x, pHeadBot.y); ctx.lineTo(pBB.x, pBB.y);
         ctx.stroke();
 
-        ctx.strokeStyle = '#34736c';
+        ctx.strokeStyle = '#9a6a12';
         ctx.lineWidth = 3.2;
         ctx.beginPath();
         ctx.moveTo(pHeadBot.x, pHeadBot.y); ctx.lineTo(pFront.x, pFront.y);
@@ -4604,17 +4607,17 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const pRearGround = toPx(0, 0);
 
         ctx.save();
-        ctx.strokeStyle = '#bd5736';
+        ctx.strokeStyle = '#1f5a9e';
         ctx.lineWidth = 4;
         ctx.beginPath(); ctx.moveTo(pFrontGround.x, pFrontGround.y); ctx.lineTo(pSteerBot.x, pSteerBot.y); ctx.stroke();
 
-        ctx.fillStyle = '#bd5736';
+        ctx.fillStyle = '#1f5a9e';
         ctx.font = '600 11px "IBM Plex Mono", monospace';
         ctx.textAlign = 'center';
         ctx.fillText(`Trail ${(c * 1000).toFixed(1)}mm`, (pFrontGround.x + pSteerBot.x) * 0.5, pFrontGround.y + 16);
 
         const wbY = pRearGround.y + 28;
-        ctx.strokeStyle = '#68716c';
+        ctx.strokeStyle = '#5f6e7b';
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(pRearGround.x, pRearGround.y + 4); ctx.lineTo(pRearGround.x, wbY + 4);
@@ -4622,16 +4625,16 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.moveTo(pRearGround.x, wbY); ctx.lineTo(pFrontGround.x, wbY);
         ctx.stroke();
 
-        ctx.fillStyle = '#68716c';
+        ctx.fillStyle = '#5f6e7b';
         ctx.fillText(`Wheelbase w = ${w.toFixed(3)} m`, (pRearGround.x + pFrontGround.x) * 0.5, wbY - 4);
 
         const arcR = 34;
-        ctx.strokeStyle = '#bd5736';
+        ctx.strokeStyle = '#1f5a9e';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.arc(pSteerBot.x, pSteerBot.y, arcR, Math.PI, Math.PI + htaRad, false);
         ctx.stroke();
-        ctx.fillStyle = '#bd5736';
+        ctx.fillStyle = '#1f5a9e';
         ctx.textAlign = 'right';
         ctx.fillText(`${p.headAngleDeg.toFixed(1)}°`, pSteerBot.x - arcR - 5, pSteerBot.y - 8);
         ctx.restore();
@@ -4639,13 +4642,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // Principal-inertia overlays: component ellipses plus the two Whipple
         // rigid-body assemblies. These are scaled radii of gyration, not part shapes.
         if (appState.showDumbbells) {
-          drawAssemblyPrincipalAxes2D(ctx, toPx, model.compB_JB, '#34736c', 'Rear assembly');
-          drawAssemblyPrincipalAxes2D(ctx, toPx, model.compH_JB, '#bd5736', 'Steering assembly');
-          drawInertiaDumbbell(ctx, toPx, p.frame, '#68716c');
-          drawInertiaDumbbell(ctx, toPx, p.rider, '#34736c');
-          drawInertiaDumbbell(ctx, toPx, p.rack, '#747a72');
-          drawInertiaDumbbell(ctx, toPx, forkXY, '#bd5736');
-          drawInertiaDumbbell(ctx, toPx, model.basketXY, '#34736c');
+          drawAssemblyPrincipalAxes2D(ctx, toPx, model.compB_JB, '#9a6a12', 'Rear assembly');
+          drawAssemblyPrincipalAxes2D(ctx, toPx, model.compH_JB, '#1f5a9e', 'Steering assembly');
+          drawInertiaDumbbell(ctx, toPx, p.frame, '#5f6e7b');
+          drawInertiaDumbbell(ctx, toPx, p.rider, '#9a6a12');
+          drawInertiaDumbbell(ctx, toPx, p.rack, '#6b7a87');
+          drawInertiaDumbbell(ctx, toPx, forkXY, '#1f5a9e');
+          drawInertiaDumbbell(ctx, toPx, model.basketXY, '#9a6a12');
           drawSystemCenterOfMass2D(ctx, toPx, model);
         }
 
@@ -4664,7 +4667,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.stroke();
           ctx.fillStyle = fillColor;
           ctx.fillRect(pt.x - 3, pt.y - 3, 6, 6);
-          ctx.strokeStyle = '#f2f0e8';
+          ctx.strokeStyle = '#eef1f3';
           ctx.lineWidth = 1;
           ctx.strokeRect(pt.x - 3, pt.y - 3, 6, 6);
 
@@ -4672,19 +4675,19 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const tw = ctx.measureText(label).width + 12;
           const labelX = pt.x + 15;
           const labelY = pt.y - 10;
-          ctx.fillStyle = '#202a2e';
+          ctx.fillStyle = '#15283c';
           ctx.fillRect(labelX, labelY, tw, 20);
           ctx.strokeStyle = fillColor;
           ctx.lineWidth = 1;
           ctx.strokeRect(labelX, labelY, tw, 20);
-          ctx.fillStyle = '#f2f0e8';
+          ctx.fillStyle = '#eef1f3';
           ctx.textAlign = 'left';
           ctx.fillText(label, labelX + 6, pt.y + 3);
           ctx.restore();
         };
 
-        if (p.rider.m > 0) drawDragHandle(p.rider.x, p.rider.y, '#34736c', `Rider CoM (${p.rider.m}kg)`);
-        if (p.fork.m > 0) drawDragHandle(forkXY.x, forkXY.y, '#bd5736', `Front CoM (${p.fork.m}kg)`);
+        if (p.rider.m > 0) drawDragHandle(p.rider.x, p.rider.y, '#9a6a12', `Rider CoM (${p.rider.m}kg)`);
+        if (p.fork.m > 0) drawDragHandle(forkXY.x, forkXY.y, '#1f5a9e', `Front CoM (${p.fork.m}kg)`);
       }
 
       /**
@@ -4705,12 +4708,12 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const proj = (x, y, z) => project3DPoint({ x, y, z }, target, cam, width, height, baseScale);
 
         // Flat drafting-paper field; depth is carried by the wireframe and contact geometry.
-        ctx.fillStyle = '#f2f0e8';
+        ctx.fillStyle = '#eef1f3';
         ctx.fillRect(0, 0, width, height);
 
         // 1. Perspective Ground Grid (scrolls backward with wheelSpinAngle)
         const scrollX = (appState.sim.wheelSpinAngle * rR) % 0.5;
-        ctx.strokeStyle = '#b9b9ae';
+        ctx.strokeStyle = '#b4bec6';
         ctx.lineWidth = 1;
         for (let gx = -1.5; gx <= 3.0; gx += 0.5) {
           const p0 = proj(gx - scrollX, 0, -1.5);
@@ -4721,7 +4724,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const p0 = proj(-1.5, 0, gz);
           const p1 = proj(3.0, 0, gz);
           ctx.beginPath();
-          ctx.strokeStyle = Math.abs(gz) < 1e-4 ? '#b9b9ae' : '#b9b9ae';
+          ctx.strokeStyle = Math.abs(gz) < 1e-4 ? '#b4bec6' : '#b4bec6';
           ctx.lineWidth = Math.abs(gz) < 1e-4 ? 1.5 : 1;
           ctx.moveTo(p0.x, p0.y); ctx.lineTo(p1.x, p1.y); ctx.stroke();
         }
@@ -4810,11 +4813,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         };
 
         if (appState.showDumbbells) {
-          drawPrincipalInertiaEllipsoid3D(p.frame, leanPoint, '#68716c');
-          drawPrincipalInertiaEllipsoid3D(p.rider, leanPoint, '#34736c');
-          drawPrincipalInertiaEllipsoid3D(p.rack, leanPoint, '#747a72');
-          drawPrincipalInertiaEllipsoid3D(model.forkXY, steerAndLeanPoint, '#bd5736');
-          drawPrincipalInertiaEllipsoid3D(model.basketXY, steerAndLeanPoint, '#34736c');
+          drawPrincipalInertiaEllipsoid3D(p.frame, leanPoint, '#5f6e7b');
+          drawPrincipalInertiaEllipsoid3D(p.rider, leanPoint, '#9a6a12');
+          drawPrincipalInertiaEllipsoid3D(p.rack, leanPoint, '#6b7a87');
+          drawPrincipalInertiaEllipsoid3D(model.forkXY, steerAndLeanPoint, '#1f5a9e');
+          drawPrincipalInertiaEllipsoid3D(model.basketXY, steerAndLeanPoint, '#9a6a12');
         }
 
         // Helper: draw 3D wheel (tire ring + spokes)
@@ -4838,7 +4841,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.stroke();
 
           // Rotating spokes
-          ctx.strokeStyle = '#68716c';
+          ctx.strokeStyle = '#5f6e7b';
           ctx.lineWidth = 1.2;
           const spin = appState.sim.wheelSpinAngle * (rR / Math.max(radius, 0.1));
           for (let i = 0; i < 8; i++) {
@@ -4851,8 +4854,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         };
 
         // Draw Rear & Front Wheels
-        draw3DWheel(0, rR, rR, false, '#202a2e');
-        draw3DWheel(w, rF, rF, true, '#202a2e');
+        draw3DWheel(0, rR, rR, false, '#15283c');
+        draw3DWheel(w, rF, rF, true, '#15283c');
 
         // Rear Frame 3D Geometry
         const bb = { x: w * 0.36, y: Math.min(rR, rF) * 0.82 };
@@ -4879,14 +4882,14 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const headBot3 = leanPoint(headBot.x, headBot.y, 0);
         const headTop3 = leanPoint(headTop.x, headTop.y, 0);
 
-        line3D(rearHubL, bb3, '#202a2e', 3);
-        line3D(rearHubR, bb3, '#202a2e', 3);
-        line3D(rearHubL, seat3, '#202a2e', 2.8);
-        line3D(rearHubR, seat3, '#202a2e', 2.8);
-        line3D(bb3, seat3, '#202a2e', 4);
-        line3D(seat3, headTop3, '#202a2e', 4);
-        line3D(bb3, headBot3, '#202a2e', 4.5);
-        line3D(headBot3, headTop3, '#202a2e', 5);
+        line3D(rearHubL, bb3, '#15283c', 3);
+        line3D(rearHubR, bb3, '#15283c', 3);
+        line3D(rearHubL, seat3, '#15283c', 2.8);
+        line3D(rearHubR, seat3, '#15283c', 2.8);
+        line3D(bb3, seat3, '#15283c', 4);
+        line3D(seat3, headTop3, '#15283c', 4);
+        line3D(bb3, headBot3, '#15283c', 4.5);
+        line3D(headBot3, headTop3, '#15283c', 5);
 
         // Steerable Front Fork & Wide MTB Handlebars
         const forkCrown3 = steerAndLeanPoint(headBot.x, headBot.y, 0);
@@ -4896,10 +4899,10 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const barLeft = steerAndLeanPoint(headTop.x - 0.04, headTop.y + 0.06, -0.39);
         const barRight = steerAndLeanPoint(headTop.x - 0.04, headTop.y + 0.06, 0.39);
 
-        line3D(forkCrown3, frontHubL, '#34736c', 3.5);
-        line3D(forkCrown3, frontHubR, '#34736c', 3.5);
-        line3D(steerAndLeanPoint(headTop.x, headTop.y, 0), stemTop, '#34736c', 4);
-        line3D(barLeft, barRight, '#34736c', 4.5);
+        line3D(forkCrown3, frontHubL, '#9a6a12', 3.5);
+        line3D(forkCrown3, frontHubR, '#9a6a12', 3.5);
+        line3D(steerAndLeanPoint(headTop.x, headTop.y, 0), stemTop, '#9a6a12', 4);
+        line3D(barLeft, barRight, '#9a6a12', 4.5);
 
         // Rider CoM 3D Sphere & Plumb Projection
         if (p.rider.m > 0) {
@@ -4911,22 +4914,22 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const c2 = proj(rCom3.x, rCom3.y, rCom3.z);
           ctx.fillStyle = 'rgba(52, 115, 108, 0.25)';
           ctx.beginPath(); ctx.arc(c2.x, c2.y, 22 * cam.zoom, 0, Math.PI * 2); ctx.fill();
-          ctx.fillStyle = '#34736c';
-          ctx.strokeStyle = '#f2f0e8';
+          ctx.fillStyle = '#9a6a12';
+          ctx.strokeStyle = '#eef1f3';
           ctx.lineWidth = 2;
           ctx.beginPath(); ctx.arc(c2.x, c2.y, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
         }
 
         // HUD Telemetry Overlay
-        ctx.fillStyle = '#202a2e';
+        ctx.fillStyle = '#15283c';
         ctx.font = '700 12px "IBM Plex Mono", monospace';
         ctx.textAlign = 'left';
         ctx.fillText(`3D Ride View | v = ${formatSpeed(appState.sim.speedMs, appState.unit)}`, 14, 22);
-        ctx.fillStyle = '#34736c';
+        ctx.fillStyle = '#9a6a12';
         ctx.fillText(`Lean φ(t) = ${(phi * RAD2DEG).toFixed(2)}°`, 14, 40);
-        ctx.fillStyle = '#bd5736';
+        ctx.fillStyle = '#1f5a9e';
         ctx.fillText(`Steer δ(t) = ${(delta * RAD2DEG).toFixed(2)}°`, 14, 58);
-        ctx.fillStyle = '#68716c';
+        ctx.fillStyle = '#5f6e7b';
         ctx.font = '10px "IBM Plex Sans", sans-serif';
         ctx.fillText(appState.showDumbbells
           ? 'Wireframes: 0.75x principal radii of gyration (not part dimensions)'
@@ -4965,13 +4968,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           canvas.dataset.renderState = 'error';
           canvas.setAttribute('aria-label', 'Geometry diagram failed to render');
           ctx.save();
-          ctx.fillStyle = '#f2f0e8';
+          ctx.fillStyle = '#eef1f3';
           ctx.fillRect(0, 0, width, height);
-          ctx.fillStyle = '#bd5736';
+          ctx.fillStyle = '#c8321e';
           ctx.font = '600 14px "IBM Plex Sans", sans-serif';
           ctx.textAlign = 'center';
           ctx.fillText('Geometry diagram could not render', width / 2, height / 2 - 12);
-          ctx.fillStyle = '#68716c';
+          ctx.fillStyle = '#5f6e7b';
           ctx.font = '12px "IBM Plex Sans", sans-serif';
           const message = String(err && err.message ? err.message : err).slice(0, 100);
           ctx.fillText(message, width / 2, height / 2 + 12, Math.max(100, width - 32));
@@ -5217,12 +5220,12 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         // Horizontal Y grid
         ctx.font = '500 11px "IBM Plex Mono", monospace';
-        ctx.fillStyle = '#68716c';
+        ctx.fillStyle = '#5f6e7b';
         ctx.textAlign = 'right';
         for (let yv = yMin; yv <= yMax; yv += 2) {
           const py = toPxY(yv);
           ctx.beginPath();
-          ctx.strokeStyle = yv === 0 ? '#747a72' : 'rgba(116, 122, 114, 0.2)';
+          ctx.strokeStyle = yv === 0 ? '#6b7a87' : 'rgba(116, 122, 114, 0.2)';
           ctx.lineWidth = yv === 0 ? 1.25 : 0.7;
           ctx.moveTo(padL, py); ctx.lineTo(padL + plotW, py); ctx.stroke();
           ctx.fillText(yv.toString(), padL - 8, py + 3.5);
@@ -5247,7 +5250,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         // Axis labels
-        ctx.fillStyle = '#46514f';
+        ctx.fillStyle = '#3a4b5c';
         ctx.font = '600 11px "IBM Plex Sans", sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(`Forward Speed (${UNIT_CONFIG[unit].label})`, padL + plotW * 0.5, height - 7);
@@ -5261,9 +5264,9 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // Direct series labels live on the plot surface; no detached legend is needed.
         ctx.font = '9px "IBM Plex Mono", monospace';
         ctx.textAlign = 'left';
-        ctx.fillStyle = '#34736c';
+        ctx.fillStyle = '#2f7d4a';
         ctx.fillText('IM(λ) · OSCILLATION', padL, 19);
-        ctx.fillStyle = '#bd5736';
+        ctx.fillStyle = '#c8321e';
         ctx.fillText('RE(λ) · GROWTH / DECAY', padL + 136, 19);
 
         ctx.save();
@@ -5295,7 +5298,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         // Imaginary eigenvalue component: oscillation frequency (teal).
-        ctx.fillStyle = '#34736c';
+        ctx.fillStyle = '#2f7d4a';
         for (const step of sweepData) {
           const px = toPxX(step.v);
           for (const r of step.roots) {
@@ -5306,7 +5309,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         // Real eigenvalue component: growth and decay rate (orange).
-        ctx.fillStyle = '#bd5736';
+        ctx.fillStyle = '#c8321e';
         for (const step of sweepData) {
           const px = toPxX(step.v);
           for (const r of step.roots) {
@@ -5320,7 +5323,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         for (const dr of doubleRoots) {
           if (dr.v >= minVelPlot && dr.v <= maxVelPlot && dr.re >= yMin && dr.re <= yMax) {
             const px = toPxX(dr.v);
-            ctx.strokeStyle = '#bd5736';
+            ctx.strokeStyle = '#c8321e';
             ctx.lineWidth = 1.75;
             ctx.beginPath(); ctx.moveTo(px, toPxY(0)); ctx.lineTo(px, toPxY(dr.re)); ctx.stroke();
           }
@@ -5329,10 +5332,10 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // Weave & Capsize lines
         if (vw !== null && vw > 0 && vw >= minVelPlot && vw <= maxVelPlot) {
           const px = toPxX(vw);
-          ctx.strokeStyle = '#34736c';
+          ctx.strokeStyle = '#2f7d4a';
           ctx.lineWidth = 2;
           ctx.beginPath(); ctx.moveTo(px, toPxY(0)); ctx.lineTo(px, padT + plotH); ctx.stroke();
-          ctx.fillStyle = '#34736c';
+          ctx.fillStyle = '#2f7d4a';
           ctx.font = '700 10px "IBM Plex Sans", sans-serif';
           ctx.textAlign = 'left';
           ctx.fillText(`vw = ${formatSpeed(vw, unit)}`, px + 5, padT + plotH - 8);
@@ -5340,10 +5343,10 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         if (vc !== null && vc >= minVelPlot && vc <= maxVelPlot) {
           const px = toPxX(vc);
-          ctx.strokeStyle = '#bd5736';
+          ctx.strokeStyle = '#c8321e';
           ctx.lineWidth = 2;
           ctx.beginPath(); ctx.moveTo(px, toPxY(0)); ctx.lineTo(px, padT + plotH); ctx.stroke();
-          ctx.fillStyle = '#bd5736';
+          ctx.fillStyle = '#c8321e';
           ctx.font = '700 10px "IBM Plex Sans", sans-serif';
           ctx.textAlign = 'left';
           ctx.fillText(`vc = ${formatSpeed(vc, unit)}`, px + 5, padT + plotH - 22);
@@ -5352,7 +5355,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // Active Test Speed marker
         if (appState.sim.speedMs >= minVelPlot && appState.sim.speedMs <= maxVelPlot) {
           const pxSim = toPxX(appState.sim.speedMs);
-          ctx.strokeStyle = '#bd5736';
+          ctx.strokeStyle = '#c8321e';
           ctx.lineWidth = 1.5;
           ctx.setLineDash([4, 3]);
           ctx.beginPath(); ctx.moveTo(pxSim, padT); ctx.lineTo(pxSim, padT + plotH); ctx.stroke();
@@ -5362,7 +5365,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // Hover crosshair
         if (appState.hoverSpeed !== null && appState.hoverSpeed >= minVelPlot && appState.hoverSpeed <= maxVelPlot) {
           const pxH = toPxX(appState.hoverSpeed);
-          ctx.strokeStyle = '#202a2e';
+          ctx.strokeStyle = '#15283c';
           ctx.lineWidth = 1;
           ctx.setLineDash([3, 3]);
           ctx.beginPath(); ctx.moveTo(pxH, padT); ctx.lineTo(pxH, padT + plotH); ctx.stroke();
@@ -5370,7 +5373,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         }
 
         ctx.restore();
-        ctx.strokeStyle = '#b9b9ae';
+        ctx.strokeStyle = '#b4bec6';
         ctx.lineWidth = 1;
         ctx.strokeRect(padL, padT, plotW, plotH);
       }
@@ -5401,7 +5404,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         };
 
         // Background
-        ctx.fillStyle = '#f2f0e8';
+        ctx.fillStyle = '#eef1f3';
         ctx.fillRect(0, 0, width, height);
 
         // 1. Draw the Re(lambda) = 0 stability plane.
@@ -5450,15 +5453,15 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         ctx.font = '9px "IBM Plex Mono", monospace';
         ctx.textAlign = 'left';
-        ctx.fillStyle = '#34736c';
+        ctx.fillStyle = '#2f7d4a';
         ctx.fillText('REFERENCE PLANE · Re(λ) = 0', 12, 17);
-        ctx.fillStyle = '#68716c';
+        ctx.fillStyle = '#5f6e7b';
         ctx.fillText('TEAL · DECAY     ORANGE · GROWTH', 12, 31);
 
-        drawAxisLine(axOrigin, axSpeed, '#202a2e', `Speed v (${UNIT_CONFIG[unit].label})`);
-        drawAxisLine(axReNeg, axRePos, '#bd5736', '+Re(λ) Unstable');
-        drawAxisLine(axOrigin, axImPos, '#68716c', 'Im(λ) Freq');
-        ctx.fillStyle = '#34736c';
+        drawAxisLine(axOrigin, axSpeed, '#15283c', `Speed v (${UNIT_CONFIG[unit].label})`);
+        drawAxisLine(axReNeg, axRePos, '#c8321e', '+Re(λ) Unstable');
+        drawAxisLine(axOrigin, axImPos, '#5f6e7b', 'Im(λ) Freq');
+        ctx.fillStyle = '#2f7d4a';
         ctx.font = '700 10px "IBM Plex Sans", sans-serif';
         ctx.fillText('-Re(λ) Stable', axReNeg.x - 10, axReNeg.y + 12);
 
@@ -5475,7 +5478,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             ctx.beginPath(); ctx.moveTo(pt.x, pt.y); ctx.lineTo(ptShadow.x, ptShadow.y); ctx.stroke();
 
             // Root point colored by stability (teal if Re<0, orange otherwise).
-            ctx.fillStyle = r.re < -1e-5 ? '#34736c' : '#bd5736';
+            ctx.fillStyle = r.re < -1e-5 ? '#2f7d4a' : '#c8321e';
             ctx.beginPath();
             ctx.arc(pt.x, pt.y, Math.max(2, 2.8 * pt.scale / baseScale), 0, Math.PI * 2);
             ctx.fill();
@@ -5485,14 +5488,14 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // 4. Mark Weave (vw) and Capsize (vc) crossings on the Re=0 plane
         if (vw !== null && vw >= minVelPlot && vw <= maxVelPlot) {
           const pVw = proj(vw, 0, 0);
-          ctx.fillStyle = '#34736c';
+          ctx.fillStyle = '#2f7d4a';
           ctx.beginPath(); ctx.arc(pVw.x, pVw.y, 5, 0, Math.PI * 2); ctx.fill();
           ctx.font = '700 11px "IBM Plex Sans", sans-serif';
           ctx.fillText(`vw = ${formatSpeed(vw, unit)}`, pVw.x + 8, pVw.y - 6);
         }
         if (vc !== null && vc >= minVelPlot && vc <= maxVelPlot) {
           const pVc = proj(vc, 0, 0);
-          ctx.fillStyle = '#bd5736';
+          ctx.fillStyle = '#c8321e';
           ctx.beginPath(); ctx.arc(pVc.x, pVc.y, 5, 0, Math.PI * 2); ctx.fill();
           ctx.font = '700 11px "IBM Plex Sans", sans-serif';
           ctx.fillText(`vc = ${formatSpeed(vc, unit)}`, pVc.x + 8, pVc.y + 12);
@@ -5587,7 +5590,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           hoverModesList.innerHTML = sorted.map((r, idx) => {
             const sign = r.im >= 0 ? '+' : '−';
             const freqStr = Math.abs(r.im) > 0.01 ? ` (${(Math.abs(r.im) / (2 * Math.PI)).toFixed(2)} Hz)` : '';
-            const color = r.re < 0 ? '#6ee7b7' : '#fda4af';
+            const color = r.re < 0 ? '#8fd0a5' : '#f0a79b';
             return `<div>&lambda;<sub>${idx + 1}</sub>: <span style="color:${color};">${r.re.toFixed(2)}</span> ${sign} ${Math.abs(r.im).toFixed(2)}i${freqStr}</div>`;
           }).join('');
 
@@ -5643,12 +5646,12 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         ctx.fillStyle = '#d6d3c8';
         ctx.fillRect(0, groundY, width, height - groundY);
-        ctx.strokeStyle = '#68716c';
+        ctx.strokeStyle = '#5f6e7b';
         ctx.lineWidth = 2;
         ctx.beginPath(); ctx.moveTo(0, groundY); ctx.lineTo(width, groundY); ctx.stroke();
 
         ctx.save();
-        ctx.strokeStyle = '#b9b9ae';
+        ctx.strokeStyle = '#b4bec6';
         ctx.lineWidth = 1;
         ctx.setLineDash([4, 4]);
         ctx.beginPath(); ctx.moveTo(cx, 24); ctx.lineTo(cx, groundY); ctx.stroke();
@@ -5662,36 +5665,36 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.rotate(phi);
 
         // Rear tire
-        ctx.fillStyle = '#202a2e';
+        ctx.fillStyle = '#15283c';
         ctx.beginPath();
         if (ctx.roundRect) ctx.roundRect(-8, -74, 16, 74, 6);
         else ctx.rect(-8, -74, 16, 74);
         ctx.fill();
 
         // Frame mast
-        ctx.strokeStyle = '#202a2e';
+        ctx.strokeStyle = '#15283c';
         ctx.lineWidth = 5;
         ctx.lineCap = 'round';
         ctx.beginPath(); ctx.moveTo(0, -65); ctx.lineTo(0, -125); ctx.stroke();
 
         // Rider silhouette
-        ctx.fillStyle = '#34736c';
+        ctx.fillStyle = '#9a6a12';
         ctx.beginPath();
         if (ctx.roundRect) ctx.roundRect(-16, -158, 32, 36, 12);
         else ctx.rect(-16, -158, 32, 36);
         ctx.fill();
 
-        ctx.fillStyle = '#34736c';
+        ctx.fillStyle = '#9a6a12';
         ctx.beginPath(); ctx.arc(0, -170, 11, 0, Math.PI * 2); ctx.fill();
 
         // Handlebars & front wheel projection
         const barHalfW = 42 * Math.cos(delta);
         const barYawShift = 18 * Math.sin(delta);
-        ctx.strokeStyle = '#46514f';
+        ctx.strokeStyle = '#3a4b5c';
         ctx.lineWidth = 4;
         ctx.beginPath(); ctx.moveTo(-barHalfW + barYawShift, -124); ctx.lineTo(barHalfW + barYawShift, -124); ctx.stroke();
 
-        ctx.fillStyle = '#bd5736';
+        ctx.fillStyle = '#1f5a9e';
         ctx.beginPath();
         if (ctx.roundRect) ctx.roundRect(barYawShift * 0.75 - 5, -68, 10, 62, 4);
         else ctx.rect(barYawShift * 0.75 - 5, -68, 10, 62);
@@ -5699,13 +5702,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         ctx.restore();
 
-        ctx.fillStyle = '#202a2e';
+        ctx.fillStyle = '#15283c';
         ctx.font = '600 11px "IBM Plex Mono", monospace';
         ctx.textAlign = 'left';
         ctx.fillText(`t = ${sample.t.toFixed(2)}s / ${appState.sim.duration}s`, 10, 18);
-        ctx.fillStyle = '#34736c';
+        ctx.fillStyle = '#9a6a12';
         ctx.fillText(`Lean φ = ${(phi * RAD2DEG).toFixed(2)}°`, 10, 34);
-        ctx.fillStyle = '#bd5736';
+        ctx.fillStyle = '#1f5a9e';
         ctx.fillText(`Steer δ = ${(delta * RAD2DEG).toFixed(2)}°`, 10, 50);
       }
 
@@ -5733,13 +5736,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const toPxY = (deg) => padT + ((maxDeg - deg) / (2 * maxDeg)) * plotH;
 
         ctx.font = '500 10px "IBM Plex Mono", monospace';
-        ctx.fillStyle = '#68716c';
+        ctx.fillStyle = '#5f6e7b';
         ctx.textAlign = 'right';
 
         for (const yv of [-maxDeg, -maxDeg * 0.5, 0, maxDeg * 0.5, maxDeg]) {
           const py = toPxY(yv);
           ctx.beginPath();
-          ctx.strokeStyle = yv === 0 ? '#68716c' : '#dedcd2';
+          ctx.strokeStyle = yv === 0 ? '#5f6e7b' : '#d5dce0';
           ctx.lineWidth = yv === 0 ? 1.25 : 1;
           ctx.moveTo(padL, py); ctx.lineTo(padL + plotW, py); ctx.stroke();
           ctx.fillText(`${yv.toFixed(0)}°`, padL - 6, py + 3);
@@ -5750,16 +5753,16 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         for (let ts = 0; ts <= duration; ts += stepT) {
           const px = toPxX(ts);
           ctx.beginPath();
-          ctx.strokeStyle = '#dedcd2';
+          ctx.strokeStyle = '#d5dce0';
           ctx.moveTo(px, padT); ctx.lineTo(px, padT + plotH); ctx.stroke();
           ctx.fillText(`${ts}s`, px, padT + plotH + 15);
         }
 
         ctx.textAlign = 'left';
         ctx.font = '600 11px "IBM Plex Sans", sans-serif';
-        ctx.fillStyle = '#34736c';
+        ctx.fillStyle = '#9a6a12';
         ctx.fillText('— Lean Angle φ(t)', padL, 15);
-        ctx.fillStyle = '#bd5736';
+        ctx.fillStyle = '#1f5a9e';
         ctx.fillText('— Steer Angle δ(t)', padL + 125, 15);
 
         ctx.save();
@@ -5767,7 +5770,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.rect(padL, padT, plotW, plotH);
         ctx.clip();
 
-        ctx.strokeStyle = '#34736c';
+        ctx.strokeStyle = '#9a6a12';
         ctx.lineWidth = 2.2;
         ctx.beginPath();
         traj.forEach((pt, idx) => {
@@ -5776,7 +5779,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         });
         ctx.stroke();
 
-        ctx.strokeStyle = '#bd5736';
+        ctx.strokeStyle = '#1f5a9e';
         ctx.lineWidth = 2;
         ctx.beginPath();
         traj.forEach((pt, idx) => {
@@ -5786,12 +5789,12 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.stroke();
 
         const curX = toPxX(appState.sim.t);
-        ctx.strokeStyle = '#202a2e';
+        ctx.strokeStyle = '#15283c';
         ctx.lineWidth = 1.25;
         ctx.beginPath(); ctx.moveTo(curX, padT); ctx.lineTo(curX, padT + plotH); ctx.stroke();
 
         ctx.restore();
-        ctx.strokeStyle = '#b9b9ae';
+        ctx.strokeStyle = '#b4bec6';
         ctx.strokeRect(padL, padT, plotW, plotH);
       }
 
@@ -6371,10 +6374,10 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
               documentRef: document,
               textArea: jsonTextArea
             });
-            jsonStatusMsg.style.color = '#34736c';
+            jsonStatusMsg.style.color = '#2f7d4a';
             jsonStatusMsg.textContent = 'Copied configuration JSON to clipboard.';
           } catch (error) {
-            jsonStatusMsg.style.color = '#bd5736';
+            jsonStatusMsg.style.color = '#c8321e';
             jsonStatusMsg.textContent = 'Copy failed: ' + error.message;
           }
         });
@@ -6388,10 +6391,10 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             appState.params = Object.assign({}, JSON.parse(JSON.stringify(PRESETS.mulletMX)), parsed);
             window.JBike6AppRegressions.normalizeWheelPitchReference(appState.params, parsed);
             recomputeAll(true);
-            jsonStatusMsg.style.color = '#34736c';
+            jsonStatusMsg.style.color = '#2f7d4a';
             jsonStatusMsg.textContent = 'Configuration applied successfully.';
           } catch (err) {
-            jsonStatusMsg.style.color = '#bd5736';
+            jsonStatusMsg.style.color = '#c8321e';
             jsonStatusMsg.textContent = `Invalid JSON: ${err.message}`;
           }
         });

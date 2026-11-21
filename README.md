@@ -1,5 +1,37 @@
 # JBike6
-A Benchmark for Bicycle Motion
+
+A test bench for bicycle motion. It computes the open-loop stability of a bicycle from the linearized Whipple–Carvallo equations (four rigid bodies) and lets you change the geometry, mass and speed while watching the eigenvalues, ride response and control properties update.
+
+Open `index.html` in a browser. There is no build step and no server.
+
+## What is in the bench
+- **Stability**: root locus of the eigenvalues against forward speed, with weave speed, capsize speed and the self-stable window read out above it.
+- **Geometry**: 2D blueprint and 3D view with principal-inertia glyphs and draggable centers of mass.
+- **Ride test**: roll-perturbation time response at a chosen speed.
+- **Wheel lab**: wheel sizes, mullet setups, frame pitch and gyroscopic contribution.
+- **Control lab**: state-space matrices, eigenmodes, transfer functions and pole-zero maps.
+- **Stability landscape** and **Design optimization**: scan two parameters across a speed range.
+
+## Files
+| File | Purpose |
+| --- | --- |
+| `index.html` | The app: markup, model, and canvas drawing |
+| `instrument-ui.css` | Visual system (vellum, ink blue, one red reserved for instability) |
+| `*.js` | Feature modules: eigenmode lab, pole-zero lab, landscape, optimization, controls |
+| `tests/` | Node tests, run with `node --test tests/*.test.js` |
+| `original Matlab files/` | The original JBike6 MATLAB GUI and help files |
+| `FinalBicyclePaper_v45_with_Appendix.pdf` | Reference paper |
+| `CONTROL_THEORY_AUDIT.md` | Notes on the control-theory checks |
+
+## Color meaning
+Blue marks selection and interaction. Red marks instability and nothing else. Green marks stability. Ochre marks the rider and rear assembly in the geometry views.
+
+## Origin
+Based on JBike6 by Schwab, Papadopoulos, Ruina and Dressel (Delft University of Technology and Cornell University), 2003-2015. The original MATLAB release history and license are preserved below.
+
+---
+
+## Original JBike6 release notes and license
 
 this was created with most recent 2015-02-08 - main folder: 1,085,915 bytes (1.2 MB on disk) for 28 items
 
