@@ -1751,6 +1751,35 @@
   <!-- ===================================================================== -->
   <main class="main-wrap">
 
+    <section class="intro" aria-label="About JBike6">
+      <div class="intro-row">
+        <p class="intro-lead">JBike6 calculates whether a bicycle can balance itself with nobody on it, and how it behaves when it can't.</p>
+        <button type="button" class="intro-toggle" id="introToggle" aria-expanded="false" aria-controls="introMore">
+          <svg class="intro-icon" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+            <path class="intro-icon-h" d="M3 8h10" />
+            <path class="intro-icon-v" d="M8 3v10" />
+          </svg>
+          <span id="introToggleLabel">Say more</span>
+        </button>
+      </div>
+      <div class="intro-more" id="introMore" hidden>
+        <p>You describe a bike: wheel sizes, how steep the head angle is, how far the fork sits ahead of the steering axis, and where the weight sits. The program then works out, for every forward speed, how the bike would react to a small wobble or lean. At some speeds the bike corrects itself and rolls on upright. At others it falls over slowly or starts a growing wobble in the front end. It reports the speed where the wobble dies out, the speed where the slow fall begins, and how long a small lean takes to double. It does this with a standard, simplified physics model that has been published and tested against other bicycle simulations.</p>
+        <p>This matters because the question of why bikes stay upright looks simple but has been argued over for a long time. Several effects are involved at once: the geometry of the front end, the spinning wheels, and how the weight is distributed. It is hard to know by intuition which one dominates in a given bike. A tool like this lets designers and curious riders change one thing at a time and see the result, whether that is a mullet wheel setup, a slacker head angle or a different weight position. It has limits. It models a bike without a rider, and a rider can balance bikes that cannot balance themselves, so a result like &ldquo;unstable hands-free&rdquo; does not mean &ldquo;unrideable&rdquo;.</p>
+      </div>
+    </section>
+    <script>
+    (function(){
+      var btn=document.getElementById('introToggle'),more=document.getElementById('introMore'),label=document.getElementById('introToggleLabel');
+      if(!btn||!more||!label)return;
+      btn.addEventListener('click',function(){
+        var open=btn.getAttribute('aria-expanded')==='true';
+        btn.setAttribute('aria-expanded',open?'false':'true');
+        more.hidden=open;
+        label.textContent=open?'Say more':'Say less';
+      });
+    })();
+    </script>
+
     <nav id="vizWorkspaceNav" class="viz-workspace-nav" aria-label="Primary workspace navigation"></nav>
     <section id="engineeringInspector" class="engineering-inspector is-empty" aria-label="Linked engineering inspector"><div class="engineering-inspector-empty">Select a point, mode, or component in any visualization to inspect it here.</div></section>
     <section class="kpi-grid">
