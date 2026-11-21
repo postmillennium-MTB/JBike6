@@ -5209,12 +5209,6 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             const zoneX = toPxX(v0), zoneWidth = toPxX(v1) - zoneX;
             ctx.fillStyle = 'rgba(52, 115, 108, 0.075)';
             ctx.fillRect(zoneX, padT, zoneWidth, plotH);
-            if (zoneWidth > 82) {
-              ctx.fillStyle = 'rgba(52, 115, 108, 0.88)';
-              ctx.font = '8px "IBM Plex Mono", monospace';
-              ctx.textAlign = 'left';
-              ctx.fillText('Self-stable', zoneX + 5, padT + plotH - 8);
-            }
           }
         }
 
@@ -5354,7 +5348,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         // Dimension-line callouts, drawn like a dimensioned drawing.
         {
-          const dimY = padT + 15;
+          const dimY = padT + 24;
           const arrow = (x, dir, color) => {
             ctx.fillStyle = color;
             ctx.beginPath(); ctx.moveTo(x, dimY); ctx.lineTo(x - dir * 7, dimY - 3); ctx.lineTo(x - dir * 7, dimY + 3); ctx.closePath(); ctx.fill();
@@ -5368,10 +5362,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             ctx.font = '600 11px "Archivo", sans-serif';
             const tw = ctx.measureText(label).width;
             const cx = (x0 + x1) / 2;
-            ctx.fillStyle = 'rgba(238,241,243,0.92)';
-            ctx.fillRect(cx - tw / 2 - 5, dimY - 7, tw + 10, 14);
             ctx.fillStyle = color; ctx.textAlign = 'center';
-            ctx.fillText(label, cx, dimY + 4);
+            ctx.fillText(label, cx, dimY - 11);
           };
           const hasVw = vw !== null && vw > 0 && vw >= minVelPlot && vw <= maxVelPlot;
           const hasVc = vc !== null && vc >= minVelPlot && vc <= maxVelPlot;
@@ -5381,7 +5373,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             dimension(toPxX(vw), toPxX(maxVelPlot), 'self-stable above vw', '#2f7d4a', true);
           } else if (vw === null || vw > maxVelPlot) {
             ctx.font = '600 11px "Archivo", sans-serif'; ctx.fillStyle = '#c8321e'; ctx.textAlign = 'center';
-            ctx.fillText('No self-stable speed in this range', padL + plotW / 2, dimY + 4);
+            ctx.fillText('No self-stable speed in this range', padL + plotW / 2, dimY - 11);
           }
         }
 
@@ -5391,10 +5383,10 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.strokeStyle = '#1f5a9e';
           ctx.lineWidth = 1.5;
           ctx.setLineDash([4, 3]);
-          ctx.beginPath(); ctx.moveTo(pxSim, padT + 30); ctx.lineTo(pxSim, padT + plotH); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(pxSim, padT + 40); ctx.lineTo(pxSim, padT + plotH); ctx.stroke();
           ctx.setLineDash([]);
           ctx.font = '600 11px "Archivo", sans-serif'; ctx.fillStyle = '#1f5a9e'; ctx.textAlign = 'left';
-          ctx.fillText(`test ${formatSpeed(appState.sim.speedMs, unit)}`, pxSim + 5, padT + 42);
+          ctx.fillText(`test ${formatSpeed(appState.sim.speedMs, unit)}`, pxSim + 5, padT + 52);
         }
 
         // Hover crosshair
