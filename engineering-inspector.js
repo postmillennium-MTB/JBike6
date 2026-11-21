@@ -21,9 +21,7 @@
     clear.type = 'button';
     clear.className = 'engineering-inspector-clear';
     clear.textContent = 'Clear';
-    clear.addEventListener('click', () => {
-      host.innerHTML = '<div class="engineering-inspector-empty">Select a point, mode, or component in any visualization to inspect it here.</div>';
-    });
+    clear.addEventListener('click', () => api.clear());
     heading.append(eyebrow, clear);
     const name = document.createElement('strong');
     name.className = 'engineering-inspector-title';
@@ -54,6 +52,7 @@
     const host = typeof document !== 'undefined' && document.getElementById('engineeringInspector');
     if (host) {
       host.classList.add('is-empty');
+      delete host.dataset.selectionType;
       host.innerHTML = '<div class="engineering-inspector-empty">Select a point, mode, or component in any visualization to inspect it here.</div>';
     }
   }
