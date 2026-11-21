@@ -3496,6 +3496,14 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
       // ===================================================================
       // 5. TIME-DOMAIN RK4 PERTURBATION SIMULATOR
       // ===================================================================
+      // Fixed-step RK4 is only stable while step * (largest eigenvalue magnitude) stays below about 2.8.
+      // The Frobenius norm of the state matrix bounds that magnitude, so stiff designs (very small
+      // inertias at high speed) take extra sub-steps. At ordinary speeds one step is enough; the presets
+      // take 2 to 9 at 15 to 25 m/s. Each sub-step is a cheap 4x4 update.
+      function rk4SubstepCount(stateMatrixNorm, dt) {
+        return Math.min(400, Math.max(1, Math.ceil(dt * stateMatrixNorm / 1.5)));
+      }
+
       function runPerturbationSimulation(model, v, rollImpulseDeg = 5.0, duration = 6.0, dt = 0.01) {
         const { g, M, C1, K0, K2 } = model;
         const detM = M[0][0] * M[1][1] - M[0][1] * M[1][0];
@@ -3527,28 +3535,42 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           return [dphi, ddelta, ddphi, dddelta];
         };
 
+        const invMK = [
+          [invM[0][0] * K[0][0] + invM[0][1] * K[1][0], invM[0][0] * K[0][1] + invM[0][1] * K[1][1]],
+          [invM[1][0] * K[0][0] + invM[1][1] * K[1][0], invM[1][0] * K[0][1] + invM[1][1] * K[1][1]]
+        ];
+        const invMC = [
+          [invM[0][0] * C[0][0] + invM[0][1] * C[1][0], invM[0][0] * C[0][1] + invM[0][1] * C[1][1]],
+          [invM[1][0] * C[0][0] + invM[1][1] * C[1][0], invM[1][0] * C[0][1] + invM[1][1] * C[1][1]]
+        ];
+        const stateNorm = Math.sqrt(2 + [...invMK.flat(), ...invMC.flat()].reduce((s, x) => s + x * x, 0));
+        const nSub = rk4SubstepCount(stateNorm, dt);
+        const h = dt / nSub;
+
         let y = [rollImpulseDeg * DEG2RAD, 0.0, 0.0, 0.0];
         const steps = Math.round(duration / dt);
         const traj = [{ t: 0, phi: y[0], delta: y[1], dphi: y[2], ddelta: y[3] }];
 
         for (let i = 1; i <= steps; i++) {
-          const k1 = derivatives(y);
-          const y2 = y.map((val, idx) => val + 0.5 * dt * k1[idx]);
-          const k2 = derivatives(y2);
-          const y3 = y.map((val, idx) => val + 0.5 * dt * k2[idx]);
-          const k3 = derivatives(y3);
-          const y4 = y.map((val, idx) => val + dt * k3[idx]);
-          const k4 = derivatives(y4);
+          for (let sub = 0; sub < nSub; sub++) {
+            const k1 = derivatives(y);
+            const y2 = y.map((val, idx) => val + 0.5 * h * k1[idx]);
+            const k2 = derivatives(y2);
+            const y3 = y.map((val, idx) => val + 0.5 * h * k2[idx]);
+            const k3 = derivatives(y3);
+            const y4 = y.map((val, idx) => val + h * k3[idx]);
+            const k4 = derivatives(y4);
 
-          y = y.map((val, idx) => val + (dt / 6) * (k1[idx] + 2 * k2[idx] + 2 * k3[idx] + k4[idx]));
+            y = y.map((val, idx) => val + (h / 6) * (k1[idx] + 2 * k2[idx] + 2 * k3[idx] + k4[idx]));
 
-          if (Math.abs(y[0]) > 1.5) {
-            y[0] = Math.sign(y[0]) * 1.5;
-            y[2] = 0;
-          }
-          if (Math.abs(y[1]) > 1.5) {
-            y[1] = Math.sign(y[1]) * 1.5;
-            y[3] = 0;
+            if (Math.abs(y[0]) > 1.5) {
+              y[0] = Math.sign(y[0]) * 1.5;
+              y[2] = 0;
+            }
+            if (Math.abs(y[1]) > 1.5) {
+              y[1] = Math.sign(y[1]) * 1.5;
+              y[3] = 0;
+            }
           }
 
           traj.push({ t: i * dt, phi: y[0], delta: y[1], dphi: y[2], ddelta: y[3] });
@@ -3747,23 +3769,32 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           return [dphi, ddelta, ddphi, dddelta, phi];
         };
 
+        // Sub-steps keep RK4 stable for stiff designs and large controller gains (see rk4SubstepCount).
+        const invMNorm = Math.sqrt(invM[0][0] ** 2 + invM[0][1] ** 2 + invM[1][0] ** 2 + invM[1][1] ** 2);
+        const matrixNorm = Math.sqrt([...K.flat(), ...C.flat()].reduce((acc, x) => acc + x * x, 0));
+        const gainNorm = ctrlCfg.feedbackEnabled ? Math.abs(ctrlCfg.kp) + Math.abs(ctrlCfg.kd) + Math.abs(ctrlCfg.ki) : 0;
+        const nSub = rk4SubstepCount(Math.sqrt(2) + invMNorm * (matrixNorm + gainNorm), dt);
+        const h = dt / nSub;
+
         let s = [rollImpulseDeg * DEG2RAD, 0, 0, 0, 0];
         const steps = Math.round(duration / dt);
         const out = [{ t: 0, phi: s[0], delta: s[1], tau: computeTorque(0, s[0], s[2], s[4]) }];
 
         for (let i = 1; i <= steps; i++) {
-          const tCur = (i - 1) * dt;
-          const k1 = deriv(tCur, s);
-          const s2 = s.map((val, idx) => val + 0.5 * dt * k1[idx]);
-          const k2 = deriv(tCur + 0.5 * dt, s2);
-          const s3 = s.map((val, idx) => val + 0.5 * dt * k2[idx]);
-          const k3 = deriv(tCur + 0.5 * dt, s3);
-          const s4 = s.map((val, idx) => val + dt * k3[idx]);
-          const k4 = deriv(tCur + dt, s4);
+          for (let sub = 0; sub < nSub; sub++) {
+            const tCur = (i - 1) * dt + sub * h;
+            const k1 = deriv(tCur, s);
+            const s2 = s.map((val, idx) => val + 0.5 * h * k1[idx]);
+            const k2 = deriv(tCur + 0.5 * h, s2);
+            const s3 = s.map((val, idx) => val + 0.5 * h * k2[idx]);
+            const k3 = deriv(tCur + 0.5 * h, s3);
+            const s4 = s.map((val, idx) => val + h * k3[idx]);
+            const k4 = deriv(tCur + h, s4);
 
-          s = s.map((val, idx) => val + (dt / 6) * (k1[idx] + 2 * k2[idx] + 2 * k3[idx] + k4[idx]));
-          if (Math.abs(s[0]) > 1.5) { s[0] = Math.sign(s[0]) * 1.5; s[2] = 0; }
-          if (Math.abs(s[1]) > 1.5) { s[1] = Math.sign(s[1]) * 1.5; s[3] = 0; }
+            s = s.map((val, idx) => val + (h / 6) * (k1[idx] + 2 * k2[idx] + 2 * k3[idx] + k4[idx]));
+            if (Math.abs(s[0]) > 1.5) { s[0] = Math.sign(s[0]) * 1.5; s[2] = 0; }
+            if (Math.abs(s[1]) > 1.5) { s[1] = Math.sign(s[1]) * 1.5; s[3] = 0; }
+          }
 
           out.push({
             t: i * dt,

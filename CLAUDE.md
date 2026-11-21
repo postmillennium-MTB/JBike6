@@ -5,7 +5,8 @@ Browser app that computes bicycle stability from the linearized Whipple–Carval
 ## Commands
 - Run: open `index.html` directly. No build, no server.
 - Test: `node --test tests/*.test.js` (all must pass before a commit).
-- `tests/matlab-model.test.js` and `tests/control-lab-transfer.test.js` pull the model code out of `index.html` and check it against the original MATLAB. Any change to `assembleWhippleModel`, `combineJBikeBodies`, `charPolyCoeffs` or `computeStateSpaceAndTF` must keep them passing. Regenerate the reference with `python3 tests/fixtures/make_matlab_reference.py tests/fixtures/matlab-reference.json` (needs numpy).
+- `tests/matlab-model.test.js`, `tests/control-lab-transfer.test.js` and `tests/ride-simulator.test.js` pull the model and simulator code out of `index.html` and check it against the original MATLAB and the exact solution of the linear system. Any change to `assembleWhippleModel`, `combineJBikeBodies`, `charPolyCoeffs` `computeStateSpaceAndTF`, `runPerturbationSimulation` or `runControlledSimulation` must keep them passing. Regenerate the references with `python3 tests/fixtures/make_matlab_reference.py tests/fixtures/matlab-reference.json` and then `python3 tests/fixtures/make_simulation_reference.py tests/fixtures/simulation-reference.json` (needs numpy).
+- The simulators use fixed-step RK4 with automatic sub-steps for stiff systems (`rk4SubstepCount`). Do not remove the sub-steps: without them stiff designs and high feedback gains blow up and report false crashes.
 - Screenshot check: Chromium and Playwright are preinstalled in cloud sessions. Load `file:///.../index.html`. The old tab buttons (`.lab-tab-btn`) are hidden, so switch tabs with `document.querySelector('.lab-tab-btn[data-tab="control"]').click()` through `page.evaluate`.
 
 ## Architecture

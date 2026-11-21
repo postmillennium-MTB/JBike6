@@ -22,7 +22,7 @@ node --test tests/*.test.js
 - **Model profiles**: ten presets, from modern MTB geometries to the original Schwinn Crown and the Meijaard benchmark bike. Configurations export and import as JSON.
 
 ## Model validation
-The model is tested against the original MATLAB: all 18 reference bikes agree on the equations of motion to about 1e-15, and the benchmark bicycle reproduces the published weave and capsize speeds. See `MODEL_AUDIT.md` for what was checked and what was not.
+The model is tested against the original MATLAB: all 18 reference bikes agree on the equations of motion to about 1e-15, the benchmark bicycle reproduces the published weave and capsize speeds, and the ride-test simulator matches the exact solution of the linear equations. See `MODEL_AUDIT.md` for what was checked and what was not.
 
 ## Model limits
 The model is the linearized Whipple–Carvallo bicycle: rigid bodies, knife-edge wheels rolling without slip, no rider control, small lean and steer angles. A bike shown as unstable here is unstable hands-free. A rider can still balance it by steering. Tire compliance, suspension and rider biomechanics are not modeled.
