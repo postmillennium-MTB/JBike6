@@ -38,6 +38,19 @@ def addb(m, cm, I, a):
         It += Ixyz
     return mt, cmt, It
 
+def total_com(e):
+    # Total centre of mass [x, y] of all seven bodies, as JBmck.m forms cmt (rear contact is the origin, y is up).
+    lam = np.pi / 2 - e['head_angle']
+    Rl = np.array([[np.cos(lam), -np.sin(lam)], [np.sin(lam), np.cos(lam)]])
+    Ol = np.array([e['wheelbase'] + e['trail'], 0.0])
+    pf = Ol + Rl @ [e['ucmfork'], e['vcmfork']]
+    pb = Ol + Rl @ [e['ucmbasket'], e['vcmbasket']]
+    masses = np.array([e['mfrontwheel'], e['mfork'], e['mbasket'], e['mrearwheel'], e['mframe'], e['mrack'], e['mrider']])
+    cms = np.array([[e['wheelbase'], e['Dfrontwheel'] / 2], pf, pb, [0, e['Drearwheel'] / 2],
+                    [e['xcmframe'], e['ycmframe']], [e['xcmrack'], e['ycmrack']], [e['xcmrider'], e['ycmrider']]])
+    return (masses @ cms / masses.sum()).tolist()
+
+
 def mck(e, g):
     lam = np.pi / 2 - e['head_angle']
     masses = [e['mfrontwheel'], e['mfork'], e['mbasket'], e['mrearwheel'], e['mframe'], e['mrack'], e['mrider']]
@@ -121,6 +134,7 @@ if __name__ == '__main__':
             e0 = dict(e); e0['Irearwheel'] = list(e['Irearwheel'][:2]) + [0.0]; e0['Ifrontwheel'] = list(e['Ifrontwheel'][:2]) + [0.0]
             Mn, Cn, Kn, K2n = mck(e0, g)
             out[name] = dict(ini=e, M0=M0.tolist(), C1=C1.tolist(), K0=K0.tolist(), K2=K2.tolist(), vw=vw, vc=vc,
+                             com=total_com(e),
                              no_gyro=dict(M0=Mn.tolist(), C1=Cn.tolist(), K0=Kn.tolist(), K2=K2n.tolist()),
                              eig5=[[z.real, z.imag] for z in eig_at(M0, C1, K0, K2, 5.0)],
                              eig10=[[z.real, z.imag] for z in eig_at(M0, C1, K0, K2, 10.0)])

@@ -16,7 +16,8 @@
 | `tests/ride-simulator.test.js` | 34 | Ride test and feedback simulation against the exact solution, plus closed-loop poles |
 | `tests/design-reference.test.js` | 19 | Double roots and the design-sweep path used by the landscape and optimizer |
 | `tests/app-features.test.js` | 20 | Gyroscopic multiplier against MATLAB, and wheel auto-scaling laws |
-| `tests/plain-language.test.js`, `tests/reaction-time.test.js`, `tests/crash-playback.test.js` | 26 | The explanatory text, doubling-time math and crash playback |
+| `tests/geometry-drawing.test.js` | 52 | What the 2D and 3D views draw against the model, total centre of mass against MATLAB, inertia glyph orientation, 3D lean and steer |
+| `tests/plain-language.test.js`, `tests/reaction-time.test.js`, `tests/crash-playback.test.js`, `tests/intro.test.js` | 33 | The explanatory text, doubling-time math, crash playback and the introduction toggle |
 | `tests/control-theory-audit.test.js` and the rest | 34 | Earlier tests of `control-theory.js` and the interface modules |
 
-Total: 199. Each reference-based test fails on the bug it was written for (checked by temporarily reintroducing it).
+Total: 258. Each reference-based test fails on the bug it was written for (checked by temporarily reintroducing it). `tests/helpers/recording-canvas.js` is a stand-in canvas that records drawing calls for the geometry tests.

@@ -4001,7 +4001,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // Left-half s-plane light stability tint (Re(s) < 0)
         const zeroX = toX(0);
         if (zeroX > padL) {
-          ctx.fillStyle = 'rgba(52, 115, 108, 0.08)';
+          ctx.fillStyle = 'rgba(22, 138, 74, 0.08)';
           ctx.fillRect(padL, padT, Math.min(plotW, zeroX - padL), plotH);
         }
 
@@ -4980,11 +4980,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         if (p.rider.m > 0) {
           const rCom3 = leanPoint(p.rider.x, p.rider.y, 0);
           const rGround3 = { x: rCom3.x, y: 0, z: rCom3.z };
-          line3D(seat3, rCom3, 'rgba(52, 115, 108, 0.45)', 2);
-          line3D(rCom3, rGround3, 'rgba(52, 115, 108, 0.3)', 1.2);
+          line3D(seat3, rCom3, 'rgba(176, 122, 16, 0.45)', 2);
+          line3D(rCom3, rGround3, 'rgba(176, 122, 16, 0.3)', 1.2);
 
           const c2 = proj(rCom3.x, rCom3.y, rCom3.z);
-          ctx.fillStyle = 'rgba(52, 115, 108, 0.25)';
+          ctx.fillStyle = 'rgba(176, 122, 16, 0.25)';
           ctx.beginPath(); ctx.arc(c2.x, c2.y, 22 * cam.zoom, 0, Math.PI * 2); ctx.fill();
           ctx.fillStyle = '#b07a10';
           ctx.strokeStyle = '#f4f5f7';
@@ -5279,7 +5279,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           const v1 = vc !== null ? Math.min(vc, maxVelPlot) : maxVelPlot;
           if (v1 > v0) {
             const zoneX = toPxX(v0), zoneWidth = toPxX(v1) - zoneX;
-            ctx.fillStyle = 'rgba(52, 115, 108, 0.075)';
+            ctx.fillStyle = 'rgba(22, 138, 74, 0.075)';
             ctx.fillRect(zoneX, padT, zoneWidth, plotH);
           }
         }
@@ -5343,7 +5343,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // Pinned Baseline curve
         if (appState.pinnedBaseline) {
           const base = appState.pinnedBaseline;
-          ctx.strokeStyle = 'rgba(189, 87, 54, 0.58)';
+          ctx.strokeStyle = 'rgba(23, 71, 230, 0.58)';
           ctx.lineWidth = 1.75;
           ctx.setLineDash([5, 4]);
           for (let bIdx = 0; bIdx < 4; bIdx++) {
@@ -5513,8 +5513,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const p01 = proj(minVelPlot, 0, 8);
 
         ctx.save();
-        ctx.fillStyle = 'rgba(52, 115, 108, 0.105)';
-        ctx.strokeStyle = 'rgba(52, 115, 108, 0.42)';
+        ctx.fillStyle = 'rgba(22, 138, 74, 0.105)';
+        ctx.strokeStyle = 'rgba(22, 138, 74, 0.42)';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(p00.x, p00.y);
@@ -5526,7 +5526,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.stroke();
 
         // Fine reference lines on the Re(λ) = 0 stability plane.
-        ctx.strokeStyle = 'rgba(52, 115, 108, 0.13)';
+        ctx.strokeStyle = 'rgba(22, 138, 74, 0.13)';
         ctx.lineWidth = 0.7;
         for (let imG = -8; imG <= 8; imG += 4) {
           const a = proj(minVelPlot, 0, imG), b = proj(maxVelPlot, 0, imG);
@@ -5572,7 +5572,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             const ptShadow = proj(step.v, 0, r.im); // Projection onto Re=0 plane
 
             // Subtle drop-line to Re=0 plane to highlight sign crossing
-            ctx.strokeStyle = r.re < 0 ? 'rgba(52, 115, 108, 0.22)' : 'rgba(189, 87, 54, 0.22)';
+            ctx.strokeStyle = r.re < 0 ? 'rgba(22, 138, 74, 0.22)' : 'rgba(224, 48, 30, 0.22)';
             ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(pt.x, pt.y); ctx.lineTo(ptShadow.x, ptShadow.y); ctx.stroke();
 
