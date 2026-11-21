@@ -1133,3 +1133,12 @@ body *, body *::before, body *::after { text-transform: none !important; }
 .plain-reading .plain-test { padding-left: 10px; border-left: 3px solid var(--select); color: var(--ink); }
 .plain-guide { max-width: 68ch; margin: 10px 0 0; padding: 0 0 0 18px; color: var(--muted); font: .82rem/1.5 var(--font-body); }
 .plain-guide li { margin-bottom: 2px; }
+
+/* Time to react: growth expressed in seconds. */
+.reaction { margin: 12px 0 4px; padding-top: 10px; border-top: 1px solid var(--rule); }
+.reaction-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.reaction-label { color: var(--ink); font: 600 .9rem var(--font-body); }
+.reaction-value { color: var(--signal); font: 500 2rem/1 var(--font-mono); letter-spacing: -.02em; }
+.reaction-value.is-steady { color: var(--stable); font-size: 1.3rem; }
+.reaction .reaction-note { color: var(--muted); font-size: .8rem; }
+.reaction-canvas { display: block; width: 100%; height: 150px; margin-top: 6px; }

@@ -292,6 +292,7 @@
             { label: y.short, value: format(sample.y, y.digits) + ' ' + y.unit },
             { label: 'Forward speed', value: format(model.speed, 3) + ' m/s' },
             { label: 'Maximum Re(λ)', value: format(sample.z, 5) + ' s⁻¹' },
+            { label: 'Time to double', value: window.JBike6ReactionTime ? window.JBike6ReactionTime.describe(sample.z).value : '—' },
             { label: 'Stability', value: stability }
           ].concat(rootRows), 'This point is a sampled configuration. Use “Apply selected point” to transfer its design parameters to the active bicycle model.');
       }
