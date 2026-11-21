@@ -2844,13 +2844,14 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           basket:     { m: 0.0,  u: 0.08,  v: 0.72, I11: 0.01,  I22: 0.01, Izz: 0.01, alphaDeg: 0.0 }
         },
         benchmark: {
+          // Exact parameters from table 1 of Meijaard et al. (2007), carried at full precision so the model reproduces the paper's 14-digit results.
           name: 'Meijaard Benchmark Paper Bike',
           g: 9.81,
           wheelbase: 1.02,
           refWheelbase: 1.02,
           headAngleDeg: 72.0,
           refHeadAngleDeg: 72.0,
-          forkOffsetMm: 32.071,
+          forkOffsetMm: 32.071426727619,
           Df: 0.70,
           Dr: 0.60,
 
@@ -2864,10 +2865,10 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           velSteps: 151,
           rearWheel:  { m: 2.0, Ixx: 0.0603, Izz: 0.12 },
           frontWheel: { m: 3.0, Ixx: 0.1405, Izz: 0.28 },
-          frame:      { m: 85.0, x: 0.30, y: 0.90, I11: 10.0, I22: 2.0, Izz: 11.0, alphaDeg: -18.4349488 },
+          frame:      { m: 85.0, x: 0.30, y: 0.90, I11: 10.0, I22: 2.0, Izz: 11.0, alphaDeg: -18.434948822922 },
           rider:      { m: 0.0,  x: 0.30, y: 0.90, I11: 0.0,  I22: 0.0, Izz: 0.0,  alphaDeg: 0.0 },
           rack:       { m: 0.0,  x: 0.0,  y: 0.0,  I11: 0.0,  I22: 0.0, Izz: 0.0,  alphaDeg: 0.0 },
-          fork:       { m: 4.0,  u: 0.02610059, v: 0.72754296, I11: 0.060, I22: 0.006, Izz: 0.060, alphaDeg: 8.13010235 },
+          fork:       { m: 4.0,  u: 0.026100592803, v: 0.72754296028, I11: 0.060, I22: 0.006, Izz: 0.060, alphaDeg: 8.130102354156 },
           basket:     { m: 0.0,  u: 0.0,  v: 0.0,  I11: 0.0,  I22: 0.0, Izz: 0.0,  alphaDeg: 0.0 }
         },
         burleyLong: {
@@ -3489,7 +3490,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           vw,
           vwOmega,
           vc,
-          doubleRoots
+          doubleRoots,
+          searchMax
         };
       }
 
@@ -4278,9 +4280,9 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           capSec.textContent = unit !== 'ms' ? `(${vc.toFixed(3)} m/s)` : '';
           capSub.textContent = 'Slow non-oscillatory inward spiral onset';
         } else if (vw !== null && vc === null) {
-          capPrim.textContent = 'Infinite';
-          capSec.textContent = '(None)';
-          capSub.textContent = 'Capsize mode remains stable at high speeds';
+          capPrim.textContent = 'None found';
+          capSec.textContent = '';
+          capSub.textContent = 'No capsize speed up to ' + formatSpeed(appState.analysis.searchMax, unit);
         } else {
           capPrim.textContent = 'N/A';
           capSec.textContent = '';
@@ -4301,7 +4303,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           winPrim.textContent = `> ${formatSpeed(vw, unit)}`;
           winPrim.className = 'kpi-val emerald tabular-nums';
           winSec.textContent = '';
-          statusBadge.textContent = 'Always Stable > vw';
+          statusBadge.textContent = 'Stable above vw';
           statusBadge.className = 'pill-badge pill-emerald';
         } else {
           winPrim.textContent = '0.0';
@@ -4321,27 +4323,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const trailMm = (model.c * 1000).toFixed(1);
         const gyroPct = Math.round(p.gyroMult * 100);
 
-        let insight = '';
-        if (p.Df > p.Dr + 0.015) {
-          const dropMm = ((p.Df - p.Dr) * 0.5 * 1000).toFixed(1);
-          insight = `Running a ${wheelDesc} setup: the smaller rear wheel drops the rear axle by ${dropMm} mm relative to the front, ` +
-            `${p.simulatePitch ? 'pitching the frame backward to slacken the head angle and ' : ''}yielding ${trailMm} mm of mechanical trail. ` +
-            `Lower rear wheel spin inertia reduces gyroscopic resistance to lean-induced steering, ` +
-            (vw !== null
-              ? `stabilizing weave above ${formatSpeed(vw, unit)}${vc !== null ? ` and maintaining hands-free stability up to ${formatSpeed(vc, unit)}` : ' across higher speeds'}.`
-              : `leaving the bike dynamically unstable without rider steering input.`);
-        } else if (gyroPct === 0) {
-          insight = `Wheel gyroscopic precession is disabled (0%). Even with zero spin angular momentum (S_R = S_F = 0), ` +
-            (vw !== null
-              ? `positive mechanical trail (${trailMm} mm) and front assembly mass offset (U = ${(p.fork.u * 1000).toFixed(0)} mm) still generate sufficient steer-into-lean coupling to self-stabilize weave above ${formatSpeed(vw, unit)}!`
-              : `the current geometry lacks sufficient trail/mass coupling to self-stabilize without gyroscopic torque.`);
-        } else {
-          insight = `${wheelDesc} at g = ${p.g} m/s² with ${p.headAngleDeg.toFixed(1)}° head angle and ${trailMm} mm trail: ` +
-            (vw !== null
-              ? `low-speed oscillatory weave decays above ${formatSpeed(vw, unit)}, creating a ${vc !== null ? `${formatSpeed(vc - vw, unit)} wide` : 'unbounded'} hands-free stability envelope` +
-                `${vc !== null ? ` before slow capsize begins at ${formatSpeed(vc, unit)}.` : '.'}`
-              : `eigenvalues remain in the right-half plane across the tested velocity sweep.`);
-        }
+        const insight = window.JBike6PlainLanguage.insightFor({
+          wheelDesc, Df: p.Df, Dr: p.Dr, simulatePitch: p.simulatePitch, autoScaleWheels: p.autoScaleWheels,
+          gyroPct, trailMm, headAngleDeg: p.headAngleDeg, forkOffsetUMm: p.fork.u * 1000, g: p.g,
+          vw, vc, fmt: (v) => formatSpeed(v, unit)
+        });
         insightEl.textContent = insight;
 
         const simSlider = document.getElementById('sliderSimSpeed');

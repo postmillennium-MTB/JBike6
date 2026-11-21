@@ -117,7 +117,11 @@ if __name__ == '__main__':
         try:
             M0, C1, K0, K2 = mck(e, g)
             vw, vc = critical_speeds(M0, C1, K0, K2)
+            # Same bike with the wheels' spin inertia set to zero: the MATLAB counterpart of the app's gyro multiplier at 0.
+            e0 = dict(e); e0['Irearwheel'] = list(e['Irearwheel'][:2]) + [0.0]; e0['Ifrontwheel'] = list(e['Ifrontwheel'][:2]) + [0.0]
+            Mn, Cn, Kn, K2n = mck(e0, g)
             out[name] = dict(ini=e, M0=M0.tolist(), C1=C1.tolist(), K0=K0.tolist(), K2=K2.tolist(), vw=vw, vc=vc,
+                             no_gyro=dict(M0=Mn.tolist(), C1=Cn.tolist(), K0=Kn.tolist(), K2=K2n.tolist()),
                              eig5=[[z.real, z.imag] for z in eig_at(M0, C1, K0, K2, 5.0)],
                              eig10=[[z.real, z.imag] for z in eig_at(M0, C1, K0, K2, 10.0)])
         except Exception as ex:

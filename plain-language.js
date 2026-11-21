@@ -51,6 +51,38 @@
     return out;
   }
 
+  // One or two sentences under the readouts describing the current setup. It states what the model
+  // computes. It does not claim a cause the model has not demonstrated.
+  function insightFor(o) {
+    const f = o.fmt;
+    const hasVw = o.vw !== null && o.vw !== undefined;
+    const hasVc = o.vc !== null && o.vc !== undefined;
+    const outcome = hasVw
+      ? 'In this model the bike steadies itself above ' + f(o.vw) +
+        (hasVc ? ' and up to ' + f(o.vc) + '.' : ' at every higher speed that was searched.')
+      : 'In this model it does not steady itself at any speed in range, so a rider has to steer it.';
+    if (o.gyroPct === 0) {
+      return 'Wheel gyroscopic effect is set to 0%. ' + (hasVw
+        ? 'Trail (' + o.trailMm + ' mm) and the front assembly\u2019s mass offset (' + Math.round(o.forkOffsetUMm) +
+          ' mm) alone still steer the bike into a lean. ' + outcome
+        : 'Trail (' + o.trailMm + ' mm) and the front assembly\u2019s mass offset do not steady the bike without it. ' + outcome);
+    }
+    if (o.Df > o.Dr + 0.015) {
+      const dropMm = ((o.Df - o.Dr) * 0.5 * 1000).toFixed(1);
+      return 'Running a ' + o.wheelDesc + ' setup: the smaller rear wheel puts the rear axle ' + dropMm + ' mm lower than the front, ' +
+        (o.simulatePitch ? 'which pitches the frame backward and slackens the head angle to ' + o.headAngleDeg.toFixed(1) + '\u00b0, ' : '') +
+        'giving ' + o.trailMm + ' mm of trail. ' +
+        (o.autoScaleWheels ? 'With auto-scaling on, the smaller wheel also has less mass and spin inertia, so its gyroscopic term is weaker. ' : '') +
+        outcome;
+    }
+    return o.wheelDesc + ' with ' + o.headAngleDeg.toFixed(1) + '\u00b0 head angle and ' + o.trailMm + ' mm of trail at g = ' + o.g + ' m/s\u00b2. ' +
+      (hasVw
+        ? 'The low-speed weave wobble dies out above ' + f(o.vw) + '. ' + (hasVc
+          ? 'The bike steadies itself over a ' + f(o.vc - o.vw) + ' wide band, then a slow capsize begins at ' + f(o.vc) + '.'
+          : 'It stays steady at every higher speed that was searched.')
+        : 'The bike does not steady itself at any speed in range.');
+  }
+
   const READING_GUIDE = [
     'Each dot is one of the bike’s four natural motions at that speed.',
     'Red dots show whether a motion grows (above the zero line) or fades (below it).',
@@ -58,7 +90,7 @@
     'The shaded band is where every motion fades, so the bike steadies itself.'
   ];
 
-  const api = { readStability, READING_GUIDE };
+  const api = { readStability, insightFor, READING_GUIDE };
   if (root) root.JBike6PlainLanguage = api;
   if (typeof module === 'object' && module.exports) module.exports = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

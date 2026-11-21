@@ -1,40 +1,48 @@
 # Model audit: app versus the original MATLAB
 
-This records how the app's bicycle model was checked against the 2015 MATLAB release, what was found, and what has not been checked. It complements `CONTROL_THEORY_AUDIT.md`, which covers `control-theory.js`.
+This is the short version. The full record, with the method, each result, the mistakes made along the way and the limits, is in [`docs/audit/audit-log.md`](docs/audit/audit-log.md). It complements `CONTROL_THEORY_AUDIT.md`, which covers `control-theory.js`.
 
-## Method
-1. `tests/fixtures/make_matlab_reference.py` is a direct Python port of `JBmck.m`, `JBaddb.m` and `JBeig.m`. It does not use the app's JavaScript.
-2. Sanity check on the port: for the Meijaard benchmark bicycle it gives a weave speed of 4.2924 m/s and a capsize speed of 6.0243 m/s, which match the published values (Meijaard et al. 2007: 4.292 and 6.024).
-3. The port was run on every bike in `original Matlab files/JBini_files` (gravity 9.81). The results are the fixture `tests/fixtures/matlab-reference.json`.
-4. The app's `assembleWhippleModel` was run on the same inputs. M0, C1, K0 and K2 were compared element by element (after the steer sign change below), and weave and capsize speeds were compared.
+The audit was done by an AI model with the repository owner, not by a human reviewer, and MATLAB itself was never run. The references are a Python port of the MATLAB files, the published paper in this repo, and the exact solution of the linear equations.
 
-## Findings, all fixed
-| Finding | Effect | Fix |
-| --- | --- | --- |
-| `S_A` was divided by the wheelbase `w`. It is a first moment in kg·m, as in Meijaard et al. and MATLAB's `nu`. | K0(1,2), K0(2,2), K2(2,2) and C1(2,2) were wrong by a factor that grows with wheelbase. The benchmark's weave and capsize speeds were off by 2%. Every modern MTB preset (wheelbase about 1.25 m) showed no self-stable window. With the fix they show windows of roughly 15.6 to 23 mph. | Removed the division. |
-| `combineJBikeBodies` returned zero inertia for a group with no mass, while MATLAB's `JBaddb` keeps the inertia of massless bodies. | Wrong mass matrix for designs that use a massless body with inertia (two MATLAB test bikes). | Centre taken at the origin for a massless group, inertia kept. |
-| Control lab: `denG` was the raw `det(M0 s² + C s + K)`, which is `det(M0)` times the monic polynomial, while `numG` was normalized. | The displayed `G(s) = numG/denG` had the wrong gain by `det(M0)` (about 19 to 59). Poles and zeros were right. | `denG` is now monic. |
+## Results
+| Area | Result |
+| --- | --- |
+| Equations of motion (M0, C1, K0, K2), 18 MATLAB bikes | Agree to about 2e-15 after fixes |
+| Benchmark bicycle against the paper (matrices to 14 digits, Table 2) | Agree to 1e-10 (matrices) and 1e-8 (eigenvalues and speeds) after fixes |
+| Weave and capsize speeds | Agree with MATLAB to 0.01 m/s or better |
+| Double-root speeds | All 34 reference speeds found, none missed, none extra |
+| Eigenvalues and mode shapes (Eigenmode lab) | Agree with the MATLAB eigenproblem |
+| Ride-test and feedback simulators | Agree with the exact solution to about 1e-8, after a stability fix |
+| Control lab transfer function and closed-loop poles | Agree after one fix |
+| Landscape and optimization path (parameter to eigenvalue) | Agrees to about 3.5e-15 |
+| Gyroscopic multiplier at 0 | Matches MATLAB with zero wheel spin inertia |
 
-After the fixes, all 18 compared MATLAB bikes agree on M0, C1, K0 and K2 to about 2e-15 (relative). Weave and capsize speeds agree to 0.01 m/s or better. `tests/matlab-model.test.js` and `tests/control-lab-transfer.test.js` keep it that way. Both fail on the old code.
-
-## Ride-test simulator versus `JBike6Integrate.m`
-MATLAB integrates M0 q'' = -(C1 v q' + (K0 + v²K2) q) with `ode45` at a tolerance of 1e-3. The app uses the same equation with fixed-step RK4 at 10 ms. The reference for the check is the exact solution (a matrix exponential, `tests/fixtures/make_simulation_reference.py`), which is stricter than `ode45`. Tests: `tests/ride-simulator.test.js`.
-
-- **Accuracy:** while the solution stays inside the display range, the app matches the exact solution to about 1e-8 (relative) for lean and, with the sign flipped, steer. Unstable bikes match to about 1e-7 up to the moment they hit the clamp.
-- **Fixed (stiff designs):** fixed-step RK4 at 10 ms goes unstable once an eigenvalue passes about 278 per second. The MATLAB `Trail_only` design reaches 362 per second at 25 m/s. The exact solution is a calm 5° lean, but the app's integrator blew up and reported a false crash. The ride test and the Control lab feedback simulator now take extra sub-steps when the system is stiff. The presets take one step at ordinary speeds and 2 to 9 at 15 to 25 m/s. After the fix the stiff cases agree to about 1e-12. A feedback case with gains kp 300 and kd 40 was also affected.
-- **Display clamp (by design):** lean and steer are clamped at ±1.5 rad and the rate is zeroed. The linear model does not do this, so after a clamp the trajectory is no longer the linear solution. The crash playback stops at 45° of lean, before the clamp. The Control lab's unstable closed-loop responses can reach the clamp through steer angle.
-- **Initial conditions:** MATLAB lets you set initial lean, steer and both rates. The app starts from an initial lean with everything else at rest. The "roll impulse" control is an initial lean angle, not an impulse.
+## Bugs found and fixed
+| # | Bug | Effect | PR |
+| --- | --- | --- | --- |
+| 1 | `S_A` divided by the wheelbase in `assembleWhippleModel` | Wrong stability for every bike with wheelbase other than 1 m. Modern MTB presets showed no self-stable window. Now they show roughly 15.6 to 23 mph | #36 |
+| 2 | A group of bodies with no mass lost its inertia | Wrong mass matrix for designs with massless bodies | #36 |
+| 3 | Control lab `denG` not monic | Displayed G(s) had the wrong gain by `det(M0)` | #36 |
+| 4 | Fixed-step RK4 unstable for stiff systems and high feedback gains | False crashes in the ride test and Control lab | #37 |
+| 5 | Benchmark preset carried rounded numbers | About 1e-6 error against the paper | this audit |
+| 6 | Generated text claimed an unsupported gyroscopic cause and said "Infinite" for a missing capsize speed | Misleading wording | this audit |
 
 ## Differences that are not bugs
-- **Steer sign.** MATLAB takes steer to the left as positive. The app uses Meijaard's convention (steer right positive). The off-diagonals of M0, C1, K0 and K2 change sign. Eigenvalues are identical.
-- **`Rear_wheel_only`** is left out of the fixture. Its eigenvalues lie on the imaginary axis (real parts of about 1e-15), so "stable" is numerical noise and the two implementations disagree on a meaningless boundary.
-- **Search range.** The app finds a capsize speed only within its search range. The Chopper's capsize speed (16.06 m/s) lies beyond the default plot range of 12 m/s.
+- **Steer sign.** MATLAB takes steer to the left as positive. The app follows Meijaard et al. (steer right positive). Off-diagonal terms flip sign and the eigenvalues are identical.
+- **Display clamp.** Lean and steer are clamped at 1.5 rad in the simulators, which the linear model does not do.
+- **Initial conditions.** MATLAB can set initial steer and rates. The app starts from an initial lean.
+- **`Rear_wheel_only`** is excluded from the fixture because its eigenvalues lie on the imaginary axis, so stability is numerical noise.
 
-## Preset fidelity
-The preset called "JBike6 Schwinn Crown (Original Default)" is not the MATLAB `JBini_Schwinn_Crown.m`. Its masses, centres of mass, inertias and fork values differ (for example frame mass 11.4 kg versus 2.5 kg). The benchmark preset does match the MATLAB benchmark and the published numbers.
+## Open items for the owner
+- **Presets named after MATLAB bikes are not those bikes.** Only the benchmark matches its MATLAB file. The "Original Default" Schwinn, the Burleys, the Chopper, "Minimal" and "Trail-only" presets are different bikes with MATLAB-style names. Decision by the owner: leave the preset names as they are, and never change the files in `original Matlab files/` (noted in the README).
+- **Earlier published numbers.** Anything published from the app before PR #36 used the buggy model.
 
 ## Not checked
-- App-only features that have no MATLAB counterpart: wheel auto-scaling, the mullet frame-pitch option, the gyroscopic multiplier.
-- The 3D and 2D drawing geometry.
-- The Stability landscape and Design optimization searches. They reuse the corrected model but were not checked on their own.
-- The explanatory text generated from the analysis (`updateKPIsAndInsight`), for example the statements about how smaller rear wheels change stability.
+- 2D and 3D drawing geometry (screenshots only).
+- The rider stance feature.
+- The physics of wheel auto-scaling (the reference values have no cited source) and the mullet frame-pitch option, which only changes the head angle.
+- The shape of the landscape and optimization displays, and the optimizer's search behavior.
+- Stability search resolution: a self-stable window narrower than about 0.14 m/s could be missed.
+
+## Reproducing
+`node --test tests/*.test.js` runs 199 tests. The reference fixtures are regenerated by the scripts in `tests/fixtures/` (needs Python 3 and numpy). See the test map in [`docs/audit/README.md`](docs/audit/README.md).
