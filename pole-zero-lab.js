@@ -147,7 +147,7 @@
       ctx.moveTo(p.x+size,p.y-size); ctx.lineTo(p.x-size,p.y+size); ctx.stroke(); ctx.restore();
     }
     function drawRing(ctx, p) {
-      ctx.save(); ctx.strokeStyle = '#202a2e'; ctx.lineWidth = 1.3;
+      ctx.save(); ctx.strokeStyle = '#15283c'; ctx.lineWidth = 1.3;
       ctx.beginPath(); ctx.arc(p.x,p.y,10,0,Math.PI*2); ctx.stroke(); ctx.restore();
     }
 
@@ -156,16 +156,16 @@
       const at = p => is3D ? projectRoot({ re:p.re, im:p.im, v:cur.v },width,height) : to2D(p);
       if(state.visible.poles)(cur.poles || []).forEach((p,i) => {
         const q = at(p), status = classifyPole(p);
-        drawCross(ctx,q,status === 'stable' ? '#34736c' : status === 'unstable' ? '#bd5736' : '#bd5736',5.5,2.2);
+        drawCross(ctx,q,status === 'stable' ? '#2f7d4a' : status === 'unstable' ? '#c8321e' : '#c8321e',5.5,2.2);
         if (state.selected && state.selected.kind === 'pole' && state.selected.index === i) drawRing(ctx,q);
       });
       if(state.visible.zeros)(cur.zeros || []).forEach((p,i) => {
-        const q=at(p); ctx.save(); ctx.strokeStyle='#bd5736'; ctx.lineWidth=2;
+        const q=at(p); ctx.save(); ctx.strokeStyle='#c8321e'; ctx.lineWidth=2;
         ctx.beginPath(); ctx.arc(q.x,q.y,6,0,Math.PI*2); ctx.stroke(); ctx.restore();
         if (state.selected && state.selected.kind==='zero' && state.selected.index===i) drawRing(ctx,q);
       });
       if(state.visible.closed)(cur.closedPoles || []).forEach((p,i) => {
-        const q=at(p); ctx.save(); ctx.strokeStyle='#bd5736'; ctx.lineWidth=2;
+        const q=at(p); ctx.save(); ctx.strokeStyle='#c8321e'; ctx.lineWidth=2;
         ctx.beginPath(); ctx.moveTo(q.x,q.y-5); ctx.lineTo(q.x+5,q.y); ctx.lineTo(q.x,q.y+5); ctx.lineTo(q.x-5,q.y); ctx.closePath(); ctx.stroke(); ctx.restore();
         if (state.selected && state.selected.kind==='closed' && state.selected.index===i) drawRing(ctx,q);
       });
@@ -175,41 +175,41 @@
       const data=state.data, ext=state.extents;
       const reHalf=Math.max(Math.abs(ext.reMin),Math.abs(ext.reMax),1), imHalf=ext.imMax;
       const proj=p=>project3D(p,width,height), p3=(re,im,z)=>coord(re,im,z);
-      ctx.fillStyle='#f2f0e8'; ctx.fillRect(0,0,width,height);
+      ctx.fillStyle='#eef1f3'; ctx.fillRect(0,0,width,height);
 
       // Vertical Re(s)=0 plane is the actual stability boundary.
       const stability=[
         proj(p3(0,-imHalf,-1)),proj(p3(0,imHalf,-1)),
         proj(p3(0,imHalf,1)),proj(p3(0,-imHalf,1))
       ];
-      ctx.save(); ctx.fillStyle='rgba(52,115,108,.10)'; ctx.strokeStyle='rgba(52,115,108,.62)'; ctx.lineWidth=1.3;
+      ctx.save(); ctx.fillStyle='rgba(47,125,74,.10)'; ctx.strokeStyle='rgba(47,125,74,.62)'; ctx.lineWidth=1.3;
       ctx.beginPath(); stability.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
       ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
-      [-.5,0,.5].forEach(z=>drawLine(ctx,proj(p3(0,-imHalf,z)),proj(p3(0,imHalf,z)),'rgba(52,115,108,.22)',1));
-      [-.5,0,.5].forEach(y=>drawLine(ctx,proj(p3(0,y*imHalf,-1)),proj(p3(0,y*imHalf,1)),'rgba(52,115,108,.22)',1));
+      [-.5,0,.5].forEach(z=>drawLine(ctx,proj(p3(0,-imHalf,z)),proj(p3(0,imHalf,z)),'rgba(47,125,74,.22)',1));
+      [-.5,0,.5].forEach(y=>drawLine(ctx,proj(p3(0,y*imHalf,-1)),proj(p3(0,y*imHalf,1)),'rgba(47,125,74,.22)',1));
 
       // Amber slice marks the currently selected bicycle speed.
       const zNow=speedZ(data.current.v);
       const slice=[proj(p3(ext.reMin,-imHalf,zNow)),proj(p3(ext.reMax,-imHalf,zNow)),proj(p3(ext.reMax,imHalf,zNow)),proj(p3(ext.reMin,imHalf,zNow))];
-      ctx.save();ctx.fillStyle='rgba(189,87,54,.06)';ctx.strokeStyle='rgba(189,87,54,.62)';ctx.lineWidth=1;ctx.setLineDash([5,4]);
+      ctx.save();ctx.fillStyle='rgba(200,50,30,.06)';ctx.strokeStyle='rgba(200,50,30,.62)';ctx.lineWidth=1;ctx.setLineDash([5,4]);
       ctx.beginPath();slice.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
 
       // Bounding box.
       const corners=[];
       [-1,1].forEach(x=>[-1,1].forEach(y=>[-1,1].forEach(z=>corners.push({x:x,y:y,z:z}))));
       [[0,1],[0,2],[0,4],[1,3],[1,5],[2,3],[2,6],[3,7],[4,5],[4,6],[5,7],[6,7]].forEach(e=>
-        drawLine(ctx,proj(corners[e[0]]),proj(corners[e[1]]),'rgba(104,113,108,.25)',.8));
+        drawLine(ctx,proj(corners[e[0]]),proj(corners[e[1]]),'rgba(95,110,123,.25)',.8));
 
       // Axes: real part, imaginary part, and forward speed.
       const origin=proj({x:0,y:0,z:-1}), reEnd=proj({x:1.08,y:0,z:-1});
       const imEnd=proj({x:0,y:1.08,z:-1}), speedEnd=proj({x:0,y:0,z:1.08});
-      drawLine(ctx,origin,reEnd,'#46514f',1.8);drawLine(ctx,origin,imEnd,'#68716c',1.8);drawLine(ctx,origin,speedEnd,'#68716c',1.8);
+      drawLine(ctx,origin,reEnd,'#3a4b5c',1.8);drawLine(ctx,origin,imEnd,'#5f6e7b',1.8);drawLine(ctx,origin,speedEnd,'#5f6e7b',1.8);
       ctx.font='700 10px "IBM Plex Sans", sans-serif';ctx.textAlign='left';
-      ctx.fillStyle='#46514f';ctx.fillText('Re(s) · growth / decay',reEnd.x+4,reEnd.y+3);
-      ctx.fillStyle='#68716c';ctx.fillText('Im(s) · rad/s',imEnd.x+4,imEnd.y-5);
-      ctx.fillStyle='#68716c';ctx.fillText('Forward speed · m/s',speedEnd.x+4,speedEnd.y+3);
+      ctx.fillStyle='#3a4b5c';ctx.fillText('Re(s) · growth / decay',reEnd.x+4,reEnd.y+3);
+      ctx.fillStyle='#5f6e7b';ctx.fillText('Im(s) · rad/s',imEnd.x+4,imEnd.y-5);
+      ctx.fillStyle='#5f6e7b';ctx.fillText('Forward speed · m/s',speedEnd.x+4,speedEnd.y+3);
 
-      ctx.font='9px "IBM Plex Mono", monospace';ctx.fillStyle='#68716c';ctx.textAlign='center';
+      ctx.font='9px "IBM Plex Mono", monospace';ctx.fillStyle='#5f6e7b';ctx.textAlign='center';
       for(let i=-2;i<=2;i++){
         const rv=reHalf*i/2, rp=proj(p3(rv,0,-1));ctx.fillText(rv.toFixed(1),rp.x,rp.y+13);
         const iv=imHalf*i/2, ip=proj(p3(0,iv,-1));ctx.fillText(iv.toFixed(1),ip.x-10,ip.y-5);
@@ -221,21 +221,21 @@
       // Continuity-matched pole branches, colored by stable / unstable half-plane.
       if(state.visible.poles)state.tracks.poles.forEach(track=>{
         for(let i=1;i<track.length;i++){
-          const a=track[i-1],b=track[i],color=(a.re+b.re)/2 < -EPS?'rgba(52,115,108,.88)':'rgba(189,87,54,.88)';
+          const a=track[i-1],b=track[i],color=(a.re+b.re)/2 < -EPS?'rgba(47,125,74,.88)':'rgba(200,50,30,.88)';
           drawLine(ctx,projectRoot(a,width,height),projectRoot(b,width,height),color,1.85);
         }
       });
       if(state.visible.zeros)state.tracks.zeros.forEach(track=>{
-        ctx.save();ctx.strokeStyle='rgba(189,87,54,.78)';ctx.lineWidth=1.35;ctx.setLineDash([4,3]);ctx.beginPath();
+        ctx.save();ctx.strokeStyle='rgba(200,50,30,.78)';ctx.lineWidth=1.35;ctx.setLineDash([4,3]);ctx.beginPath();
         track.forEach((p,i)=>{const q=projectRoot(p,width,height);i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y);});
         ctx.stroke();ctx.restore();
       });
       if(state.visible.closed)state.tracks.closedPoles.forEach(track=>{
-        for(let i=1;i<track.length;i++)drawLine(ctx,projectRoot(track[i-1],width,height),projectRoot(track[i],width,height),'rgba(189,87,54,.72)',1.3,[4,3]);
+        for(let i=1;i<track.length;i++)drawLine(ctx,projectRoot(track[i-1],width,height),projectRoot(track[i],width,height),'rgba(200,50,30,.72)',1.3,[4,3]);
       });
       drawCurrentMarkers(ctx,width,height,true);
-      ctx.fillStyle='#34736c';ctx.font='700 10px "IBM Plex Sans", sans-serif';ctx.fillText('Re(s) = 0 · stability boundary',12,18);
-      ctx.fillStyle='#bd5736';ctx.fillText('Dashed orange plane · selected operating speed',12,33);
+      ctx.fillStyle='#2f7d4a';ctx.font='700 10px "IBM Plex Sans", sans-serif';ctx.fillText('Re(s) = 0 · stability boundary',12,18);
+      ctx.fillStyle='#c8321e';ctx.fillText('Dashed red plane · selected operating speed',12,33);
     }
 
     function to2D(p) {
@@ -246,25 +246,25 @@
     function draw2D(ctx,width,height) {
       const e=state.extents,pad={left:48,right:17,top:17,bottom:35};
       const area={left:pad.left,top:pad.top,width:width-pad.left-pad.right,height:height-pad.top-pad.bottom};
-      state.plotArea=area;ctx.fillStyle='#f2f0e8';ctx.fillRect(0,0,width,height);
+      state.plotArea=area;ctx.fillStyle='#eef1f3';ctx.fillRect(0,0,width,height);
       const zeroX=area.left+(0-e.reMin)/(e.reMax-e.reMin)*area.width;
-      ctx.fillStyle='rgba(52,115,108,.08)';ctx.fillRect(area.left,area.top,Math.max(0,zeroX-area.left),area.height);
-      ctx.font='9px "IBM Plex Mono", monospace';ctx.fillStyle='#68716c';ctx.textAlign='center';
+      ctx.fillStyle='rgba(47,125,74,.08)';ctx.fillRect(area.left,area.top,Math.max(0,zeroX-area.left),area.height);
+      ctx.font='9px "IBM Plex Mono", monospace';ctx.fillStyle='#5f6e7b';ctx.textAlign='center';
       for(let i=0;i<=6;i++){
         const re=e.reMin+(e.reMax-e.reMin)*i/6,x=area.left+area.width*i/6;
-        ctx.strokeStyle=Math.abs(re)<1e-7?'#747a72':'rgba(116,122,114,.2)';ctx.lineWidth=Math.abs(re)<1e-7?1.25:.7;
+        ctx.strokeStyle=Math.abs(re)<1e-7?'#6b7a87':'rgba(107,122,135,.2)';ctx.lineWidth=Math.abs(re)<1e-7?1.25:.7;
         ctx.beginPath();ctx.moveTo(x,area.top);ctx.lineTo(x,area.top+area.height);ctx.stroke();ctx.fillText(re.toFixed(1),x,area.top+area.height+14);
       }
       ctx.textAlign='right';
       for(let i=-2;i<=2;i++){
         const im=e.imMax*i/2,y=area.top+(e.imMax-im)/(2*e.imMax)*area.height;
-        ctx.strokeStyle=i===0?'#747a72':'rgba(116,122,114,.2)';ctx.lineWidth=i===0?1.25:.7;ctx.beginPath();ctx.moveTo(area.left,y);ctx.lineTo(area.left+area.width,y);ctx.stroke();ctx.fillText(im.toFixed(1),area.left-6,y+3);
+        ctx.strokeStyle=i===0?'#6b7a87':'rgba(107,122,135,.2)';ctx.lineWidth=i===0?1.25:.7;ctx.beginPath();ctx.moveTo(area.left,y);ctx.lineTo(area.left+area.width,y);ctx.stroke();ctx.fillText(im.toFixed(1),area.left-6,y+3);
       }
-      ctx.fillStyle='#46514f';ctx.textAlign='center';ctx.font='600 10px "IBM Plex Sans", sans-serif';
+      ctx.fillStyle='#3a4b5c';ctx.textAlign='center';ctx.font='600 10px "IBM Plex Sans", sans-serif';
       ctx.fillText('Re(s) [1/s]  ← stable | unstable →',area.left+area.width/2,height-5);
       ctx.save();ctx.translate(12,area.top+area.height/2);ctx.rotate(-Math.PI/2);ctx.fillText('Im(s) [rad/s]',0,0);ctx.restore();
       ctx.save();ctx.beginPath();ctx.rect(area.left,area.top,area.width,area.height);ctx.clip();
-      drawCurrentMarkers(ctx,width,height,false);ctx.restore();ctx.strokeStyle='#747a72';ctx.strokeRect(area.left,area.top,area.width,area.height);
+      drawCurrentMarkers(ctx,width,height,false);ctx.restore();ctx.strokeStyle='#6b7a87';ctx.strokeRect(area.left,area.top,area.width,area.height);
     }
 
     function selectedPoint() {
@@ -317,9 +317,9 @@
     function drawHoverCrosshair(ctx,width,height){
       if(!state.hover)return;
       const x=state.hover.x,y=state.hover.y;
-      ctx.save();ctx.strokeStyle='rgba(189,87,54,.8)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+      ctx.save();ctx.strokeStyle='rgba(200,50,30,.8)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
       ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,height);ctx.moveTo(0,y);ctx.lineTo(width,y);ctx.stroke();
-      ctx.setLineDash([]);ctx.fillStyle='#bd5736';ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();ctx.restore();
+      ctx.setLineDash([]);ctx.fillStyle='#c8321e';ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();ctx.restore();
     }
     function setCameraPreset(name){
       const presets={front:{yaw:0,pitch:.12,zoom:1},side:{yaw:Math.PI/2,pitch:.18,zoom:1},top:{yaw:0,pitch:1.18,zoom:1}};

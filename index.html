@@ -2070,10 +2070,10 @@
           </div>
 
           <div id="rootPlotDescription" class="sr-only">
-            Root-locus plot. Teal points represent imaginary eigenvalue components and oscillation frequency.
-            Orange points represent real eigenvalue components and growth or decay. The shaded interval is
+            Root-locus plot. Green points represent imaginary eigenvalue components and oscillation frequency.
+            Red points represent real eigenvalue components and growth or decay. The shaded interval is
             self-stable where the maximum real eigenvalue is negative. Vertical markers identify weave,
-            capsize, and the currently selected operating speed. Double-root markers are highlighted in orange.
+            capsize, and the currently selected operating speed. Double-root markers are highlighted in red.
           </div>
 
           <div class="canvas-stage root-h">
@@ -2469,7 +2469,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
     <section id="stabilityLandscapeSection" class="landscape-workspace hidden" aria-labelledby="landscapeTitle">
       <div class="landscape-hero">
         <div class="landscape-hero-copy">
-          <div class="landscape-eyebrow"><span class="landscape-pulse"></span> PARAMETER SPACE EXPLORER</div>
+          
           <h2 id="landscapeTitle">Bicycle Stability Landscape</h2>
           <p>Explore how two design parameters reshape the bicycle's dynamic stability at a chosen forward speed.</p>
         </div>
@@ -2618,7 +2618,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         </aside>
         <div class="optimization-results">
           <section class="panel-card optimization-map-card">
-            <div class="panel-head"><div><h3 class="panel-title">Worst-case stability response</h3><p class="viz-sub">Each cell evaluates every speed sample in the chosen interval. Teal indicates decay; orange indicates growth.</p></div><span class="pill-badge pill-slate">Sampled search</span></div>
+            <div class="panel-head"><div><h3 class="panel-title">Worst-case stability response</h3><p class="viz-sub">Each cell evaluates every speed sample in the chosen interval. Green indicates decay; red indicates growth.</p></div><span class="pill-badge pill-slate">Sampled search</span></div>
             <div class="optimization-canvas-stage"><canvas id="optimizationCanvas" aria-label="Heatmap of worst-case bicycle eigenvalue growth rate over two design parameters"></canvas></div>
             <div class="optimization-legend"><span><i class="optimization-swatch better"></i>More negative · better</span><span><i class="optimization-swatch neutral"></i>Near neutral</span><span><i class="optimization-swatch worse"></i>Positive · unstable</span></div>
           </section>
@@ -5213,7 +5213,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
               ctx.fillStyle = 'rgba(52, 115, 108, 0.88)';
               ctx.font = '8px "IBM Plex Mono", monospace';
               ctx.textAlign = 'left';
-              ctx.fillText('SELF-STABLE', zoneX + 5, padT + plotH - 8);
+              ctx.fillText('Self-stable', zoneX + 5, padT + plotH - 8);
             }
           }
         }
@@ -5262,12 +5262,12 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.restore();
 
         // Direct series labels live on the plot surface; no detached legend is needed.
-        ctx.font = '9px "IBM Plex Mono", monospace';
+        ctx.font = '600 11px "Archivo", sans-serif';
         ctx.textAlign = 'left';
         ctx.fillStyle = '#2f7d4a';
-        ctx.fillText('IM(λ) · OSCILLATION', padL, 19);
+        ctx.fillText('Im(λ): oscillation', padL, 19);
         ctx.fillStyle = '#c8321e';
-        ctx.fillText('RE(λ) · GROWTH / DECAY', padL + 136, 19);
+        ctx.fillText('Re(λ): growth or decay', padL + 136, 19);
 
         ctx.save();
         ctx.beginPath();
@@ -5297,7 +5297,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.setLineDash([]);
         }
 
-        // Imaginary eigenvalue component: oscillation frequency (teal).
+        // Imaginary eigenvalue component: oscillation frequency (green).
         ctx.fillStyle = '#2f7d4a';
         for (const step of sweepData) {
           const px = toPxX(step.v);
@@ -5308,7 +5308,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           }
         }
 
-        // Real eigenvalue component: growth and decay rate (orange).
+        // Real eigenvalue component: growth and decay rate (red).
         ctx.fillStyle = '#c8321e';
         for (const step of sweepData) {
           const px = toPxX(step.v);
@@ -5454,9 +5454,9 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.font = '9px "IBM Plex Mono", monospace';
         ctx.textAlign = 'left';
         ctx.fillStyle = '#2f7d4a';
-        ctx.fillText('REFERENCE PLANE · Re(λ) = 0', 12, 17);
+        ctx.fillText('Reference plane: Re(λ) = 0', 12, 17);
         ctx.fillStyle = '#5f6e7b';
-        ctx.fillText('TEAL · DECAY     ORANGE · GROWTH', 12, 31);
+        ctx.fillText('Green: decay     Red: growth', 12, 31);
 
         drawAxisLine(axOrigin, axSpeed, '#15283c', `Speed v (${UNIT_CONFIG[unit].label})`);
         drawAxisLine(axReNeg, axRePos, '#c8321e', '+Re(λ) Unstable');
@@ -5477,7 +5477,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(pt.x, pt.y); ctx.lineTo(ptShadow.x, ptShadow.y); ctx.stroke();
 
-            // Root point colored by stability (teal if Re<0, orange otherwise).
+            // Root point colored by stability (green if Re<0, red otherwise).
             ctx.fillStyle = r.re < -1e-5 ? '#2f7d4a' : '#c8321e';
             ctx.beginPath();
             ctx.arc(pt.x, pt.y, Math.max(2, 2.8 * pt.scale / baseScale), 0, Math.PI * 2);
