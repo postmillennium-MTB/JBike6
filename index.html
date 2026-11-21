@@ -1681,7 +1681,7 @@
 </style>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@90..110,400..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="instrument-ui.css" />
 </head>
 <body>
@@ -2236,7 +2236,7 @@
       <!-- Canonical Whipple-Carvallo Equation Banner -->
       <div class="eq-banner">
         <div><strong>Uncontrolled Bicycle Equation of Motion (Schwab &amp; Papadopoulos):</strong> &nbsp; M<sub>0</sub> q&#776; + (C<sub>1</sub> &middot; v) q&#775; + (g K<sub>0</sub> + K<sub>2</sub> &middot; v&sup2;) q = [0 ; &tau;<sub>&delta;</sub>] &nbsp; where q = [&phi;, &delta;]<sup>T</sup></div>
-        <div style="color:#94a3b8;margin-top:0.2rem;">State vector x = [q<sub>1</sub>, q&#775;<sub>1</sub>, q<sub>2</sub>, q&#775;<sub>2</sub>]<sup>T</sup> = [&phi;, &phi;&#775;, &delta;, &delta;&#775;]<sup>T</sup> &nbsp;|&nbsp; Input u(t) = steer torque &tau;<sub>&delta;</sub> (N&middot;m)</div>
+        <div style="color:#5a6977;margin-top:0.2rem;">State vector x = [q<sub>1</sub>, q&#775;<sub>1</sub>, q<sub>2</sub>, q&#775;<sub>2</sub>]<sup>T</sup> = [&phi;, &phi;&#775;, &delta;, &delta;&#775;]<sup>T</sup> &nbsp;|&nbsp; Input u(t) = steer torque &tau;<sub>&delta;</sub> (N&middot;m)</div>
       </div>
 
       <!-- 2x2 Coupled Matrices M0, C1, K0, K2 -->
@@ -5209,12 +5209,6 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             const zoneX = toPxX(v0), zoneWidth = toPxX(v1) - zoneX;
             ctx.fillStyle = 'rgba(52, 115, 108, 0.075)';
             ctx.fillRect(zoneX, padT, zoneWidth, plotH);
-            if (zoneWidth > 82) {
-              ctx.fillStyle = 'rgba(52, 115, 108, 0.88)';
-              ctx.font = '8px "IBM Plex Mono", monospace';
-              ctx.textAlign = 'left';
-              ctx.fillText('Self-stable', zoneX + 5, padT + plotH - 8);
-            }
           }
         }
 
@@ -5352,14 +5346,47 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.fillText(`vc = ${formatSpeed(vc, unit)}`, px + 5, padT + plotH - 22);
         }
 
-        // Active Test Speed marker
+        // Dimension-line callouts, drawn like a dimensioned drawing.
+        {
+          const dimY = padT + 24;
+          const arrow = (x, dir, color) => {
+            ctx.fillStyle = color;
+            ctx.beginPath(); ctx.moveTo(x, dimY); ctx.lineTo(x - dir * 7, dimY - 3); ctx.lineTo(x - dir * 7, dimY + 3); ctx.closePath(); ctx.fill();
+          };
+          const dimension = (x0, x1, label, color, openEnd) => {
+            ctx.strokeStyle = color; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(x0, dimY - 8); ctx.lineTo(x0, dimY + 8); ctx.stroke();
+            if (!openEnd) { ctx.beginPath(); ctx.moveTo(x1, dimY - 8); ctx.lineTo(x1, dimY + 8); ctx.stroke(); }
+            ctx.beginPath(); ctx.moveTo(x0, dimY); ctx.lineTo(x1, dimY); ctx.stroke();
+            arrow(x0, -1, color); arrow(x1, 1, color);
+            ctx.font = '600 11px "Archivo", sans-serif';
+            const tw = ctx.measureText(label).width;
+            const cx = (x0 + x1) / 2;
+            ctx.fillStyle = color; ctx.textAlign = 'center';
+            ctx.fillText(label, cx, dimY - 11);
+          };
+          const hasVw = vw !== null && vw > 0 && vw >= minVelPlot && vw <= maxVelPlot;
+          const hasVc = vc !== null && vc >= minVelPlot && vc <= maxVelPlot;
+          if (hasVw && hasVc && vc > vw) {
+            dimension(toPxX(vw), toPxX(vc), `self-stable window ${formatSpeed(vc - vw, unit)}`, '#2f7d4a', false);
+          } else if (hasVw) {
+            dimension(toPxX(vw), toPxX(maxVelPlot), 'self-stable above vw', '#2f7d4a', true);
+          } else if (vw === null || vw > maxVelPlot) {
+            ctx.font = '600 11px "Archivo", sans-serif'; ctx.fillStyle = '#c8321e'; ctx.textAlign = 'center';
+            ctx.fillText('No self-stable speed in this range', padL + plotW / 2, dimY - 11);
+          }
+        }
+
+        // Active Test Speed marker: selection, so it is blue and never red.
         if (appState.sim.speedMs >= minVelPlot && appState.sim.speedMs <= maxVelPlot) {
           const pxSim = toPxX(appState.sim.speedMs);
-          ctx.strokeStyle = '#c8321e';
+          ctx.strokeStyle = '#1f5a9e';
           ctx.lineWidth = 1.5;
           ctx.setLineDash([4, 3]);
-          ctx.beginPath(); ctx.moveTo(pxSim, padT); ctx.lineTo(pxSim, padT + plotH); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(pxSim, padT + 40); ctx.lineTo(pxSim, padT + plotH); ctx.stroke();
           ctx.setLineDash([]);
+          ctx.font = '600 11px "Archivo", sans-serif'; ctx.fillStyle = '#1f5a9e'; ctx.textAlign = 'left';
+          ctx.fillText(`test ${formatSpeed(appState.sim.speedMs, unit)}`, pxSim + 5, padT + 52);
         }
 
         // Hover crosshair
