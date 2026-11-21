@@ -2683,6 +2683,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
   <script src="instrument-controls.js"></script>
   <script src="plain-language.js"></script>
   <script src="reaction-time.js"></script>
+  <script src="crash-playback.js"></script>
   <script src="viz-workspace.js"></script>
   <script src="stability-landscape.js"></script>
   <script src="eigenmode-lab.js"></script>
@@ -3034,7 +3035,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           uprightPreview: false,
           lastFrameTime: null,
           wheelSpinAngle: 0,
-          trajectory: []
+          trajectory: [],
+          phase: 'run',
+          holdLeft: 0,
+          rewindElapsed: 0,
+          slowShown: false,
+          crashFor: null,
+          crashT: null
         },
         control: {
           feedbackEnabled: true,
@@ -4123,6 +4130,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         );
         if (resetSimTime) {
           appState.sim.t = 0;
+          resetCrashPlayback();
           appState.sim.playing = true;
           document.getElementById('btnPlayPauseSim').textContent = 'Pause';
         }
@@ -5928,6 +5936,16 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         });
         ctx.stroke();
 
+        const crashMark = getCrashTime();
+        if (crashMark !== null) {
+          const cx = toPxX(crashMark);
+          ctx.strokeStyle = '#e0301e'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+          ctx.beginPath(); ctx.moveTo(cx, padT); ctx.lineTo(cx, padT + plotH); ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = '#e0301e'; ctx.font = '600 11px "Archivo", sans-serif';
+          ctx.textAlign = cx > padL + plotW * 0.8 ? 'right' : 'left';
+          ctx.fillText('crash', cx + (cx > padL + plotW * 0.8 ? -5 : 5), padT + 14);
+        }
         const curX = toPxX(appState.sim.t);
         ctx.strokeStyle = '#0d1226';
         ctx.lineWidth = 1.25;
@@ -5938,20 +5956,60 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.strokeRect(padL, padT, plotW, plotH);
       }
 
+      // Time at which the current ride test passes the crash lean, or null if it never does.
+      function getCrashTime() {
+        const sim = appState.sim;
+        if (sim.crashFor !== sim.trajectory) {
+          sim.crashFor = sim.trajectory;
+          const i = window.JBike6CrashPlayback ? window.JBike6CrashPlayback.findCrashIndex(sim.trajectory) : -1;
+          sim.crashT = i >= 0 ? sim.trajectory[i].t : null;
+          resetCrashPlayback();
+        }
+        return sim.crashT;
+      }
+
+      function resetCrashPlayback() {
+        const sim = appState.sim;
+        sim.phase = 'run';
+        sim.holdLeft = 0;
+        sim.rewindElapsed = 0;
+        sim.slowShown = false;
+      }
+
       function animationLoop(timestamp) {
-        if (!appState.sim.lastFrameTime) appState.sim.lastFrameTime = timestamp;
-        const dtSec = Math.min(0.05, (timestamp - appState.sim.lastFrameTime) / 1000);
-        appState.sim.lastFrameTime = timestamp;
+        const sim = appState.sim;
+        if (!sim.lastFrameTime) sim.lastFrameTime = timestamp;
+        const dtSec = Math.min(0.05, (timestamp - sim.lastFrameTime) / 1000);
+        sim.lastFrameTime = timestamp;
 
-        if (appState.sim.playing) {
-          appState.sim.t += dtSec;
+        if (sim.playing) {
+          const crashT = getCrashTime();
+          const before = sim.t;
+          const result = window.JBike6CrashPlayback.advance(sim, dtSec, {
+            crashT,
+            duration: sim.duration,
+            leanDegAt: (t) => getSimSampleAtTime(t).phi * RAD2DEG,
+            reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          });
+          Object.assign(sim, result.state);
           const rR = Math.max(0.15, appState.params.Dr * 0.5);
-          appState.sim.wheelSpinAngle += (appState.sim.speedMs / rR) * dtSec;
+          // Wheel spin follows simulated time, so it slows in slow motion and reverses in the rewind.
+          sim.wheelSpinAngle += (sim.speedMs / rR) * (sim.t - before);
 
-          if (appState.sim.t >= appState.sim.duration) {
-            appState.sim.t = appState.sim.duration;
-            appState.sim.playing = false;
-            document.getElementById('btnPlayPauseSim').textContent = 'Replay';
+          const btn = document.getElementById('btnPlayPauseSim');
+          if (result.event === 'slow') {
+            updateGeometryRideStatus('Falling · slow motion');
+          } else if (result.event === 'crash') {
+            updateGeometryRideStatus('Crashed at ' + sim.t.toFixed(2) + ' s · lean passed ' + window.JBike6CrashPlayback.CRASH_LEAN_DEG + '°');
+          } else if (result.event === 'rewind') {
+            updateGeometryRideStatus('Rewinding to the start');
+          } else if (result.event === 'rewound') {
+            sim.playing = false;
+            if (btn) btn.textContent = 'Replay';
+            updateGeometryRideStatus('Back at the start · replay to try again');
+          } else if (result.event === 'complete') {
+            sim.playing = false;
+            if (btn) btn.textContent = 'Replay';
             updateGeometryRideStatus('Test complete · stand upright or replay');
           }
           drawRearViewCanvas();
@@ -5976,6 +6034,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           appState.analysis.model, sim.speedMs, 0, sim.duration, sim.dt
         );
         sim.t = 0;
+        resetCrashPlayback();
         sim.playing = false;
         sim.uprightPreview = true;
         sim.wheelSpinAngle = 0;
@@ -6002,6 +6061,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           appState.sim.dt
         );
         appState.sim.t = 0;
+        resetCrashPlayback();
         appState.sim.playing = true;
         appState.sim.uprightPreview = false;
         appState.sim.wheelSpinAngle = 0;
@@ -6482,7 +6542,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         });
 
         document.getElementById('btnPlayPauseSim').addEventListener('click', () => {
-          if (appState.sim.uprightPreview || appState.sim.t >= appState.sim.duration) {
+          if (appState.sim.uprightPreview || appState.sim.t >= appState.sim.duration || (appState.sim.phase === 'done' && !appState.sim.playing)) {
             setTestSpeedAndRun(appState.sim.speedMs);
           } else {
             appState.sim.playing = !appState.sim.playing;

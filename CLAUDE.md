@@ -26,6 +26,10 @@ Browser app that computes bicycle stability from the linearized Whipple–Carval
 ## Reaction time
 - `reaction-time.js` turns the largest real eigenvalue into a doubling time (ln 2 / Re λ) shown under the stability plot and in the inspector. It describes the bike with nobody steering. Do not present it as a rider model or add a pass/fail threshold without a source.
 
+## Ride test playback
+- `crash-playback.js` owns the crash behavior: a ride counts as crashed when lean passes 45° (the lean chart's limit). Playback slows from 20° lean, holds on the crash, rewinds to the start and stops there. The state machine is pure and tested. `animationLoop` in `index.html` only applies its result.
+- Anything that restarts the ride clock must call `resetCrashPlayback()`. Reduced-motion users skip the rewind animation.
+
 ## Math
 - The MATLAB files in `original Matlab files/` are the source of truth. Do not edit them.
 - The MATLAB `K0` already includes gravity. Use `K0 + v²K2` directly and never multiply `K0` by g again (see `CONTROL_THEORY_AUDIT.md`).
