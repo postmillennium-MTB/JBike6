@@ -85,23 +85,47 @@ The paper's equations (6.1) to (6.4) and Table 2 were turned into a test (`tests
 
 The wording now lives in `plain-language.js` (`insightFor`) with tests, states what the model computes, and mentions the wheel's gyroscopic term only when auto-scaling is on. "Infinite" became "None found" with the searched range. Units: mph 2.2369 and km/h 3.6 per m/s are correct.
 
+### 16. Geometry drawing (2D and 3D)
+The question: does what the geometry views draw agree with the model? Earlier this was only reviewed in screenshots.
+
+**Method.** The page's own drawing functions are cut out of `index.html` and run against a recording canvas (`tests/helpers/recording-canvas.js`) that stores every line, arc and label. The recorded pixels are converted back to metres using only the two wheel hubs and the wheelbase, so nothing depends on the drawing code's own scale. 2D was run on all 10 presets, all 18 MATLAB bikes and one deliberately odd geometry. For 3D, the stand-in for the camera returns an id for each projected point, which recovers the exact 3D world points the drawing asked for.
+
+**2D results.** Everything measured agrees with the model to 1e-9 or better (in the scratch run, 1e-14):
+- wheel hub heights and rim radii (both wheels on one ground line), and the rim sizes at the drawn scale
+- the steering axis: it meets the ground at w + trail, leans back at the head angle, and sits one fork offset from the front axle, measured from the drawing with sign (negative offsets included)
+- the trail callout, the head-angle arc, and the labels (trail, wheelbase, head angle)
+- the rider and fork centre-of-mass handles. The fork position is checked against MATLAB's `Ol + Rl [u; v]`.
+- the total centre of mass marker. The model's value is checked against MATLAB's total centre of mass (a new field, `com`, in `matlab-reference.json`, computed as `JBmck.m` forms `cmt`), and the drawn marker against that.
+- inertia glyphs. Component glyphs follow MATLAB's rotation (the along-axis is (cos α, sin α) and uses the moment about the other axis). Assembly glyphs lie along the direction of largest moment of inertia, measured with the tensor from the model.
+
+**3D results.** Upright wheels are circles of the right radius in the vertical plane, tangent to the ground. A positive lean tips the top toward +z (the rider's right, in right-handed axes with x forward and y up), by exactly the lean angle, and the ground contact does not move. A positive steer angle rotates the front wheel rigidly about the steering axis: the hub moves sideways by fork offset × sin(steer), to the right, its distance from the axis stays equal to the fork offset, every rim point stays one wheel radius from the hub, and the rear wheel does not move. Lean and steer have the same sign convention as the simulator (steering into the lean).
+
+**Test:** `tests/geometry-drawing.test.js` (52 tests). Five deliberate breakages were each caught: the steering-axis angle (22 failures), 3D steer direction (1), 3D lean direction (2), inertia glyph rotation (1), and the centre-of-mass sign (11).
+
+**Found and fixed.** Ten colors in `index.html` were still the old palette (terracotta red and teal as `rgba(...)` values, which my earlier palette pass missed because it only matched hex codes): the root-locus self-stable shading, the 3D reference plane and drop-lines, the control-response stability tint, and the 3D rider's lines. Stable tints are now green, the 3D rider is ochre, and the unstable drop-line is the current red. The pinned-baseline comparison curve was red, which breaks the rule that red means instability only, so it is now blue.
+
+**Test mistakes (mine), fixed as I went:** I first sorted the two hubs by x (wrong for MATLAB's `Backwards_Bike`, which has a negative wheelbase), took the absolute value of the fork offset (wrong for designs with negative offset), and assumed every wheel is drawn (the drawing code skips a wheel under 2 px, which is the case for the 1 cm wheels of the MATLAB "mass alone" designs). The test now handles those cases and says why.
+
+**What this does not cover.** The frame, fork and handlebar tubes are a stylized cartoon: the model has no tube lengths, so the drawing places a bottom bracket at 0.36 of the wheelbase and so on. Only the parts tied to model quantities (wheels, steering axis, head tube position on the axis, centres of mass, glyphs) are checked. The inertia glyphs are schematic scaled radii of gyration, as their legend says. The 3D camera and perspective, the wheel-spin animation, and the rider stance feature are not checked.
+
 ## Corrections to my own earlier statements
 - The license-email draft said the model was "verified numerically against the MATLAB source". I wrote that before any check. For the equations of motion it is true now, from this audit.
 - Benchmark values were first quoted from memory. They were later confirmed in the paper.
 - Demonstration numbers for the default bike (plain-English text, 0.48 s reaction time, crash at 1.93 s) came from the buggy model.
 - A mistaken count of "36" double-root speeds (correct: 34).
 - A first, wrong comparison table that forgot the steer-sign change (see step 3).
+- My earlier palette pass missed ten `rgba(...)` colors in `index.html` (see step 16), so some charts still used the old terracotta and teal.
 
 ## Known limits of this audit
 - MATLAB was never executed. The reference is my port plus the paper.
 - Several tests cut model code out of `index.html` using text markers (for example the string `function combineJBikeBodies`). Renaming or reordering those functions will break the tests loudly, which is intended, but the markers need updating.
-- Not checked at all: 2D and 3D drawing geometry (reviewed only in screenshots), the rider stance feature, the layout of the landscape and optimization displays, the numeric content of the optimization search, and the physics of the app-only features beyond what is stated above.
+- Not checked at all: the stylized frame, fork and handlebar tubes in the drawings (a cartoon with no model quantities behind it), the 3D camera and perspective, the rider stance feature, the layout of the landscape and optimization displays, the numeric content of the optimization search, and the physics of the app-only features beyond what is stated above.
 - The step-size guard bounds the stiffness with a matrix norm. It was tested on the 18 MATLAB bikes and the presets, not on arbitrary user-edited designs.
 - The stability search samples 181 speeds. A self-stable window narrower than one sample (about 0.14 m/s) could be missed.
 
 ## Reproducing everything
 ```sh
-node --test tests/*.test.js          # 199 tests
+node --test tests/*.test.js          # 258 tests
 # Regenerate the reference fixtures (needs Python 3 and numpy):
 python3 tests/fixtures/make_matlab_reference.py tests/fixtures/matlab-reference.json
 python3 tests/fixtures/make_simulation_reference.py tests/fixtures/simulation-reference.json
