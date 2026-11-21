@@ -70,7 +70,7 @@ button { border-radius: var(--radius-none); }
 h1, h2, h3, h4, .brand-title, .viz-title, .panel-title {
   font-family: var(--font-display);
   font-weight: 650;
-  font-stretch: 94%;
+ 
   letter-spacing: -.005em;
 }
 .tabular-nums, output, .ctrl-val, .kpi-val, .kpi-sec,
@@ -1063,3 +1063,63 @@ input[type="range"]:not(.sci-slider)::-moz-range-track {
     border-left-width: 1px !important; border-top: 3px solid var(--select) !important;
   }
 }
+
+/* ---------- Pass 2: plain headings, plain status text, no caps ---------- */
+body *, body *::before, body *::after { text-transform: none !important; }
+
+/* Banners become headings that sit directly on the page, divided by a rule. */
+.landscape-hero, .optimization-hero, .eigen-equation-banner, .eq-banner {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 32px;
+  padding: 14px 0 12px !important;
+  border: 0 !important;
+  border-top: 2px solid var(--ink) !important;
+  border-bottom: 1px solid var(--rule) !important;
+  border-left: 0 !important;
+  background: transparent !important;
+  color: var(--ink) !important;
+  text-align: left;
+}
+.landscape-hero::before, .landscape-hero::after { display: none !important; }
+.landscape-hero h2, .optimization-hero h2 {
+  margin: 0 0 4px !important; color: var(--ink) !important;
+  font: 650 1.6rem/1.1 var(--font-display) !important;
+}
+.landscape-hero p, .optimization-hero p { max-width: 62ch; margin: 0; color: var(--ink-soft) !important; font-size: .86rem; }
+.landscape-hero-equation, .optimization-objective {
+  min-width: 0 !important; padding: 0 0 0 14px !important;
+  border: 0 !important; border-left: 1px solid var(--rule-strong) !important;
+  background: transparent !important; color: var(--ink) !important;
+}
+.landscape-hero-equation strong, .optimization-objective strong { color: var(--ink) !important; font: 500 1.25rem var(--font-mono) !important; }
+.landscape-hero-equation small, .optimization-objective small, .optimization-objective span { color: var(--muted) !important; }
+.eigen-equation-main { color: var(--ink) !important; font: 500 1.1rem var(--font-mono); }
+.eigen-equation-sub { color: var(--muted) !important; font-family: var(--font-mono); }
+
+/* Status badges become plain colored text. */
+.pill-badge, .pill-emerald, .pill-rose, .pill-amber, .pill-indigo, .pill-slate {
+  padding: 0 !important; border: 0 !important; background: transparent !important;
+  font: 600 .74rem var(--font-body) !important; letter-spacing: 0 !important;
+}
+.pill-emerald { color: var(--stable) !important; }
+.pill-rose, .pill-amber { color: var(--signal) !important; }
+.pill-indigo, .pill-slate { color: var(--muted) !important; }
+
+/* Compact readout: the plot is the hero, so the strip steps back. */
+.kpi-card:nth-child(3) .kpi-val { font-size: 2.1rem; }
+.kpi-card:not(:nth-child(3)) .kpi-val { font-size: 1.2rem; }
+.kpi-card { padding-top: 7px; padding-bottom: 8px; }
+.kpi-card:nth-child(3) { padding: 8px 18px 9px 0; }
+
+/* Numbered steps are plain numerals, not boxed badges. */
+.landscape-step, .eigen-step-heading > span, .opt-rank-number {
+  border: 0 !important; background: transparent !important; box-shadow: none !important;
+  color: var(--muted) !important; font: 500 .9rem var(--font-mono) !important;
+  min-width: 1.6rem; width: auto !important; height: auto !important;
+}
+
+/* Small data captions use the body face. */
+.landscape-plot-meta, .geometry-legend, .legend-bar, .optimization-legend, .landscape-legend,
+.geometry-legend-note, .wheel-pill-sub, .landscape-zero-key {
+  font-family: var(--font-body) !important; font-size: .74rem !important;
+}
+.landscape-hero-equation, .optimization-objective { border-radius: 0 !important; }
