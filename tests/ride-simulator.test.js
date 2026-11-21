@@ -12,13 +12,14 @@ const vm = require('node:vm');
 
 const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 const start = html.indexOf('function combineJBikeBodies');
-const end = html.indexOf('function computeClosedLoopPoles');
+const end = html.indexOf('function updateControlTheoryLab');
 assert.ok(start > 0 && end > start, 'simulator code markers not found in index.html');
 const sandbox = { Math };
 vm.createContext(sandbox);
+sandbox.window = { JBike6AppRegressions: require('../app-regressions.js') };
 vm.runInContext('const DEG2RAD = Math.PI / 180;\n' + html.slice(start, end) +
-  '\nthis.api = { assembleWhippleModel, runPerturbationSimulation, runControlledSimulation };', sandbox);
-const { assembleWhippleModel, runPerturbationSimulation, runControlledSimulation } = sandbox.api;
+  '\nthis.api = { assembleWhippleModel, runPerturbationSimulation, runControlledSimulation, computeClosedLoopPoles };', sandbox);
+const { assembleWhippleModel, runPerturbationSimulation, runControlledSimulation, computeClosedLoopPoles } = sandbox.api;
 
 const matlab = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'matlab-reference.json'), 'utf8'));
 const sims = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'simulation-reference.json'), 'utf8'));
@@ -100,3 +101,16 @@ test('the first sample is the initial lean with everything else at rest', () => 
   assert.ok(Math.abs(first.phi - 5 / R2D) < 1e-12);
   assert.equal(first.delta, 0); assert.equal(first.dphi, 0); assert.equal(first.ddelta, 0);
 });
+
+for (const c of sims.closed_loop) {
+  test('closed-loop poles match the eigenvalues of the feedback system for ' + c.name + ' (kp ' + c.kp + ', kd ' + c.kd + ', ki ' + c.ki + ')', () => {
+    const model = assembleWhippleModel(paramsFromMatlab(matlab[c.name].ini));
+    const poles = computeClosedLoopPoles(model, c.speed, c.kp, c.kd, c.ki);
+    assert.equal(poles.length, c.poles.length);
+    for (const ref of c.poles) {
+      const scale = Math.max(1, Math.hypot(ref[0], ref[1]));
+      const best = Math.min(...poles.map(r => Math.hypot(r.re - ref[0], r.im - ref[1])));
+      assert.ok(best / scale < 1e-6, 'no pole near ' + ref + ' (off by ' + best + ')');
+    }
+  });
+}

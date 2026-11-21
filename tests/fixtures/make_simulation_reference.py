@@ -42,6 +42,19 @@ def open_loop(name, v):
     return dict(t=TIMES.tolist(), phi=z[:, 0].tolist(), delta=(-z[:, 1]).tolist())
 
 
+def closed_loop_poles(name, v, kp, kd, ki):
+    # Eigenvalues of the closed-loop system (4 states, or 5 with integral action), same construction as closed_loop().
+    Mi, C, K = parts(name, v)
+    b = Mi[:, 1]
+    n = 5 if abs(ki) > 1e-8 else 4
+    A = np.zeros((5, 5))
+    A[0:2, 2:4] = np.eye(2); A[2:4, 0:2] = -K; A[2:4, 2:4] = -C; A[4, 0] = 1.0
+    gains = np.zeros(5); gains[0] = kp; gains[2] = kd; gains[4] = ki
+    A[2:4, :] += np.outer(-b, gains)
+    w = np.linalg.eigvals(A[:n, :n])
+    return [[float(z.real), float(z.imag)] for z in w]
+
+
 def closed_loop(name, v, kp, kd, ki):
     # App convention: steer torque tau = kp*phi + kd*phi_dot + ki*integral(phi) acts on the steer equation.
     # In MATLAB's convention (steer flipped) the same torque enters as -tau.
@@ -68,6 +81,6 @@ if __name__ == '__main__':
     for n, v, kp, kd, ki in [('Benchmark_Paper', 3.0, 12.0, 6.0, 0.0), ('Benchmark_Paper', 3.0, 12.0, 6.0, 3.0),
                              ('Schwinn_Crown', 4.0, 12.0, 6.0, 0.0), ('Trail_only', 25.0, 12.0, 6.0, 0.0),
                              ('Benchmark_Paper', 5.0, 300.0, 40.0, 0.0)]:
-        out['closed_loop'].append(dict(name=n, speed=v, kp=kp, kd=kd, ki=ki, **closed_loop(n, v, kp, kd, ki)))
+        out['closed_loop'].append(dict(name=n, speed=v, kp=kp, kd=kd, ki=ki, poles=closed_loop_poles(n, v, kp, kd, ki), **closed_loop(n, v, kp, kd, ki)))
     json.dump(out, open(sys.argv[1], 'w'))
     print('wrote', sys.argv[1], len(out['open_loop']), 'open-loop and', len(out['closed_loop']), 'closed-loop cases')
