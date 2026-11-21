@@ -15,10 +15,13 @@ Browser app that computes bicycle stability from the linearized Whipple–Carval
 
 ## Design rules
 - Color is semantic. Blue is selection and interaction, red is instability only, green is stability, ochre is rider and rear assembly. Never use red for a selected or active state.
-- Tokens live in `:root` in `instrument-ui.css` (`--select`, `--signal`, `--stable`, `--ochre`, `--ink`, `--paper`). Canvas code cannot read CSS variables, so the same hex values are repeated in the JS: `#1f5a9e` blue, `#c8321e` red, `#2f7d4a` green, `#9a6a12` ochre, `#15283c` ink, `#eef1f3` paper. Change both places together.
+- Tokens live in `:root` in `instrument-ui.css` (`--select`, `--signal`, `--stable`, `--ochre`, `--ink`, `--paper`). Canvas code cannot read CSS variables, so the same hex values are repeated in the JS: `#1747e6` blue, `#e0301e` red, `#168a4a` green, `#b07a10` ochre, `#0d1226` ink, `#f4f5f7` paper. Change both places together.
 - Type: Archivo for everything, IBM Plex Mono for numbers only. Sentence case, no all-caps labels, no letter-spaced eyebrows. `text-transform` is forced to `none` site-wide.
 - No shadows, no rounded corners, no gradient washes, no dark hero banners, no pill badges. Status is plain colored text. Number steps only when the content is really a sequence.
 - Keep the plot as the first and largest drawing on the Stability view.
+
+## Plain language
+- `plain-language.js` turns the stability analysis into sentences shown under the root-locus plot ("What am I looking at?"). Keep wording non-technical and update `tests/plain-language.test.js` with any change.
 
 ## Math
 - The MATLAB files in `original Matlab files/` are the source of truth. Do not edit them.
@@ -30,5 +33,4 @@ Browser app that computes bicycle stability from the linearized Whipple–Carval
 - The original JBike6 license (`LICENSE-JBike6.md`) requires attribution to the authors. Keep the footer credit and the README credit intact.
 
 ## Known issues
-- The linked inspector keeps its last selection when switching tabs.
 - Fonts come from Google Fonts and fall back to system fonts offline.

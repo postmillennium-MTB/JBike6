@@ -16,9 +16,9 @@
   const clone = object => JSON.parse(JSON.stringify(object));
 
   function colorForScore(score, scale) {
-    if (!Number.isFinite(score)) return '#b4bec6';
+    if (!Number.isFinite(score)) return '#c3c8d4';
     const t=clamp(score/Math.max(scale,1e-9),-1,1);
-    const low=[47,125,74], mid=[242,240,232], high=[200,50,30];
+    const low=[22,138,74], mid=[242,240,232], high=[224,48,30];
     const a=t<0?low:mid, b=t<0?mid:high, f=Math.abs(t);
     return 'rgb('+a.map((value,index)=>Math.round(value+(b[index]-value)*f)).join(', ')+')';
   }
@@ -223,9 +223,9 @@
       }
       const ctx=canvas.getContext('2d');if(!ctx)return;
       ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width,height);
-      ctx.fillStyle='#eef1f3';ctx.fillRect(0,0,width,height);
+      ctx.fillStyle='#f4f5f7';ctx.fillRect(0,0,width,height);
       if(!model.rows.length){
-        ctx.fillStyle='#5f6e7b';ctx.font='13px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
+        ctx.fillStyle='#586079';ctx.font='13px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
         ctx.fillText('Run an optimization to map the design space.',width/2,height/2);return;
       }
       const pad={left:68,right:24,top:28,bottom:54};
@@ -234,16 +234,16 @@
       model.plot={...pad,plotW,plotH,cellW,cellH};
       for(let iy=0;iy<model.yValues.length;iy++)for(let ix=0;ix<model.xValues.length;ix++){
         const candidate=model.rows[iy][ix],x=pad.left+ix*cellW,y=pad.top+(model.yValues.length-1-iy)*cellH;
-        ctx.fillStyle=candidate?colorForScore(candidate.score,model.scale):'#d5dce0';
+        ctx.fillStyle=candidate?colorForScore(candidate.score,model.scale):'#dadde3';
         ctx.fillRect(x,y,cellW+0.5,cellH+0.5);
       }
-      ctx.strokeStyle='rgba(95,110,123,.48)';ctx.lineWidth=1;ctx.strokeRect(pad.left,pad.top,plotW,plotH);
+      ctx.strokeStyle='rgba(88,96,121,.48)';ctx.lineWidth=1;ctx.strokeRect(pad.left,pad.top,plotW,plotH);
       const xAxis=getAxis(model.scanConfig.xKey),yAxis=getAxis(model.scanConfig.yKey);
-      ctx.fillStyle='#3a4b5c';ctx.font='11px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
+      ctx.fillStyle='#2f3550';ctx.font='11px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
       ctx.fillText(xAxis.short+' ('+xAxis.unit+')',pad.left+plotW/2,height-14);
       ctx.save();ctx.translate(17,pad.top+plotH/2);ctx.rotate(-Math.PI/2);
       ctx.fillText(yAxis.short+' ('+yAxis.unit+')',0,0);ctx.restore();
-      ctx.font='10px "IBM Plex Mono", monospace';ctx.fillStyle='#5f6e7b';
+      ctx.font='10px "IBM Plex Mono", monospace';ctx.fillStyle='#586079';
       ctx.textAlign='left';ctx.fillText(format(model.xValues[0],xAxis.digits),pad.left,pad.top+plotH+17);
       ctx.textAlign='right';ctx.fillText(format(model.xValues[model.xValues.length-1],xAxis.digits),pad.left+plotW,pad.top+plotH+17);
       ctx.textAlign='right';ctx.fillText(format(model.yValues[0],yAxis.digits),pad.left-8,pad.top+plotH);
@@ -254,11 +254,11 @@
         if(selected){
           const ix=model.selected.ix,iy=model.selected.iy;
           const x=pad.left+ix*cellW,y=pad.top+(model.yValues.length-1-iy)*cellH;
-          ctx.strokeStyle='#15283c';ctx.lineWidth=2.5;ctx.strokeRect(x+1,y+1,Math.max(0,cellW-2),Math.max(0,cellH-2));
-          ctx.beginPath();ctx.arc(x+cellW/2,y+cellH/2,4,0,Math.PI*2);ctx.fillStyle='#eef1f3';ctx.fill();ctx.strokeStyle='#15283c';ctx.stroke();
+          ctx.strokeStyle='#0d1226';ctx.lineWidth=2.5;ctx.strokeRect(x+1,y+1,Math.max(0,cellW-2),Math.max(0,cellH-2));
+          ctx.beginPath();ctx.arc(x+cellW/2,y+cellH/2,4,0,Math.PI*2);ctx.fillStyle='#f4f5f7';ctx.fill();ctx.strokeStyle='#0d1226';ctx.stroke();
         }
       }
-      ctx.fillStyle='#5f6e7b';ctx.font='10px "IBM Plex Sans", sans-serif';ctx.textAlign='left';
+      ctx.fillStyle='#586079';ctx.font='10px "IBM Plex Sans", sans-serif';ctx.textAlign='left';
       ctx.fillText('Color = worst-case max Re(λ) across speed interval · green indicates decay; red indicates growth',pad.left,pad.top-10);
     }
     function selectFromCanvas(event){
