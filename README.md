@@ -21,6 +21,9 @@ node --test tests/*.test.js
 - **Stability landscape** and **Design optimization**: scan two parameters across a speed range.
 - **Model profiles**: ten presets, from modern MTB geometries to the original Schwinn Crown and the Meijaard benchmark bike. Configurations export and import as JSON.
 
+## Model validation
+The model is tested against the original MATLAB: all 18 reference bikes agree on the equations of motion to about 1e-15, and the benchmark bicycle reproduces the published weave and capsize speeds. See `MODEL_AUDIT.md` for what was checked and what was not.
+
 ## Model limits
 The model is the linearized Whipple–Carvallo bicycle: rigid bodies, knife-edge wheels rolling without slip, no rider control, small lean and steer angles. A bike shown as unstable here is unstable hands-free. A rider can still balance it by steering. Tire compliance, suspension and rider biomechanics are not modeled.
 
@@ -34,7 +37,7 @@ The model is the linearized Whipple–Carvallo bicycle: rigid bodies, knife-edge
 | `plain-language.js`, `reaction-time.js`, `crash-playback.js` | Plain-English reading, doubling-time math and crash playback, unit tested in Node |
 | `control-theory.js`, `app-regressions.js` | Math helpers that are unit tested in Node |
 | `tests/` | Node tests |
-| `CONTROL_THEORY_AUDIT.md` | How the control math was checked against the MATLAB source |
+| `CONTROL_THEORY_AUDIT.md`, `MODEL_AUDIT.md` | How the control math and the bicycle model were checked against the MATLAB source |
 | `original Matlab files/` | The original JBike6 MATLAB release, the mathematical source of truth |
 | `FinalBicyclePaper_v45_with_Appendix.pdf` | Reference paper |
 | `docs/ideas-archive.md` | Archived external review with feature ideas |

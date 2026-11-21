@@ -3070,11 +3070,9 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
             sumMy += b.m * b.y;
           }
         }
-        if (totalM <= 1e-12) {
-          return { m: 0, x: 0, y: 0, Ixx: 0, Iyy: 0, Izz: 0, Ixy: 0 };
-        }
-        const xcm = sumMx / totalM;
-        const ycm = sumMy / totalM;
+        // A group with no mass can still carry inertia, and MATLAB's JBaddb keeps it (centre taken at the origin).
+        const xcm = totalM > 1e-12 ? sumMx / totalM : 0;
+        const ycm = totalM > 1e-12 ? sumMy / totalM : 0;
 
         let Ixx = 0, Iyy = 0, Izz = 0, Ixy = 0;
         for (const b of bodies) {
@@ -3204,7 +3202,8 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const I_Alz = mA * uA * xA + I_Axz * sinL + I_Azz * cosL;
 
         const mu = (c / w) * cosL;
-        const S_A = (mA * uA + mu * mT * xT) / w;
+        // S_A is a first moment (kg*m), as in Meijaard et al. (2007) and MATLAB's nu. It is not divided by the wheelbase.
+        const S_A = mA * uA + mu * mT * xT;
 
         const M = [
           [I_Txx, I_Alx + mu * I_Txz],
@@ -3648,8 +3647,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const C = outputType === 'delta' ? [0, 0, 1, 0] : [1, 0, 0, 0];
         const D = 0;
 
-        // Denominator denG(s) = det(sI - A) = characteristic polynomial
-        const denG = charPolyCoeffs(model, v);
+        // Denominator denG(s) = det(sI - A): the characteristic polynomial made monic.
+        // charPolyCoeffs is det(M0 s^2 + C s + K), which is det(M0) times larger, so dividing by its
+        // leading coefficient keeps G(s) = numG / denG consistent with the state-space matrices.
+        const charPoly = charPolyCoeffs(model, v);
+        const denG = charPoly.map(c => c / charPoly[0]);
         const poles = solvePolynomialRoots(denG);
 
         // Numerator numG(s) = C * adj(sI - A) * B for single input u = tau
