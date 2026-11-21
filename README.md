@@ -38,12 +38,17 @@ The model is the linearized Whipple–Carvallo bicycle: rigid bodies, knife-edge
 | `control-theory.js`, `app-regressions.js` | Math helpers that are unit tested in Node |
 | `tests/` | Node tests |
 | `CONTROL_THEORY_AUDIT.md`, `MODEL_AUDIT.md` | How the control math and the bicycle model were checked against the MATLAB source |
-| `original Matlab files/` | The original JBike6 MATLAB release, the mathematical source of truth |
+| `original Matlab files/` | The original JBike6 MATLAB release, the mathematical source of truth. **Do not change anything in this folder.** The tests and the audit compare the app against these files as they are. |
 | `FinalBicyclePaper_v45_with_Appendix.pdf` | Reference paper |
 | `docs/ideas-archive.md` | Archived external review with feature ideas |
 
 ## Visual system
 Blue marks selection and interaction. Red marks instability and nothing else. Green marks stability. Ochre marks the rider and rear assembly in the geometry views. Labels are sentence case; mono is for numbers only. See `CLAUDE.md` for the rules contributors follow.
+
+## Original MATLAB files: leave unchanged
+Everything in `original Matlab files/` is the authors' original release and must stay exactly as it is. The audit in `MODEL_AUDIT.md` and the reference tests treat these files as the source of truth, and the license requires the original to be preserved. Fixes and changes belong in the app, never in that folder.
+
+Some presets in the app have MATLAB-style names (for example "Original Default", the Burley Canto bikes, the Chopper) but are not the bikes defined in the MATLAB `JBini_files`. Only the benchmark preset matches its MATLAB file. The preset names have been left as they are, and `MODEL_AUDIT.md` records the differences.
 
 ## Credits and license
 Based on JBike6 by Schwab, Papadopoulos, Ruina and Dressel (Delft University of Technology and Cornell University), copyright 2003-2015. The original license requires attribution to the authors and places conditions on copying and transfer; the full text is in [`LICENSE-JBike6.md`](LICENSE-JBike6.md). The original MATLAB release history is in `original Matlab files/readme.md`.

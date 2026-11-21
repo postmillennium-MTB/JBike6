@@ -33,7 +33,7 @@ Browser app that computes bicycle stability from the linearized Whipple–Carval
 - Anything that restarts the ride clock must call `resetCrashPlayback()`. Reduced-motion users skip the rewind animation.
 
 ## Math
-- The MATLAB files in `original Matlab files/` are the source of truth. Do not edit them.
+- The MATLAB files in `original Matlab files/` are the source of truth. Do not edit them, and do not rename or retune app presets to "fix" differences from them. The owner has decided to leave preset names as they are.
 - The MATLAB `K0` already includes gravity. Use `K0 + v²K2` directly and never multiply `K0` by g again (see `CONTROL_THEORY_AUDIT.md`).
 - State order is interleaved: `x = [q1, q̇1, q2, q̇2]`.
 - Sign conventions differ. MATLAB and `control-theory.js` take steer to the left as positive. The app (`assembleWhippleModel`, the ride test, the Control lab) follows Meijaard et al. (2007), where steer to the right is positive, so a lean to the right is met by a positive steer. The off-diagonal terms of M0, C1, K0 and K2 flip sign between the two, and the eigenvalues are identical.

@@ -34,7 +34,7 @@ The audit was done by an AI model with the repository owner, not by a human revi
 - **`Rear_wheel_only`** is excluded from the fixture because its eigenvalues lie on the imaginary axis, so stability is numerical noise.
 
 ## Open items for the owner
-- **Presets named after MATLAB bikes are not those bikes.** Only the benchmark matches its MATLAB file. The "Original Default" Schwinn, the Burleys, the Chopper, "Minimal" and "Trail-only" presets are different bikes with MATLAB-style names. Rename them or replace them with the real parameters.
+- **Presets named after MATLAB bikes are not those bikes.** Only the benchmark matches its MATLAB file. The "Original Default" Schwinn, the Burleys, the Chopper, "Minimal" and "Trail-only" presets are different bikes with MATLAB-style names. Decision by the owner: leave the preset names as they are, and never change the files in `original Matlab files/` (noted in the README).
 - **Earlier published numbers.** Anything published from the app before PR #36 used the buggy model.
 
 ## Not checked
