@@ -108,6 +108,9 @@ The question: does what the geometry views draw agree with the model? Earlier th
 
 **What this does not cover.** The frame, fork and handlebar tubes are a stylized cartoon: the model has no tube lengths, so the drawing places a bottom bracket at 0.36 of the wheelbase and so on. Only the parts tied to model quantities (wheels, steering axis, head tube position on the axis, centres of mass, glyphs) are checked. The inertia glyphs are schematic scaled radii of gyration, as their legend says. The 3D camera and perspective, the wheel-spin animation, and the rider stance feature are not checked.
 
+### 17. A second transcription of the MATLAB matrices (closed PR #6)
+Pull request #6 contained `matlab-reference.js`, a JavaScript port of `JBaddb.m` and `JBmck.m` written separately from my Python port. It was closed without merging, because the audit supersedes it. Before closing, its Schwinn Crown inputs were run through it and compared with `tests/fixtures/matlab-reference.json`: all four matrices (M0, C1, K0, K2) agree to about 5e-16. Two separate transcriptions of the same MATLAB code agreeing is evidence that the transcription is right. It is not a run of MATLAB itself, which has still not been done.
+
 ## Corrections to my own earlier statements
 - The license-email draft said the model was "verified numerically against the MATLAB source". I wrote that before any check. For the equations of motion it is true now, from this audit.
 - Benchmark values were first quoted from memory. They were later confirmed in the paper.
