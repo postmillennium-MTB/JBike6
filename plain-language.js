@@ -85,8 +85,8 @@
 
   const READING_GUIDE = [
     'Each dot is one of the bike’s four natural motions at that speed.',
-    'Red dots show whether a motion grows (above the zero line) or fades (below it).',
-    'Green dots above or below the zero line mean a motion oscillates, like a wobble. Green dots on the zero line mean it does not, like a plain fall.',
+    'Filled red dots show whether a motion grows (above the zero line) or fades (below it).',
+    'Hollow green rings above or below the zero line mean a motion oscillates, like a wobble. Rings on the zero line mean it does not, like a plain fall.',
     'The shaded band is where every motion fades, so the bike steadies itself.'
   ];
 
