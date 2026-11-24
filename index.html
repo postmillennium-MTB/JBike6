@@ -117,7 +117,7 @@
     .brand-sub {
       margin: 0.1rem 0 0;
       font-size: 0.75rem;
-      color: #94a3b8;
+      color: var(--muted);
     }
 
     .header-actions {
@@ -935,18 +935,18 @@
     .eigen-step-heading { display:flex; align-items:flex-start; gap:.55rem; margin-bottom:.65rem; }
     .eigen-step-heading > span { display:grid; place-items:center; width:25px; height:25px; flex:0 0 auto; border-radius:8px; background:#e0f2f1; color:#1747e6; font:750 0.75rem var(--font-mono); }
     .eigen-step-heading strong { display:block; color:#0d1226; font-size:.76rem; }
-    .eigen-step-heading small { display:block; margin-top:.1rem; color:#727a92; font-size:0.75rem; line-height:1.4; }
+    .eigen-step-heading small { display:block; margin-top:.1rem; color:var(--muted); font-size:0.75rem; line-height:1.4; }
     .eigen-matrix-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.45rem; }
     .eigen-matrix-card { min-width:0; padding:.5rem; border-radius:8px; background:#f4f5f7; }
     .eigen-matrix-name { display:flex; flex-wrap:wrap; justify-content:space-between; gap:.2rem; margin-bottom:.35rem; color:#33495b; font:700 0.75rem var(--font-mono); }
-    .eigen-matrix-name span { color:#8293a2; font:500 0.75rem var(--font-sans); }
+    .eigen-matrix-name span { color:var(--muted); font:500 0.75rem var(--font-sans); }
     .eigen-matrix-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.22rem; color:#263b4c; font:0.75rem var(--font-mono); font-variant-numeric:tabular-nums; }
     .eigen-matrix-grid span { min-width:0; padding:.22rem .14rem; border-radius:4px; background:#fff; text-align:right; overflow:hidden; }
     .eigen-matrix-grid.four { grid-template-columns:repeat(4,minmax(0,1fr)); }
     .eigen-matrix-grid.four span { font-size:0.75rem; }
     .eigen-state-matrix .eigen-matrix-card { background:#f4f5f7; }
     .eigen-matrix-card.wide { width:100%; }
-    .eigen-math-explain, .eigen-poly-note, .eigen-footnote { margin-top:.5rem; color:#727a92; font-size:0.75rem; line-height:1.5; }
+    .eigen-math-explain, .eigen-poly-note, .eigen-footnote { margin-top:.5rem; color:var(--muted); font-size:0.75rem; line-height:1.5; }
     .eigen-poly-equation { color:#1747e6; font:750 .85rem var(--font-mono); }
     .eigen-poly-expanded { margin-top:.45rem; color:#172f42; font:650 .77rem/1.7 var(--font-mono); overflow-wrap:anywhere; }
     .eigen-root-list { display:flex; flex-wrap:wrap; gap:.4rem; }
@@ -956,30 +956,30 @@
     .eigen-root-chip.unstable { border-left:3px solid #e05252; }
     .eigen-root-chip.neutral { border-left:3px solid #d69b38; }
     .eigen-root-chip.selected { outline:2px solid #2563eb; outline-offset:1px; background:#eff6ff; }
-    .eigen-math-status { margin-top:.5rem; color:#65798a; font-size:0.75rem; line-height:1.45; }
+    .eigen-math-status { margin-top:.5rem; color:var(--muted); font-size:0.75rem; line-height:1.45; }
     .eigen-math-status[data-kind="error"] { color: var(--signal-text); }
     .eigen-math-status[data-kind="success"] { color:#1747e6; }
     .eigen-mode-heading { margin-top:1rem; padding-top:.9rem; border-top:1px solid #e5edf2; }
     .eigen-mode-heading h4 { margin:0 0 .25rem; color:#0d1226; font-size:.88rem; }
     .eigen-mode-controls { display:flex; flex-direction:column; gap:.25rem; min-width:180px; }
-    .eigen-mode-controls label { color:#64798a; font-size:0.75rem; font-weight:700; }
+    .eigen-mode-controls label { color:var(--muted); font-size:0.75rem; font-weight:700; }
     .eigen-mode-select { min-width:180px; }
     .eigen-mode-stats { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:.45rem; margin:.75rem 0; }
     .eigen-stat { min-width:0; padding:.55rem .6rem; border:1px solid #e0e8ee; border-radius:9px; background:#fff; }
-    .eigen-stat span { display:block; min-height:2em; color:#727a92; font-size:0.75rem; line-height:1.35; }
+    .eigen-stat span { display:block; min-height:2em; color:var(--muted); font-size:0.75rem; line-height:1.35; }
     .eigen-stat strong { display:block; margin-top:.2rem; color:#0d1226; font:700 .78rem var(--font-mono); overflow-wrap:anywhere; }
     .eigen-mode-visual { display:grid; grid-template-columns:minmax(0,1.6fr) minmax(220px,.7fr); gap:.7rem; }
     .eigen-state-vector { display:flex; flex-wrap:wrap; align-items:center; gap:.45rem .8rem; margin:.7rem 0; padding:.6rem .7rem; border:1px solid #dadde3; border-radius:9px; background:#f4f5f7; }
     .eigen-state-vector strong { color:#334e60; font-size:0.75rem; }
     .eigen-state-vector code { color:#1747e6; font:0.75rem var(--font-mono); overflow-wrap:anywhere; }
-    .eigen-state-vector span { color:#727a92; font-size:0.75rem; }
+    .eigen-state-vector span { color:var(--muted); font-size:0.75rem; }
     .eigen-verification-panel { margin:.65rem 0 .8rem; padding:.75rem; border:1px solid #dadde3; border-radius:11px; background:#fff; }
     .eigen-verification-head { display:flex; justify-content:space-between; align-items:flex-start; gap:.6rem; flex-wrap:wrap; }
     .eigen-verification-head strong { display:block; color:#0d1226; font-size:0.75rem; }
-    .eigen-verification-head span { display:block; margin-top:.15rem; color:#727a92; font-size:0.75rem; }
+    .eigen-verification-head span { display:block; margin-top:.15rem; color:var(--muted); font-size:0.75rem; }
     .eigenpair-readout { color:#1747e6; font:650 0.75rem/1.5 var(--font-mono); text-align:right; }
     #eigenpairCanvas { display:block; width:100%; height:176px; margin-top:.35rem; }
-    .eigenpair-legend { display:flex; flex-wrap:wrap; gap:.8rem; color:#727a92; font-size:0.75rem; }
+    .eigenpair-legend { display:flex; flex-wrap:wrap; gap:.8rem; color:var(--muted); font-size:0.75rem; }
     .eigenpair-legend span { display:flex; align-items:center; gap:.3rem; }
     .eigenpair-swatch { display:inline-block; width:9px; height:9px; border-radius:2px; }
     .eigenpair-swatch.ax { background:#1747e6; }
@@ -1013,7 +1013,7 @@
     .optimization-map-card, .optimization-inspector { min-width:0; padding:.9rem; }
     .optimization-canvas-stage { height:clamp(340px,44vw,520px); min-height:320px; border:1px solid #dadde3; border-radius:11px; overflow:hidden; background:#f4f5f7; }
     #optimizationCanvas { display:block; width:100%; height:100%; }
-    .optimization-legend { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:.55rem; color:#687d8d; font-size:0.75rem; }
+    .optimization-legend { display:flex; flex-wrap:wrap; gap:.8rem; margin-top:.55rem; color:var(--muted); font-size:0.75rem; }
     .optimization-legend span { display:inline-flex; align-items:center; gap:.32rem; }
     .optimization-swatch { width:10px; height:10px; border-radius:3px; display:inline-block; }
     .optimization-swatch.better { background:#1747e6; }
@@ -1023,20 +1023,20 @@
     .optimization-selection-detail { margin-top:.65rem; }
     .opt-detail-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.45rem; }
     .opt-detail-grid > div { min-width:0; padding:.55rem; border-radius:8px; background:#f4f5f7; }
-    .opt-detail-grid span { display:block; color:#727a92; font-size:0.75rem; }
+    .opt-detail-grid span { display:block; color:var(--muted); font-size:0.75rem; }
     .opt-detail-grid strong { display:block; margin-top:.22rem; color:#0d1226; font:700 0.75rem var(--font-mono); overflow-wrap:anywhere; }
     .opt-detail-status { margin-top:.55rem; padding:.55rem .65rem; border-radius:8px; background:#fff7ed; color:#9a3412; font-size:0.75rem; }
     .opt-detail-status.stable { background:#ecfdf5; color:#047857; }
-    .opt-detail-foot { margin-top:.45rem; color:#727a92; font-size:0.75rem; line-height:1.5; }
+    .opt-detail-foot { margin-top:.45rem; color:var(--muted); font-size:0.75rem; line-height:1.5; }
     .optimization-ranking-wrap { margin-top:.85rem; padding-top:.75rem; border-top:1px solid #e4edf2; }
     .optimization-ranking-wrap h4 { margin:0 0 .45rem; color:#20384b; font-size:.75rem; }
     .optimization-ranking { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:.45rem; }
     .opt-ranking-row { display:flex; align-items:center; gap:.45rem; min-width:0; padding:.48rem; border:1px solid #e0e8ee; border-radius:8px; background:#fafcfd; color:#34495a; cursor:pointer; text-align:left; }
     .opt-rank-number { display:grid; place-items:center; width:20px; height:20px; flex:0 0 auto; border-radius:6px; background:#e0f2f1; color:#1747e6; font:750 0.75rem var(--font-mono); }
     .opt-ranking-row span:nth-child(2) { display:flex; flex-direction:column; min-width:0; font-size:0.75rem; }
-    .opt-ranking-row small { color:#727a92; font-size:0.75rem; }
+    .opt-ranking-row small { color:var(--muted); font-size:0.75rem; }
     .opt-rank-score { margin-left:auto; font:700 0.75rem var(--font-mono); overflow-wrap:anywhere; }
-    .optimization-method-note { padding:.75rem .9rem; border:1px solid #dadde3; border-radius:10px; background:#f8fbfd; color:#65798a; font-size:0.75rem; line-height:1.55; }
+    .optimization-method-note { padding:.75rem .9rem; border:1px solid #dadde3; border-radius:10px; background:#f8fbfd; color:var(--muted); font-size:0.75rem; line-height:1.55; }
     .optimization-method-note strong { color:#334e60; }
     @media (max-width:1050px) {
       .eigen-mode-stats { grid-template-columns:repeat(3,minmax(0,1fr)); }
@@ -1349,7 +1349,7 @@
       font: 700 0.75rem var(--font-mono);
     }
     .landscape-section-heading h3 { margin: 0; font-size: .9rem; color: #142b3b; letter-spacing: -.015em; }
-    .landscape-section-heading p { margin: .12rem 0 0; color: #727a92; font-size: 0.75rem; }
+    .landscape-section-heading p { margin: .12rem 0 0; color: var(--muted); font-size: 0.75rem; }
     .landscape-field { display: flex; flex-direction: column; gap: .32rem; color: #3b5060; font-size: 0.75rem; font-weight: 650; }
     .landscape-field > span { display: flex; align-items: center; justify-content: space-between; gap: .45rem; }
     .landscape-field > span strong { color: #1747e6; font: 700 0.75rem var(--font-mono); }
@@ -1362,40 +1362,40 @@
     .landscape-range-pair { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
     .landscape-divider { height: 1px; background: #e9eff3; margin: .2rem 0; }
     .landscape-run { justify-content: center; margin-top: .1rem; padding: .68rem 1rem; font-size: .78rem; }
-    .landscape-small-note { margin: 0; color: #7a8c9a; font-size: 0.75rem; line-height: 1.5; }
+    .landscape-small-note { margin: 0; color: var(--muted); font-size: 0.75rem; line-height: 1.5; }
     .landscape-plot-card { padding: 1.15rem 1.25rem 1rem; }
     .landscape-plot-heading, .landscape-inspector-head { display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; }
     .landscape-view-switch { display: flex; align-items: center; gap: .2rem; padding: .2rem; background: #eef3f6; border: 1px solid #e1e9ee; border-radius: 10px; }
     .landscape-view-btn, .landscape-reset {
-      border: 0; border-radius: 8px; background: transparent; color: #657a89; padding: .42rem .67rem;
+      border: 0; border-radius: 8px; background: transparent; color: var(--muted); padding: .42rem .67rem;
       cursor: pointer; font: 650 0.75rem var(--font-sans); transition: all .15s ease;
     }
     .landscape-view-btn.active { color: #0a6658; background: white; box-shadow: 0 1px 4px rgba(19,42,55,.12); }
     .landscape-reset { font-size: 1rem; padding: .28rem .48rem; }
     .landscape-reset:hover { color: #0b7967; background: white; }
     .landscape-plot-meta { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin: 1rem .1rem .45rem; color: #526879; font: 650 0.75rem var(--font-mono); }
-    .landscape-meta-center { color: #98a6b1; font-size: 0.75rem; letter-spacing: .08em; text-align: center; }
+    .landscape-meta-center { color: var(--muted); font-size: 0.75rem; letter-spacing: .08em; text-align: center; }
     .landscape-canvas-stage { position: relative; height: 500px; overflow: hidden; border: 1px solid #dce6ec; border-radius: 13px; background: #f8fbfc; }
     #stabilityLandscapeCanvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
     .landscape-canvas-hint { position: absolute; right: 11px; bottom: 10px; pointer-events: none; padding: .28rem .52rem; border-radius: 7px; background: rgba(12,29,43,.78); color: #e2eef0; font-size: 0.75rem; }
-    .landscape-legend { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.1rem; padding: .72rem .1rem .25rem; color: #687c8b; font-size: 0.75rem; }
+    .landscape-legend { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.1rem; padding: .72rem .1rem .25rem; color: var(--muted); font-size: 0.75rem; }
     .landscape-legend > span { display: inline-flex; align-items: center; gap: .35rem; }
     .legend-dot { width: 9px; height: 9px; display: inline-block; border-radius: 50%; }
     .legend-dot.stable { background: #0e7490; }
     .legend-dot.boundary { background: #dadde3; border: 1px solid #94a3b8; }
     .legend-dot.unstable { background: #dc4841; }
     .landscape-zero-key { color: #526879; }
-    .landscape-status { margin-top: .55rem; padding: .5rem .7rem; border-radius: 9px; background: #f1f5f8; color: #637888; font-size: 0.75rem; }
+    .landscape-status { margin-top: .55rem; padding: .5rem .7rem; border-radius: 9px; background: #f1f5f8; color: var(--muted); font-size: 0.75rem; }
     .landscape-status[data-kind="success"] { background: #e8f8f2; color: #1747e6; }
     .landscape-status[data-kind="error"] { background: #fff1f2; color: var(--signal-text); }
     .landscape-status[data-kind="working"] { background: #eff6ff; color: #1d4ed8; }
     .landscape-inspector { padding: 1.05rem 1.25rem; }
-    .landscape-selection-detail { margin-top: .85rem; padding: .8rem .9rem; border: 1px solid #e3ebef; border-radius: 11px; background: #f8fbfc; color: #627888; font-size: 0.75rem; line-height: 1.65; }
-    .landscape-detail-top { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem 1.2rem; color: #5f7483; }
+    .landscape-selection-detail { margin-top: .85rem; padding: .8rem .9rem; border: 1px solid #e3ebef; border-radius: 11px; background: #f8fbfc; color: var(--muted); font-size: 0.75rem; line-height: 1.65; }
+    .landscape-detail-top { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem 1.2rem; color: var(--muted); }
     .landscape-detail-top strong { color: #162f40; font: 700 0.75rem var(--font-mono); }
     .landscape-detail-status { display: inline-flex; margin-top: .5rem; padding: .22rem .5rem; border-radius: 6px; background: #e4f5ef; color: #1747e6; font-weight: 700; }
     .landscape-roots { margin-top: .5rem; color: #395366; font: 0.75rem/1.8 var(--font-mono); overflow-wrap: anywhere; }
-    .landscape-method-note { padding: .85rem 1rem; border-left: 3px solid #0d9a7e; border-radius: 0 10px 10px 0; background: rgba(255,255,255,.7); color: #657a89; font-size: 0.75rem; line-height: 1.6; }
+    .landscape-method-note { padding: .85rem 1rem; border-left: 3px solid #0d9a7e; border-radius: 0 10px 10px 0; background: rgba(255,255,255,.7); color: var(--muted); font-size: 0.75rem; line-height: 1.6; }
     .landscape-method-note strong { color: #294657; }
 
     @media (max-width: 1050px) {
@@ -1827,7 +1827,7 @@
         <div class="kpi-val-row">
           <span id="kpiTrailVal" class="kpi-val tabular-nums">--</span>
           <span class="kpi-sec">trail</span>
-          <span style="color:#c3c8d4;">|</span>
+          <span aria-hidden="true" style="color:#c3c8d4;">|</span>
           <span id="kpiHtaVal" class="kpi-val tabular-nums" style="font-size:1.15rem;">--</span>
           <span class="kpi-sec">HTA</span>
         </div>
@@ -2155,7 +2155,8 @@
           </div>
 
           <div class="canvas-stage geom-h">
-            <canvas id="geomCanvas" aria-label="Interactive bicycle geometry and principal inertia visualization"></canvas>
+            <canvas id="geomCanvas" aria-label="Interactive bicycle geometry and principal inertia visualization" aria-describedby="geomDesc"></canvas>
+            <div id="geomDesc" class="sr-only"></div>
             <div id="geomDragBadge" class="overlay-badge hidden">Dragging CoM...</div>
             <div id="geom3dHint" class="camera-hint hidden">Drag to orbit &bull; Pinch or use + / − to zoom &bull; Live roll and steering motion</div>
           </div>
@@ -2235,10 +2236,12 @@
 
           <div class="sim-split">
             <div class="sim-canvas-box">
-              <canvas id="rearViewCanvas"></canvas>
+              <canvas id="rearViewCanvas" role="img" aria-label="Rear view of the bike during the ride test" aria-describedby="rearViewDesc"></canvas>
+              <div id="rearViewDesc" class="sr-only"></div>
             </div>
             <div class="sim-canvas-box">
-              <canvas id="timeSeriesCanvas"></canvas>
+              <canvas id="timeSeriesCanvas" role="img" aria-label="Lean and steer angle over time during the ride test" aria-describedby="timeSeriesDesc"></canvas>
+              <div id="timeSeriesDesc" class="sr-only"></div>
             </div>
           </div>
         </section>
@@ -2488,7 +2491,8 @@
         </div>
 
         <div class="pz-canvas-box" style="height:auto;min-height:310px;">
-          <canvas id="controlResponseCanvas"></canvas>
+          <canvas id="controlResponseCanvas" role="img" aria-label="Lean response without and with feedback control" aria-describedby="controlResponseDesc"></canvas>
+          <div id="controlResponseDesc" class="sr-only"></div>
         </div>
       </div>
 
@@ -2711,6 +2715,7 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
   <script src="engineering-inspector.js"></script>
   <script src="instrument-controls.js"></script>
   <script src="plain-language.js"></script>
+  <script src="canvas-descriptions.js"></script>
   <script src="reaction-time.js"></script>
   <script src="crash-playback.js"></script>
   <script src="viz-workspace.js"></script>
@@ -2729,6 +2734,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
       const DEG2RAD = Math.PI / 180;
       const RAD2DEG = 180 / Math.PI;
       const INCH2M = 0.0254;
+
+      // Screen-reader text for the drawings. Only touches the page when the sentence changes.
+      function setCanvasDescription(id, text) {
+        const el = document.getElementById(id);
+        if (el && el.textContent !== text) el.textContent = text;
+      }
+      let lastRearDescAt = 0;
 
       // Text-safe shades for the semantic colours (4.5:1 or better on paper, panel and well). Fills, dots and lines keep the brighter colours.
       const TEXT_SAFE = { '#168a4a': '#0b6b33', '#e0301e': '#b82416', '#b07a10': '#805800' };
@@ -4096,6 +4108,11 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const openTraj = appState.sim.trajectory;
         const ctrlTraj = appState.control.trajectory;
         const duration = appState.sim.duration;
+        if (window.JBike6CanvasDescriptions) {
+          setCanvasDescription('controlResponseDesc', window.JBike6CanvasDescriptions.describeControlResponse({
+            openTraj, ctrlTraj, duration, feedbackEnabled: appState.control.feedbackEnabled, crashLeanDeg: window.JBike6CrashPlayback.CRASH_LEAN_DEG
+          }));
+        }
 
         const padL = 48, padR = 16, padT = 26, padB = 28;
         const plotW = width - padL - padR;
@@ -5031,6 +5048,13 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           if (!appState.analysis || !appState.analysis.model) {
             throw new Error('Bicycle model is still initializing');
           }
+          if (window.JBike6CanvasDescriptions) {
+            const gm = appState.analysis.model, gp = appState.params;
+            setCanvasDescription('geomDesc', window.JBike6CanvasDescriptions.describeGeometry({
+              wheelbase: gp.wheelbase, headAngleDeg: gp.headAngleDeg, trailMm: gm.c * 1000, forkOffsetMm: gp.forkOffsetMm,
+              frontWheelM: gp.Df, rearWheelM: gp.Dr, mode: appState.geomViewMode
+            }));
+          }
           if (appState.geomViewMode === '3d') {
             drawGeometryCanvas3D(ctx, width, height);
           } else {
@@ -5333,10 +5357,15 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         // Direct series labels live on the plot surface; no detached legend is needed.
         ctx.font = '600 12px "Archivo", sans-serif';
         ctx.textAlign = 'left';
+        // Second cue besides colour: oscillation is a hollow ring, growth and decay is a filled dot.
+        ctx.strokeStyle = '#168a4a'; ctx.lineWidth = 1.5; ctx.fillStyle = '#f4f5f7';
+        ctx.beginPath(); ctx.arc(padL + 5, 15, 4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
         ctx.fillStyle = '#0b6b33';
-        ctx.fillText('Im(λ): oscillation', padL, 19);
+        ctx.fillText('Im(λ): oscillation', padL + 15, 19);
+        ctx.fillStyle = '#e0301e';
+        ctx.beginPath(); ctx.arc(padL + 163, 15, 4, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#b82416';
-        ctx.fillText('Re(λ): growth or decay', padL + 136, 19);
+        ctx.fillText('Re(λ): growth or decay', padL + 173, 19);
 
         ctx.save();
         ctx.beginPath();
@@ -5366,13 +5395,15 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
           ctx.setLineDash([]);
         }
 
-        // Imaginary eigenvalue component: oscillation frequency (green).
-        ctx.fillStyle = '#168a4a';
+        // Imaginary eigenvalue component: oscillation frequency (green, hollow rings so it also differs by shape).
+        ctx.strokeStyle = '#168a4a';
+        ctx.lineWidth = 1.2;
+        ctx.fillStyle = '#f4f5f7';
         for (const step of sweepData) {
           const px = toPxX(step.v);
           for (const r of step.roots) {
             if (r.im >= yMin && r.im <= yMax) {
-              ctx.beginPath(); ctx.arc(px, toPxY(r.im), 2.1, 0, Math.PI * 2); ctx.fill();
+              ctx.beginPath(); ctx.arc(px, toPxY(r.im), 2.4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
             }
           }
         }
@@ -5839,6 +5870,12 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         const canvas = document.getElementById('rearViewCanvas');
         const { ctx, width, height } = setupHiDPICanvas(canvas);
         const sample = getSimSampleAtTime(appState.sim.t);
+        if (window.JBike6CanvasDescriptions && (!appState.sim.playing || performance.now() - lastRearDescAt > 500)) {
+          lastRearDescAt = performance.now();
+          setCanvasDescription('rearViewDesc', window.JBike6CanvasDescriptions.describeRearView({
+            leanDeg: sample.phi * RAD2DEG, steerDeg: sample.delta * RAD2DEG, t: appState.sim.t, duration: appState.sim.duration
+          }));
+        }
 
         ctx.clearRect(0, 0, width, height);
 
@@ -5913,8 +5950,17 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
         ctx.fillText(`Steer δ = ${(delta * RAD2DEG).toFixed(2)}°`, 10, 50);
       }
 
+      let timeSeriesDescFor = null;
       function drawTimeSeriesCanvas() {
         const canvas = document.getElementById('timeSeriesCanvas');
+        if (appState.sim.trajectory !== timeSeriesDescFor && window.JBike6CanvasDescriptions) {
+          timeSeriesDescFor = appState.sim.trajectory;
+          const crash = getCrashTime();
+          setCanvasDescription('timeSeriesDesc', window.JBike6CanvasDescriptions.describeTimeSeries({
+            traj: timeSeriesDescFor, duration: appState.sim.duration, label: 'Lean and steer after a ' + appState.sim.rollImpulseDeg.toFixed(0) + ' degree push at ' + formatSpeed(appState.sim.speedMs, appState.unit),
+            crashT: crash, crashLeanDeg: window.JBike6CrashPlayback.CRASH_LEAN_DEG
+          }));
+        }
         const { ctx, width, height } = setupHiDPICanvas(canvas);
         const traj = appState.sim.trajectory;
         const duration = appState.sim.duration;
@@ -5961,10 +6007,16 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         ctx.textAlign = 'left';
         ctx.font = '600 12px "IBM Plex Sans", sans-serif';
+        // Second cue besides colour: lean is a solid line, steer is a dashed line, in the legend and on the chart.
+        ctx.strokeStyle = '#b07a10'; ctx.lineWidth = 2.2; ctx.setLineDash([]);
+        ctx.beginPath(); ctx.moveTo(padL, 11); ctx.lineTo(padL + 22, 11); ctx.stroke();
         ctx.fillStyle = '#805800';
-        ctx.fillText('— Lean Angle φ(t)', padL, 15);
+        ctx.fillText('Lean angle φ(t)', padL + 28, 15);
+        ctx.strokeStyle = '#1747e6'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+        ctx.beginPath(); ctx.moveTo(padL + 150, 11); ctx.lineTo(padL + 172, 11); ctx.stroke();
+        ctx.setLineDash([]);
         ctx.fillStyle = '#1747e6';
-        ctx.fillText('— Steer Angle δ(t)', padL + 125, 15);
+        ctx.fillText('Steer angle δ(t)', padL + 178, 15);
 
         ctx.save();
         ctx.beginPath();
@@ -5982,12 +6034,14 @@ B = [0; M(1,2); 0; M(2,2)];   C = [1, 0, 0, 0];   D = 0;
 
         ctx.strokeStyle = '#1747e6';
         ctx.lineWidth = 2;
+        ctx.setLineDash([8, 5]);
         ctx.beginPath();
         traj.forEach((pt, idx) => {
           const px = toPxX(pt.t), py = toPxY(pt.delta * RAD2DEG);
           if (idx === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
         });
         ctx.stroke();
+        ctx.setLineDash([]);
 
         const crashMark = getCrashTime();
         if (crashMark !== null) {

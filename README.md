@@ -24,6 +24,9 @@ node --test tests/*.test.js
 ## Model validation
 The model is tested against the original MATLAB: all 18 reference bikes agree on the equations of motion to about 1e-15, the benchmark bicycle reproduces the paper's 14-digit results, and the ride-test simulator matches the exact solution of the linear equations. See `MODEL_AUDIT.md` for the summary and `docs/audit/` for the full record, including what was not checked.
 
+## Accessibility
+Text is never smaller than 12 px, text meets 4.5:1 contrast, controls are at least 44 px on phones, charts do not rely on color alone, and each chart has a text description. Tests keep these rules, and `docs/accessibility.md` records how they were measured.
+
 ## Model limits
 The model is the linearized Whipple–Carvallo bicycle: rigid bodies, knife-edge wheels rolling without slip, no rider control, small lean and steer angles. A bike shown as unstable here is unstable hands-free. A rider can still balance it by steering. Tire compliance, suspension and rider biomechanics are not modeled.
 
@@ -34,7 +37,7 @@ The model is the linearized Whipple–Carvallo bicycle: rigid bodies, knife-edge
 | `instrument-ui.css` | Visual system, loaded after the inline styles in `index.html` and overriding them |
 | `viz-workspace.js`, `instrument-controls.js`, `engineering-inspector.js` | Navigation, parameter inputs, linked inspector |
 | `eigenmode-lab.js`, `pole-zero-lab.js`, `stability-landscape.js`, `design-optimization.js` | Feature modules |
-| `plain-language.js`, `reaction-time.js`, `crash-playback.js` | Plain-English reading, doubling-time math and crash playback, unit tested in Node |
+| `plain-language.js`, `reaction-time.js`, `crash-playback.js`, `canvas-descriptions.js` | Plain-English reading, doubling-time math, crash playback and chart descriptions, unit tested in Node |
 | `control-theory.js`, `app-regressions.js` | Math helpers that are unit tested in Node |
 | `tests/` | Node tests |
 | `CONTROL_THEORY_AUDIT.md`, `MODEL_AUDIT.md` | How the control math and the bicycle model were checked against the MATLAB source |

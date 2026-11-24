@@ -17,8 +17,15 @@ Browser app that computes bicycle stability from the linearized Whipple–Carval
 
 ## Design rules
 - Color is semantic. Blue is selection and interaction, red is instability only, green is stability, ochre is rider and rear assembly. Never use red for a selected or active state.
-- Tokens live in `:root` in `instrument-ui.css` (`--select`, `--signal`, `--stable`, `--ochre`, `--ink`, `--paper`). Canvas code cannot read CSS variables, so the same hex values are repeated in the JS, including inside `rgba(...)` strings (search for those too when changing a color): `#1747e6` blue, `#e0301e` red, `#168a4a` green, `#b07a10` ochre, `#0d1226` ink, `#f4f5f7` paper. Change both places together.
+- Tokens live in `:root` in `instrument-ui.css` (`--select`, `--signal`, `--stable`, `--ochre`, `--ink`, `--paper`). Canvas code cannot read CSS variables, so the same hex values are repeated in the JS, including inside `rgba(...)` strings (search for those too when changing a color): `#1747e6` blue, `#e0301e` red, `#168a4a` green, `#b07a10` ochre, `#0d1226` ink, `#f4f5f7` paper. Change both places together. Text uses the darker text-safe shades below.
 - Type: Archivo for everything, IBM Plex Mono for numbers only. Sentence case, no all-caps labels, no letter-spaced eyebrows. `text-transform` is forced to `none` site-wide.
+- Accessibility rules, enforced by `tests/accessibility.test.js` and `tests/browser/ux-scan.js`:
+  - No text below 12px anywhere: CSS, inline styles, canvas `font` strings, subscripts. Do not add a smaller size.
+  - Text must reach 4.5:1 contrast on paper, panel and well. For text use the text-safe shades `--stable-text` `#0b6b33`, `--signal-text` `#b82416`, `--ochre-text` `#805800` (canvas code: the `TEXT_SAFE` map). The brighter colors are for fills, dots and lines only. Do not write a new gray as a hex value, use `--muted`.
+  - Color is never the only cue in a chart. On the root-locus plot oscillation is a hollow ring and growth or decay is a filled dot. On the ride-test chart lean is solid and steer is dashed. Keep the legends in step.
+  - Every canvas that carries data has `role="img"`, an `aria-label`, and an `aria-describedby` text built by `canvas-descriptions.js` (tested in `tests/canvas-descriptions.test.js`).
+  - On phones and touch screens every control is at least 44 x 44px (the block at the end of `instrument-ui.css`; checkboxes count through their 44px label row). The phone header grid rows are `auto`, so tall controls cannot overlap.
+  - After any visual change run `node tests/browser/ux-scan.js` (needs Playwright). It measures the rendered page on every tab at phone and desktop width.
 - No shadows, no rounded corners, no gradient washes, no dark hero banners, no pill badges. Status is plain colored text. Number steps only when the content is really a sequence.
 - Keep the plot as the first and largest drawing on the Stability view.
 
@@ -48,3 +55,5 @@ Browser app that computes bicycle stability from the linearized Whipple–Carval
 
 ## Known issues
 - Fonts come from Google Fonts and fall back to system fonts offline.
+- The wheel-size sliders show a focus ring in Chromium through the slider thumb. Firefox has no equivalent rule, and this has not been checked there.
+- Not reviewed: screen-reader behavior on a real device, and performance.

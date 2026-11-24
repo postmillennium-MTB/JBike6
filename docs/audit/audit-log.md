@@ -125,7 +125,7 @@ The question: does what the geometry views draw agree with the model? Earlier th
 
 ## Reproducing everything
 ```sh
-node --test tests/*.test.js          # 258 tests
+node --test tests/*.test.js          # 293 tests
 # Regenerate the reference fixtures (needs Python 3 and numpy):
 python3 tests/fixtures/make_matlab_reference.py tests/fixtures/matlab-reference.json
 python3 tests/fixtures/make_simulation_reference.py tests/fixtures/simulation-reference.json

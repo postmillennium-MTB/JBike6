@@ -781,7 +781,7 @@ input[type="range"]:not(.sci-slider)::-moz-range-track {
   box-shadow: none;
   text-align: left;
 }
-.eq-banner div + div { color: #c6c9bf !important; }
+.eq-banner div + div { color: var(--muted) !important; }
 .matrix-box, .tf-poly-box {
   min-width: 0;
   border: 1px solid var(--rule);
