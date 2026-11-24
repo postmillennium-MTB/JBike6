@@ -239,11 +239,11 @@
       }
       ctx.strokeStyle='rgba(88,96,121,.48)';ctx.lineWidth=1;ctx.strokeRect(pad.left,pad.top,plotW,plotH);
       const xAxis=getAxis(model.scanConfig.xKey),yAxis=getAxis(model.scanConfig.yKey);
-      ctx.fillStyle='#2f3550';ctx.font='11px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
+      ctx.fillStyle='#2f3550';ctx.font='12px "IBM Plex Sans", sans-serif';ctx.textAlign='center';
       ctx.fillText(xAxis.short+' ('+xAxis.unit+')',pad.left+plotW/2,height-14);
       ctx.save();ctx.translate(17,pad.top+plotH/2);ctx.rotate(-Math.PI/2);
       ctx.fillText(yAxis.short+' ('+yAxis.unit+')',0,0);ctx.restore();
-      ctx.font='10px "IBM Plex Mono", monospace';ctx.fillStyle='#586079';
+      ctx.font='12px "IBM Plex Mono", monospace';ctx.fillStyle='#586079';
       ctx.textAlign='left';ctx.fillText(format(model.xValues[0],xAxis.digits),pad.left,pad.top+plotH+17);
       ctx.textAlign='right';ctx.fillText(format(model.xValues[model.xValues.length-1],xAxis.digits),pad.left+plotW,pad.top+plotH+17);
       ctx.textAlign='right';ctx.fillText(format(model.yValues[0],yAxis.digits),pad.left-8,pad.top+plotH);
@@ -258,7 +258,7 @@
           ctx.beginPath();ctx.arc(x+cellW/2,y+cellH/2,4,0,Math.PI*2);ctx.fillStyle='#f4f5f7';ctx.fill();ctx.strokeStyle='#0d1226';ctx.stroke();
         }
       }
-      ctx.fillStyle='#586079';ctx.font='10px "IBM Plex Sans", sans-serif';ctx.textAlign='left';
+      ctx.fillStyle='#586079';ctx.font='12px "IBM Plex Sans", sans-serif';ctx.textAlign='left';
       ctx.fillText('Color = worst-case max Re(λ) across speed interval · green indicates decay; red indicates growth',pad.left,pad.top-10);
     }
     function selectFromCanvas(event){

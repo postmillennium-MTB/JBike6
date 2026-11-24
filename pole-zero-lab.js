@@ -204,12 +204,12 @@
       const origin=proj({x:0,y:0,z:-1}), reEnd=proj({x:1.08,y:0,z:-1});
       const imEnd=proj({x:0,y:1.08,z:-1}), speedEnd=proj({x:0,y:0,z:1.08});
       drawLine(ctx,origin,reEnd,'#2f3550',1.8);drawLine(ctx,origin,imEnd,'#586079',1.8);drawLine(ctx,origin,speedEnd,'#586079',1.8);
-      ctx.font='700 10px "IBM Plex Sans", sans-serif';ctx.textAlign='left';
+      ctx.font='700 12px "IBM Plex Sans", sans-serif';ctx.textAlign='left';
       ctx.fillStyle='#2f3550';ctx.fillText('Re(s) · growth / decay',reEnd.x+4,reEnd.y+3);
       ctx.fillStyle='#586079';ctx.fillText('Im(s) · rad/s',imEnd.x+4,imEnd.y-5);
       ctx.fillStyle='#586079';ctx.fillText('Forward speed · m/s',speedEnd.x+4,speedEnd.y+3);
 
-      ctx.font='9px "IBM Plex Mono", monospace';ctx.fillStyle='#586079';ctx.textAlign='center';
+      ctx.font='12px "IBM Plex Mono", monospace';ctx.fillStyle='#586079';ctx.textAlign='center';
       for(let i=-2;i<=2;i++){
         const rv=reHalf*i/2, rp=proj(p3(rv,0,-1));ctx.fillText(rv.toFixed(1),rp.x,rp.y+13);
         const iv=imHalf*i/2, ip=proj(p3(0,iv,-1));ctx.fillText(iv.toFixed(1),ip.x-10,ip.y-5);
@@ -234,8 +234,8 @@
         for(let i=1;i<track.length;i++)drawLine(ctx,projectRoot(track[i-1],width,height),projectRoot(track[i],width,height),'rgba(224,48,30,.72)',1.3,[4,3]);
       });
       drawCurrentMarkers(ctx,width,height,true);
-      ctx.fillStyle='#168a4a';ctx.font='700 10px "IBM Plex Sans", sans-serif';ctx.fillText('Re(s) = 0 · stability boundary',12,18);
-      ctx.fillStyle='#e0301e';ctx.fillText('Dashed red plane · selected operating speed',12,33);
+      ctx.fillStyle='#0b6b33';ctx.font='700 12px "IBM Plex Sans", sans-serif';ctx.fillText('Re(s) = 0 · stability boundary',12,18);
+      ctx.fillStyle='#b82416';ctx.fillText('Dashed red plane · selected operating speed',12,33);
     }
 
     function to2D(p) {
@@ -249,7 +249,7 @@
       state.plotArea=area;ctx.fillStyle='#f4f5f7';ctx.fillRect(0,0,width,height);
       const zeroX=area.left+(0-e.reMin)/(e.reMax-e.reMin)*area.width;
       ctx.fillStyle='rgba(22,138,74,.08)';ctx.fillRect(area.left,area.top,Math.max(0,zeroX-area.left),area.height);
-      ctx.font='9px "IBM Plex Mono", monospace';ctx.fillStyle='#586079';ctx.textAlign='center';
+      ctx.font='12px "IBM Plex Mono", monospace';ctx.fillStyle='#586079';ctx.textAlign='center';
       for(let i=0;i<=6;i++){
         const re=e.reMin+(e.reMax-e.reMin)*i/6,x=area.left+area.width*i/6;
         ctx.strokeStyle=Math.abs(re)<1e-7?'#727a92':'rgba(114,122,146,.2)';ctx.lineWidth=Math.abs(re)<1e-7?1.25:.7;
@@ -260,7 +260,7 @@
         const im=e.imMax*i/2,y=area.top+(e.imMax-im)/(2*e.imMax)*area.height;
         ctx.strokeStyle=i===0?'#727a92':'rgba(114,122,146,.2)';ctx.lineWidth=i===0?1.25:.7;ctx.beginPath();ctx.moveTo(area.left,y);ctx.lineTo(area.left+area.width,y);ctx.stroke();ctx.fillText(im.toFixed(1),area.left-6,y+3);
       }
-      ctx.fillStyle='#2f3550';ctx.textAlign='center';ctx.font='600 10px "IBM Plex Sans", sans-serif';
+      ctx.fillStyle='#2f3550';ctx.textAlign='center';ctx.font='600 12px "IBM Plex Sans", sans-serif';
       ctx.fillText('Re(s) [1/s]  ← stable | unstable →',area.left+area.width/2,height-5);
       ctx.save();ctx.translate(12,area.top+area.height/2);ctx.rotate(-Math.PI/2);ctx.fillText('Im(s) [rad/s]',0,0);ctx.restore();
       ctx.save();ctx.beginPath();ctx.rect(area.left,area.top,area.width,area.height);ctx.clip();
