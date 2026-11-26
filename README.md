@@ -35,6 +35,7 @@ The model is the linearized Whipple–Carvallo bicycle: rigid bodies, knife-edge
 | --- | --- |
 | `index.html` | The app: markup, model assembly and canvas drawing |
 | `instrument-ui.css` | Visual system, loaded after the inline styles in `index.html` and overriding them |
+| `components.css` | Shared component rules (buttons, form controls, status text, panels, navigation), loaded last |
 | `viz-workspace.js`, `instrument-controls.js`, `engineering-inspector.js` | Navigation, parameter inputs, linked inspector |
 | `eigenmode-lab.js`, `pole-zero-lab.js`, `stability-landscape.js`, `design-optimization.js` | Feature modules |
 | `plain-language.js`, `reaction-time.js`, `crash-playback.js`, `canvas-descriptions.js` | Plain-English reading, doubling-time math, crash playback and chart descriptions, unit tested in Node |

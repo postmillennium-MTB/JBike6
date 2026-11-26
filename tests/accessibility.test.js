@@ -11,9 +11,9 @@ const { createRecorder } = require('./helpers/recording-canvas.js');
 const root = path.join(__dirname, '..');
 const read = f => fs.readFileSync(path.join(root, f), 'utf8');
 const html = read('index.html');
-const css = read('instrument-ui.css');
+const css = read('instrument-ui.css') + '\n' + read('components.css');
 const scripts = fs.readdirSync(root).filter(f => f.endsWith('.js'));
-const sources = { 'index.html': html, 'instrument-ui.css': css };
+const sources = { 'index.html': html, 'instrument-ui.css + components.css': css };
 for (const f of scripts) sources[f] = read(f);
 
 // ---- 1. Text floor: nothing below 12 px, in CSS, inline styles or canvas text ---------------------------------
@@ -66,9 +66,11 @@ test('canvas text uses the same text-safe shades as the stylesheet', () => {
 
 // ---- 3. Touch targets on phones and touch screens ---------------------------------------------------------------
 test('phones and touch screens get 44 px controls with room between them', () => {
-  const i = css.indexOf('@media (max-width: 700px), (pointer: coarse)');
-  assert.ok(i > 0, 'touch media query missing');
-  const block = css.slice(i, css.indexOf('\n}\n', i));
+  // The touch rules are split between instrument-ui.css and components.css, so join every block with this query.
+  const QUERY = '@media (max-width: 700px), (pointer: coarse)';
+  let block = '', i = -1;
+  while ((i = css.indexOf(QUERY, i + 1)) >= 0) block += css.slice(i, css.indexOf('\n}\n', i)) + '\n';
+  assert.ok(block, 'touch media query missing');
   assert.match(block, /min-height:\s*44px\s*!important/);
   assert.match(block, /min-width:\s*44px\s*!important/);
   for (const sel of ['button', 'select', '.seg-btn', '.wheel-pill', 'input[type="number"]']) assert.ok(block.includes(sel), sel + ' not covered');

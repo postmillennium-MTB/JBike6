@@ -12,6 +12,7 @@ Browser app that computes bicycle stability from the linearized Whipple–Carval
 ## Architecture
 - `index.html` holds the markup, an inline `<style>` block, the model assembly and all main canvas drawing. Feature modules in the repo root are plain scripts that attach `window.JBike6*` and also export through `module.exports` for the Node tests.
 - `instrument-ui.css` loads after the inline styles and overrides them, often with `!important`. Put new visual rules at the end of it.
+- `components.css` loads last and holds shared component rules (buttons, form controls, status text, panels, navigation) grouped by component. Only rules that could be moved without changing which rule wins a tie were moved; the rest stay in the two older files. Before and after any CSS move or edit that should not change the look, run `node tests/browser/style-snapshot.js capture before.json` (serve the repo over http first, set `SNAPSHOT_PAGE`), then again after, then `compare before.json after.json`. It must print IDENTICAL.
 - `.lab-tab-btn` buttons are hidden routing state. The visible navigation is built by `viz-workspace.js`, and its order is asserted in `tests/viz-workspace.test.js`.
 - `.workspace-grid` is hidden on the Control, Landscape and Optimization tabs, so anything meant to show on every tab lives outside it.
 
